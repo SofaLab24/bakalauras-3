@@ -59,6 +59,12 @@ public class PathTile
             }
         }
     }
+    /// <summary>
+    /// Generates which tiles to fill inside the path tile
+    /// </summary>
+    /// <param name="entrance"></param>
+    /// <param name="exit"></param>
+    /// <returns> Next target tile coordinates </returns>
     public Vector2Int GeneratePath(Vector2Int entrance, Vector2Int exit)
     {
         isFilled = true;
@@ -91,4 +97,6 @@ public class PathTile
     {
         return new Vector2Int((coordinates.x * size) + tileX, (coordinates.y * size) + tileY);
     }
+    public Vector2Int GetCoordinates()
+    { return coordinates; }
 }
