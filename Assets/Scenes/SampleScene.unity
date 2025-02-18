@@ -261,8 +261,8 @@ TilemapRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1271519071
+  m_SortingLayer: -4
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -417,9 +417,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1429115353}
-        m_TargetAssemblyTypeName: PathGenerator, Assembly-CSharp
-        m_MethodName: GenerateNextPaths
+      - m_Target: {fileID: 1429115354}
+        m_TargetAssemblyTypeName: WaveManager, Assembly-CSharp
+        m_MethodName: StartNextWave
         m_Mode: 4
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -820,7 +820,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
-  m_ApplyToSortingLayers: 00000000
+  m_ApplyToSortingLayers: 00000000afd44b225f646414a3f4d127a12836b443b916e2
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -875,6 +875,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1429115352}
   - component: {fileID: 1429115353}
+  - component: {fileID: 1429115354}
   m_Layer: 0
   m_Name: GAME_MANAGER
   m_TagString: Untagged
@@ -914,6 +915,19 @@ MonoBehaviour:
   towerSpot: {fileID: 11400000, guid: 425e4f57ad951464b86a401381a7b1a0, type: 2}
   portal: {fileID: 11400000, guid: 31145727c6ea075448410e5573454e36, type: 2}
   tileSize: 3
+--- !u!114 &1429115354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1429115351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 174d89f9db5aba94da3110a555562dbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyPrefab: {fileID: 7305669390683419870, guid: eae32f9db5878bc4abce2bc898a736f6, type: 3}
 --- !u!1 &2052521638
 GameObject:
   m_ObjectHideFlags: 0

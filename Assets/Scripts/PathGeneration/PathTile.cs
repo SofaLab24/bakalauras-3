@@ -93,10 +93,26 @@ public class PathTile
         return (new Vector2Int(coordinates.x + exit1.x, coordinates.y + exit1.y), new Vector2Int(coordinates.x + exit2.x, coordinates.y + exit2.y));
     }
 
+    /// <summary>
+    /// Gets coordinates of a specific tile in the tilemap
+    /// </summary>
+    /// <param name="tileX"></param>
+    /// <param name="tileY"></param>
+    /// <returns></returns>
     public Vector2Int GetTilemapCoordinates(int tileX, int tileY)
     {
         return new Vector2Int((coordinates.x * size) + tileX, (coordinates.y * size) + tileY);
     }
+    public Vector2Int GetTilemapCoordinates()
+    {
+        return GetTilemapCoordinates(coordinates.x, coordinates.y);
+    }
     public Vector2Int GetCoordinates()
     { return coordinates; }
+    public Vector2 GetWorldOfCenter(Vector2 tilemapCoordinates = default)
+    {
+        Vector2 centerOfTilemap = new Vector2((coordinates.x * size) + (size / 2f), (coordinates.y * size) + (size / 2f));
+        Debug.Log(centerOfTilemap);
+        return new Vector2(centerOfTilemap.x + tilemapCoordinates.x, centerOfTilemap.y + tilemapCoordinates.y);
+    }
 }

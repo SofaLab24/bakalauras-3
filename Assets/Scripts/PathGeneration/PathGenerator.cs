@@ -1,53 +1,10 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
 
 public class PathGenerator : MonoBehaviour
 {
-    private class Path
-    {
-        public List<PathTile> pathTiles;
-        public List<GameObject> enemyWalkPoints;
-        public bool hasEnd;
-        public Vector2Int lastFilledTile;
-        public Vector2Int targetTile;
-
-        public Path(List<PathTile> pathTiles, List<GameObject> enemyWalkPoints, Vector2Int lastFilledTile, Vector2Int targetTile)
-        {
-            this.pathTiles = pathTiles;
-            this.enemyWalkPoints = enemyWalkPoints;
-            this.lastFilledTile = lastFilledTile;
-            this.targetTile = targetTile;
-            hasEnd = false;
-        }
-
-        public void SetLastFilledTile(Vector2Int coordinates)
-        {
-            lastFilledTile = coordinates;
-        }
-        public void SetTargetTile(Vector2Int coordinates)
-        {
-            targetTile = coordinates;
-        }
-        public void AddNewTile(PathTile tile)
-        {
-            pathTiles.Add(tile);
-        }
-        public void SetEnd()
-        {
-            hasEnd = true;
-        }
-        public Path GetCopy()
-        {
-            return new Path(pathTiles, enemyWalkPoints, lastFilledTile, targetTile);
-        }
-    }
-
     [SerializeField]
     Tilemap tilemap;
     [SerializeField]
@@ -71,8 +28,7 @@ public class PathGenerator : MonoBehaviour
         allTiles = new Dictionary<Vector2Int, PathTile>();
         paths = new List<Path>();
         List<PathTile> initPath = new List<PathTile>();
-        // TODO: implement walkpoint logic
-        List<GameObject> enemyWalkPoints = new List<GameObject>();
+        List<Vector2> enemyWalkPoints = new List<Vector2>();
         paths.Add(new Path(initPath, enemyWalkPoints, Vector2Int.zero, Vector2Int.zero));
 
         for (int i = 0; i < 2; i++)
@@ -87,6 +43,7 @@ public class PathGenerator : MonoBehaviour
         Vector2Int targetTile = lastPath.GeneratePath(Vector2Int.down, Vector2Int.up);
         allTiles[targetTile] = new PathTile(targetTile, tileSize);
         PaintPathTile(lastPath);
+        paths[0].AddNewTile(lastPath);
         paths[0].SetLastFilledTile(lastPath.GetCoordinates());
         paths[0].SetTargetTile(targetTile);
     }
@@ -118,7 +75,7 @@ public class PathGenerator : MonoBehaviour
     /// Generates next paths for all the current paths
     /// </summary>
     /// <param name="splitChance"> 0.0 - 1.0 chance of paths to have a split tile </param>
-    public void GenerateNextPaths(float splitChance)
+    public List<Path> GenerateNextPaths(float splitChance)
     {
         for (int i = paths.Count - 1; i >= 0; i--)
         {
@@ -150,6 +107,7 @@ public class PathGenerator : MonoBehaviour
             {
                 allTiles[targetCoordinates].GeneratePath(paths[i].lastFilledTile - targetCoordinates, Vector2Int.zero);
                 paths[i].SetEnd();
+                paths[i].AddNewTile(allTiles[targetCoordinates]);
                 PaintPathTile(allTiles[targetCoordinates]);
                 continue;
             }
@@ -175,6 +133,7 @@ public class PathGenerator : MonoBehaviour
                 paths[i].SetLastFilledTile(targetCoordinates);
                 allTiles[nextTraget] = new PathTile(nextTraget, tileSize);
                 paths[i].SetTargetTile(nextTraget);
+                paths[i].AddNewTile(allTiles[targetCoordinates]);
             }
             // split path
             else
@@ -184,6 +143,8 @@ public class PathGenerator : MonoBehaviour
                     .GenerateSplitPath(paths[i].lastFilledTile - targetCoordinates, exits[0] - targetCoordinates, exits[1] - targetCoordinates);
                 PaintPathTile(allTiles[targetCoordinates]);
                 paths[i].SetLastFilledTile(targetCoordinates);
+                paths[i].AddNewTile(allTiles[targetCoordinates]);
+
                 paths.Add(paths[i].GetCopy());
                 allTiles[nextTraget1] = new PathTile(nextTraget1, tileSize);
                 allTiles[nextTarget2] = new PathTile(nextTarget2, tileSize);
@@ -191,5 +152,6 @@ public class PathGenerator : MonoBehaviour
                 paths[newPathId].SetTargetTile(nextTarget2);
             }
         }
+        return paths;
     }
 }
