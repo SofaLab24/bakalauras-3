@@ -8,6 +8,7 @@ public class EnemyController : MonoBehaviour
 {
     Rigidbody2D body;
     List<Vector2> targets;
+    EnemyHealthManager healthManager;
 
     public float moveSpeed = 5f;
     public float distanceOffset = 0.02f;
@@ -15,6 +16,7 @@ public class EnemyController : MonoBehaviour
     void Start()
     {
         body = GetComponent<Rigidbody2D>();
+        healthManager = GetComponent<EnemyHealthManager>();
     }
 
     private void FixedUpdate()
@@ -34,7 +36,7 @@ public class EnemyController : MonoBehaviour
         else // reached the current target
         {
             if (targets.Count == 1) { 
-                Destroy(gameObject);
+                healthManager.Die();
                 return; //just in case
             }
             body.velocity = Vector2.zero;

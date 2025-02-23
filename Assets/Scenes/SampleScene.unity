@@ -682,7 +682,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.41176474, g: 0.14117648, b: 0.48627454, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -876,6 +876,7 @@ GameObject:
   - component: {fileID: 1429115352}
   - component: {fileID: 1429115353}
   - component: {fileID: 1429115354}
+  - component: {fileID: 1429115355}
   m_Layer: 0
   m_Name: GAME_MANAGER
   m_TagString: Untagged
@@ -892,7 +893,7 @@ Transform:
   m_GameObject: {fileID: 1429115351}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.3200316, y: -0.78593224, z: 0.060366884}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -928,6 +929,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 7305669390683419870, guid: eae32f9db5878bc4abce2bc898a736f6, type: 3}
+--- !u!114 &1429115355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1429115351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d335838563dd944ab6602e1f1c1c548, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerMoney: 0
 --- !u!1 &2052521638
 GameObject:
   m_ObjectHideFlags: 0
