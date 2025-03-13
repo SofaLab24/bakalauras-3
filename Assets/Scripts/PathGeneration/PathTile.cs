@@ -112,7 +112,6 @@ public class PathTile
     public Vector2 GetWorldOfCenter(Vector2 tilemapCoordinates = default)
     {
         Vector2 centerOfTilemap = new Vector2((coordinates.x * size) + (size / 2f), (coordinates.y * size) + (size / 2f));
-        Debug.Log(centerOfTilemap);
         return new Vector2(centerOfTilemap.x + tilemapCoordinates.x, centerOfTilemap.y + tilemapCoordinates.y);
     }
 }

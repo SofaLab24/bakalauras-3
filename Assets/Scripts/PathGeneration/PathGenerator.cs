@@ -16,7 +16,7 @@ public class PathGenerator : MonoBehaviour
 
     public int tileSize = 3;
 
-    private Dictionary<Vector2Int, PathTile> allTiles;
+    public Dictionary<Vector2Int, PathTile> allTiles;
     private List<Path> paths;
 
     public void Start()
