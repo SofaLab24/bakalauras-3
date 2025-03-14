@@ -22,21 +22,6 @@ public class BaseManager : MonoBehaviour
         OnHealthChanged?.Invoke(currentHealth);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        // Check if collided with an enemy
-        EnemyHealthManager enemy = collision.gameObject.GetComponent<EnemyHealthManager>();
-        
-        if (enemy != null)
-        {
-            // Take damage based on enemy's damage value
-            TakeDamage(enemy.damageValue);
-            
-            // Destroy the enemy when it hits the base
-            enemy.Die();
-        }
-    }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         EnemyHealthManager enemy = collision.gameObject.GetComponent<EnemyHealthManager>();
@@ -45,9 +30,7 @@ public class BaseManager : MonoBehaviour
         {
             // Take damage based on enemy's damage value
             TakeDamage(enemy.damageValue);
-            
-            // Destroy the enemy when it hits the base
-            enemy.Die();
+            enemy.ReachEnd();
         }
     }
 

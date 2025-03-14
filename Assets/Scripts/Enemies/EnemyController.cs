@@ -36,7 +36,9 @@ public class EnemyController : MonoBehaviour
         else // reached the current target
         {
             if (targets.Count == 1) { 
-                healthManager.Die();
+                // Enemy has reached the end of the path
+                Debug.Log("Enemy reached end of path");
+                healthManager.ReachEnd();
                 return; //just in case
             }
             body.velocity = Vector2.zero;

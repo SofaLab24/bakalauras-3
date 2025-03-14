@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using System;
 
 public class TowerManager : MonoBehaviour
 {
@@ -13,6 +14,21 @@ public class TowerManager : MonoBehaviour
     private EconomyManager economyManager;
     private PathGenerator pathGenerator;
     private Camera mainCamera;
+
+    public static event Action<Vector3> OnTowerPlaced;
+    // TODO: trigger faulty sound effect and highlight missing money
+    public static event Action<Vector3Int> OnInvalidPlacementAttempt;
+    public static event Action OnInsufficientFunds;
+
+    private void OnEnable()
+    {
+        EconomyManager.OnPurchaseAttempted += HandlePurchaseAttempt;
+    }
+
+    private void OnDisable()
+    {
+        EconomyManager.OnPurchaseAttempted -= HandlePurchaseAttempt;
+    }
 
     private void Start()
     {
@@ -38,23 +54,50 @@ public class TowerManager : MonoBehaviour
         TileBase clickedTile = tilemap.GetTile(cellPosition);
         if (clickedTile != null && IsTowerSpot(cellPosition))
         {
-            // Check if we can afford the tower
-            if (economyManager.playerMoney >= towerCost)
+            // Check if there's already a tower at this position
+            Vector3 worldPosition = tilemap.GetCellCenterWorld(cellPosition);
+            if (IsTowerAtPosition(worldPosition))
             {
-                Vector3 worldPosition = tilemap.GetCellCenterWorld(cellPosition);
-                // Increased radius to 0.4f for better detection
-                Collider2D[] colliders = Physics2D.OverlapCircleAll(worldPosition, 0.4f);
-                
-                foreach (Collider2D collider in colliders)
-                {
-                    if (collider.CompareTag("Tower"))
-                    {
-                        return; // Tower already exists here
-                    }
-                }
-                
+                OnInvalidPlacementAttempt?.Invoke(cellPosition);
+                return;
+            }
+
+            // Try to spend money and place tower
+            if (economyManager.SpendMoney(towerCost))
+            {
                 PlaceTower(cellPosition);
             }
+            else
+            {
+                // Invalid placement position
+                OnInvalidPlacementAttempt?.Invoke(cellPosition);
+            }
+        }
+    }
+
+    private bool IsTowerAtPosition(Vector3 worldPosition)
+    {
+        // Increased radius to 0.4f for better detection
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(worldPosition, 0.4f);
+        
+        foreach (Collider2D collider in colliders)
+        {
+            if (collider.CompareTag("Tower"))
+            {
+                return true; // Tower already exists here
+            }
+        }
+        
+        return false;
+    }
+
+    private void HandlePurchaseAttempt(int amount, bool success)
+    {
+        // We can use this to respond to purchase attempts if needed
+        // For example, play a sound when purchase fails
+        if (!success && amount == towerCost)
+        {
+            OnInsufficientFunds?.Invoke();
         }
     }
 
@@ -78,6 +121,8 @@ public class TowerManager : MonoBehaviour
     {
         Vector3 towerPosition = tilemap.GetCellCenterWorld(cellPosition);
         GameObject tower = Instantiate(towerPrefab, towerPosition, Quaternion.identity);
-        economyManager.playerMoney -= towerCost;
+        
+        // Trigger tower placed event
+        OnTowerPlaced?.Invoke(towerPosition);
     }
 } 

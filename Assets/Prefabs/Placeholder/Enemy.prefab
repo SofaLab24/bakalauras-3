@@ -141,8 +141,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2221711506c6ac4788cce99a98748d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moneyValue: 5
+  moneyValue: 50
   health: 100
+  damageValue: 10
 --- !u!58 &6127112879626753412
 CircleCollider2D:
   m_ObjectHideFlags: 0
