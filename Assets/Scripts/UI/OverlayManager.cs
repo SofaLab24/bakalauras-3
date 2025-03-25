@@ -7,106 +7,58 @@ public class OverlayManager : MonoBehaviour
 {
     [SerializeField] private WaveManager waveManager; // Reference to WaveManager
     [SerializeField] private EconomyManager economyManager; // Reference to EconomyManager
+    [SerializeField] private BaseManager baseManager; // Reference to BaseManager
 
-    private UIDocument uiDocument; // Reference to UI Document
+    [SerializeField] private UIDocument uiDocument; // Reference to UI Document
     [SerializeField] private float splitChance = 0.3f; // Default split chance value
 
     private VisualElement nextWaveButton;
     private Label moneyText;
+    private VisualElement healthBarFill;
+    private Label healthText;
 
     private void OnEnable()
     {
         // Subscribe to the money changed event
         EconomyManager.OnMoneyChanged += UpdateMoneyDisplay;
+        
+        // Subscribe to the health changed event
+        BaseManager.OnHealthChanged += HandleHealthChanged;
     }
 
     private void OnDisable()
     {
         // Unsubscribe from the money changed event
         EconomyManager.OnMoneyChanged -= UpdateMoneyDisplay;
+        
+        // Unsubscribe from the health changed event
+        BaseManager.OnHealthChanged -= HandleHealthChanged;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        if (uiDocument == null)
-        {
-            uiDocument = GetComponent<UIDocument>();
-        }
+        VisualElement root = uiDocument.rootVisualElement;
+        nextWaveButton = root.Q<VisualElement>("NextWaveButton");
+        nextWaveButton.RegisterCallback<ClickEvent>(OnNextWaveButtonClicked);
 
-        if (uiDocument != null)
-        {
-            // Get the root element of the UI
-            VisualElement root = uiDocument.rootVisualElement;
-            
-            // Find the NextWaveButton
-            nextWaveButton = root.Q<VisualElement>("NextWaveButton");
-            
-            if (nextWaveButton != null)
-            {
-                // Register the click event handler
-                nextWaveButton.RegisterCallback<ClickEvent>(OnNextWaveButtonClicked);
-            }
-            else
-            {
-                Debug.LogError("NextWaveButton not found in UI");
-            }
-
-            // Find the MoneyText label
-            moneyText = root.Q<Label>("MoneyText");
-            if (moneyText == null)
-            {
-                Debug.LogError("MoneyText not found in UI");
-            }
-        }
-        else
-        {
-            Debug.LogError("UIDocument component is missing");
-        }
-
-        if (waveManager == null)
-        {
-            waveManager = FindObjectOfType<WaveManager>();
-            if (waveManager == null)
-            {
-                Debug.LogError("WaveManager not found in scene");
-            }
-        }
-
-        if (economyManager == null)
-        {
-            economyManager = FindObjectOfType<EconomyManager>();
-            if (economyManager == null)
-            {
-                Debug.LogError("EconomyManager not found in scene");
-            }
-        }
-
+        moneyText = root.Q<Label>("MoneyText");
+        healthBarFill = root.Q<VisualElement>("HealthBarFill");
+        healthText = root.Q<Label>("HealthText");
+        
         // Initialize money display with current value
         UpdateMoneyDisplay(economyManager != null ? economyManager.playerMoney : 0);
+        
+        // Initialize health bar with current value if BaseManager is available
+        UpdateHealthBar(baseManager.GetCurrentHealth(), baseManager.GetMaxHealth());
     }
 
     // Method to handle the NextWaveButton click
     private void OnNextWaveButtonClicked(ClickEvent evt)
     {
-        if (waveManager != null)
-        {
-            waveManager.StartNextWave(splitChance);
-        }
-        else
-        {
-            Debug.LogError("WaveManager reference is missing");
-        }
+        waveManager.StartNextWave(splitChance);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        // Money display is now updated via events, no need to poll every frame
-    }
-
-    // Method to update the money display with proper formatting
-    // Now accepts current money value from the event
     private void UpdateMoneyDisplay(int currentMoney)
     {
         if (moneyText != null)
@@ -115,6 +67,20 @@ public class OverlayManager : MonoBehaviour
             string formattedMoney = FormatMoneyWithSpaces(currentMoney);
             moneyText.text = "x " + formattedMoney;
         }
+    }
+    
+    // Handler for the health changed event
+    private void HandleHealthChanged(int currentHealth)
+    {
+        UpdateHealthBar(currentHealth, baseManager.GetMaxHealth());
+    }
+    
+    // Method to update the health bar fill and text based on current and max health
+    public void UpdateHealthBar(int currentHealth, int maxHealth)
+    {
+        float healthPercentage = Mathf.Clamp01((float)currentHealth / maxHealth) * 100f;
+        healthBarFill.style.width = new StyleLength(new Length(healthPercentage, LengthUnit.Percent));
+        healthText.text = $"{currentHealth} / {maxHealth}";
     }
 
     // Helper method to format money with spaces for thousands

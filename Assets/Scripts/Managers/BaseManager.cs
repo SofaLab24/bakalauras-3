@@ -16,9 +16,9 @@ public class BaseManager : MonoBehaviour
         currentHealth = maxHealth;
     }
 
-    void Start()
+    // Notify listeners of initial health after they are set up
+    void LateStart()
     {
-        // Notify listeners of initial health
         OnHealthChanged?.Invoke(currentHealth);
     }
 

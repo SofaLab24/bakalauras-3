@@ -252,7 +252,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waveManager: {fileID: 1429115354}
-  economyManager: {fileID: 0}
+  economyManager: {fileID: 1429115355}
+  baseManager: {fileID: 1119460532}
+  uiDocument: {fileID: 288415515}
   splitChance: 0.3
 --- !u!1 &356289515
 GameObject:
@@ -679,6 +681,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1119460532 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1871619152245633679, guid: 3fc2348549da0d54492de2c6b23961a0, type: 3}
+  m_PrefabInstance: {fileID: 6292206381227427851}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51cb7b75973a55f4793a34cfbc1029d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1429115351
 GameObject:
   m_ObjectHideFlags: 0
