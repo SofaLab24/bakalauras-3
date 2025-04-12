@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 556192596e2423d43b48632c41d52a9e, type: 3}
+  m_Name: ArrowTower
+  m_EditorClassIdentifier: 
+  buildingCost: 150
+  buildingIcon: {fileID: 2800000, guid: 4d1769c6d500dc14aa7451ea2d323d85, type: 3}
+  buildingPrefab: {fileID: 2857807080901524982, guid: b26cb1e9889eaac4d8357bb40a459c48, type: 3}
+  isTower: 1
+  towerType: 1
+  towerRange: 5
+  towerShootingSpeed: 0.8
+  towerDamage: 30
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  resourceType: 
+  resourceMultiplier: 0

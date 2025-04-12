@@ -5,12 +5,15 @@ using UnityEngine.UIElements; // Add UIElements namespace
 
 public class OverlayManager : MonoBehaviour
 {
-    [SerializeField] private WaveManager waveManager; // Reference to WaveManager
-    [SerializeField] private EconomyManager economyManager; // Reference to EconomyManager
-    [SerializeField] private BaseManager baseManager; // Reference to BaseManager
+    [SerializeField] private BuildingManager buildingManager;
+    [SerializeField] private WaveManager waveManager;
+    [SerializeField] private EconomyManager economyManager;
+    [SerializeField] private BaseManager baseManager;
+    [SerializeField] private UIDocument uiDocument;
+    [SerializeField] private float splitChance = 0.3f;
 
-    [SerializeField] private UIDocument uiDocument; // Reference to UI Document
-    [SerializeField] private float splitChance = 0.3f; // Default split chance value
+    [SerializeField] private VisualTreeAsset buildingIconTemplate;
+    private VisualElement buildingsWrapper;
 
     private VisualElement nextWaveButton;
     private Label moneyText;
@@ -46,19 +49,38 @@ public class OverlayManager : MonoBehaviour
         healthBarFill = root.Q<VisualElement>("HealthBarFill");
         healthText = root.Q<Label>("HealthText");
         
-        // Initialize money display with current value
+        // Initialize money and health
         UpdateMoneyDisplay(economyManager != null ? economyManager.playerMoney : 0);
-        
-        // Initialize health bar with current value if BaseManager is available
         UpdateHealthBar(baseManager.GetCurrentHealth(), baseManager.GetMaxHealth());
+
+        // Initialize buildings icons
+        buildingsWrapper = root.Q<VisualElement>("BuildingsWrapper");
+        InitializeBuildingsIcons();
     }
 
-    // Method to handle the NextWaveButton click
+    private void InitializeBuildingsIcons()
+    {
+        buildingsWrapper.Clear();
+        VisualElement buildingIcon = buildingIconTemplate.CloneTree().Q<VisualElement>("BuildingIcon");
+        foreach (var building in buildingManager.availableBuildings)
+        {
+            buildingIcon.style.backgroundImage = new StyleBackground(building.buildingIcon);
+            buildingIcon.Q<Label>("BuildingCost").text = building.buildingCost.ToString();
+            buildingIcon.RegisterCallback<ClickEvent, BuildingSettings>(OnBuildingIconClicked, building);
+            buildingsWrapper.Add(buildingIcon);
+            buildingIcon = buildingIconTemplate.CloneTree().Q<VisualElement>("BuildingIcon");
+        }
+
+    }
+
     private void OnNextWaveButtonClicked(ClickEvent evt)
     {
         waveManager.StartNextWave(splitChance);
     }
-
+    private void OnBuildingIconClicked(ClickEvent evt, BuildingSettings buildingSettings)
+    {
+        buildingManager.SelectBuilding(buildingSettings);
+    }
     private void UpdateMoneyDisplay(int currentMoney)
     {
         if (moneyText != null)

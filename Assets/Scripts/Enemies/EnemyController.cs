@@ -44,7 +44,6 @@ public class EnemyController : MonoBehaviour
             body.velocity = Vector2.zero;
             transform.position = new Vector3(target.x, target.y);
             targets.RemoveAt(targets.Count - 1);
-            Vector2 newTarget = targets[^1];
         }
     }
 

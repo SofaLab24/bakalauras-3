@@ -1,24 +1,24 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using System;
+using System.Collections.Generic;
 
-public class TowerManager : MonoBehaviour
+public class BuildingManager : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject towerPrefab;
+    public List<BuildingSettings> availableBuildings;
     [SerializeField]
     private Tilemap tilemap;
-    [SerializeField]
-    private int towerCost = 100;
-
+    
     private EconomyManager economyManager;
     private PathGenerator pathGenerator;
     private Camera mainCamera;
 
-    public static event Action<Vector3> OnTowerPlaced;
+    public static event Action<Vector3> OnBuildingPlaced;
     // TODO: trigger faulty sound effect and highlight missing money
-    public static event Action<Vector3Int> OnInvalidPlacementAttempt;
+    public static event Action<bool> TriggerRangeIndicator;
     public static event Action OnInsufficientFunds;
+
+    private BuildingSettings selectedBuilding;
 
     private void OnEnable()
     {
@@ -41,41 +41,65 @@ public class TowerManager : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            HandleTowerPlacement();
+            HandleBuildingPlacement();
         }
     }
-
-    private void HandleTowerPlacement()
+    public void SelectBuilding(BuildingSettings buildingSettings)
     {
+        selectedBuilding = buildingSettings;
+    }
+
+    private void HandleBuildingPlacement()
+    {
+        TriggerRangeIndicator?.Invoke(true);
+
         Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
         Vector3Int cellPosition = tilemap.WorldToCell(mousePosition);
 
-        // Check if the clicked position is a tower spot
+        // Check if the clicked position is a building spot
         TileBase clickedTile = tilemap.GetTile(cellPosition);
-        if (clickedTile != null && IsTowerSpot(cellPosition))
+        if (clickedTile != null && IsBuildingSpot(cellPosition))
         {
-            // Check if there's already a tower at this position
+            // Check if there's already a building at this position
             Vector3 worldPosition = tilemap.GetCellCenterWorld(cellPosition);
-            if (IsTowerAtPosition(worldPosition))
+            Transform building = IsBuildingAtPosition(worldPosition);
+            if (building != null)
             {
-                OnInvalidPlacementAttempt?.Invoke(cellPosition);
+                if (building.TryGetComponent<BaseTower>(out BaseTower tower))
+                {
+                    tower.ToggleRangeIndicator();
+                    return;
+                }
                 return;
             }
 
-            // Try to spend money and place tower
-            if (economyManager.SpendMoney(towerCost))
+            if (TryPlaceBuilding(selectedBuilding))
             {
-                PlaceTower(cellPosition);
-            }
-            else
-            {
-                // Invalid placement position
-                OnInvalidPlacementAttempt?.Invoke(cellPosition);
+                PlaceBuilding(cellPosition, selectedBuilding);
             }
         }
     }
 
-    private bool IsTowerAtPosition(Vector3 worldPosition)
+    private bool TryPlaceBuilding(BuildingSettings buildingSettings)
+    {
+        if (buildingSettings == null)
+        {
+            Debug.LogError("No building settings selected");
+            return false;
+        }
+
+        if (economyManager.SpendMoney(buildingSettings.buildingCost))
+        {
+            return true;
+        }
+        else
+        {
+            OnInsufficientFunds?.Invoke();
+            return false;
+        }
+    }
+
+    private Transform IsBuildingAtPosition(Vector3 worldPosition)
     {
         // Increased radius to 0.4f for better detection
         Collider2D[] colliders = Physics2D.OverlapCircleAll(worldPosition, 0.4f);
@@ -84,24 +108,24 @@ public class TowerManager : MonoBehaviour
         {
             if (collider.CompareTag("Tower"))
             {
-                return true; // Tower already exists here
+                return collider.transform; // Building already exists here
             }
         }
         
-        return false;
+        return null;
     }
 
     private void HandlePurchaseAttempt(int amount, bool success)
     {
         // We can use this to respond to purchase attempts if needed
         // For example, play a sound when purchase fails
-        if (!success && amount == towerCost)
+        if (!success)
         {
             OnInsufficientFunds?.Invoke();
         }
     }
 
-    private bool IsTowerSpot(Vector3Int position)
+    private bool IsBuildingSpot(Vector3Int position)
     {
         // Convert tilemap position to PathTile coordinates
         Vector2Int pathTileCoords = new Vector2Int(position.x / pathGenerator.tileSize, position.y / pathGenerator.tileSize);
@@ -117,12 +141,15 @@ public class TowerManager : MonoBehaviour
         return false;
     }
 
-    private void PlaceTower(Vector3Int cellPosition)
+    private void PlaceBuilding(Vector3Int cellPosition, BuildingSettings buildingSettings)
     {
-        Vector3 towerPosition = tilemap.GetCellCenterWorld(cellPosition);
-        GameObject tower = Instantiate(towerPrefab, towerPosition, Quaternion.identity);
+        Vector3 buildingPosition = tilemap.GetCellCenterWorld(cellPosition);
         
-        // Trigger tower placed event
-        OnTowerPlaced?.Invoke(towerPosition);
+        GameObject building = Instantiate(buildingSettings.buildingPrefab, buildingPosition, Quaternion.identity);
+        if (buildingSettings.isTower)
+        {
+            building.GetComponent<BaseTower>().Initialize(buildingSettings);
+        }
+        OnBuildingPlaced?.Invoke(buildingPosition);
     }
 } 

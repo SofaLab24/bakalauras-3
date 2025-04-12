@@ -251,11 +251,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 244be0543354d6a409f70b15fc70e727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buildingManager: {fileID: 1429115356}
   waveManager: {fileID: 1429115354}
   economyManager: {fileID: 1429115355}
   baseManager: {fileID: 1119460532}
   uiDocument: {fileID: 288415515}
   splitChance: 0.3
+  buildingIconTemplate: {fileID: 9197481963319205126, guid: 325bdd0759364104385b9b3ebed204ed, type: 3}
 --- !u!1 &356289515
 GameObject:
   m_ObjectHideFlags: 0
@@ -769,7 +771,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d335838563dd944ab6602e1f1c1c548, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerMoney: 150
+  _playerMoney: 500
 --- !u!114 &1429115356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -782,9 +784,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9529f1c2ddcdf3b41a091f4f7a319a42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  towerPrefab: {fileID: 2857807080901524982, guid: b26cb1e9889eaac4d8357bb40a459c48, type: 3}
+  availableBuildings:
+  - {fileID: 11400000, guid: cea31ed8ee45f3048966bbaabe719d1c, type: 2}
+  - {fileID: 11400000, guid: 2757f14bf8b3b804ebbcaf23641af36b, type: 2}
   tilemap: {fileID: 356289518}
-  towerCost: 100
 --- !u!1001 &6292206381227427851
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -835,7 +838,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8668568515712037954, guid: 3fc2348549da0d54492de2c6b23961a0, type: 3}
       propertyPath: m_Name
-      value: Base
+      value: BASE
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

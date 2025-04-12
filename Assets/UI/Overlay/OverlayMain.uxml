@@ -25,7 +25,9 @@
         </ui:VisualElement>
         <ui:VisualElement name="Mid" style="flex-grow: 1; width: 100%; height: 45%; position: absolute; left: 0; top: 25%;" />
         <ui:VisualElement name="Bot" style="flex-grow: 1; height: 30%; top: 70%; width: 100%; position: absolute; left: 0; flex-direction: row;">
-            <ui:VisualElement name="BotLeft" style="flex-grow: 1; position: absolute; left: 0; top: 0; width: 80%; height: 100%;" />
+            <ui:VisualElement name="BotLeft" style="flex-grow: 1; position: absolute; left: 0; top: 0; width: 80%; height: 100%;">
+                <ui:VisualElement name="BuildingsWrapper" style="flex-grow: 1; position: absolute; right: 10%; width: 80%; height: 80%; flex-direction: row; justify-content: center; top: 0;" />
+            </ui:VisualElement>
             <ui:VisualElement name="BotRight" style="flex-grow: 1; position: absolute; right: 0; top: 0; height: 100%; width: 20%; align-items: center; justify-content: center; align-self: center;">
                 <ui:VisualElement name="NextWaveButton" class="button" style="flex-grow: 1; position: absolute; left: 20%; right: 20%; bottom: 20%; top: 20%; align-items: center; justify-content: center; align-self: center;">
                     <ui:Label tabindex="-1" text="Next&#10;Wave" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Text" class="buttonText" style="font-size: 50px;" />
