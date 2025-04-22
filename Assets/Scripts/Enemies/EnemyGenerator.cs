@@ -13,7 +13,12 @@ public class EnemyGenerator : MonoBehaviour
         // If only 1 stat point, then it's 10 health and 3f move speed
         int healthPoints = Random.Range(1, leftStatPoints);
         leftStatPoints -= healthPoints;
-        float moveSpeed = leftStatPoints + 2f;
+        float moveSpeed;
+        if (leftStatPoints < 15f)
+        {
+            moveSpeed = leftStatPoints + 2f;
+        }
+        else moveSpeed = 15f; // max move speed
 
         Debug.Log("Generated enemy from " + statPoints + " stat points. Health: " + healthPoints * healthMultiplier 
         + " Move speed: " + moveSpeed * moveSpeedMultiplier);

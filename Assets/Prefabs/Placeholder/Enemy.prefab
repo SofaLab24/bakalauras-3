@@ -78,7 +78,7 @@ SpriteRenderer:
   m_SortingLayer: -3
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0.47798735, g: 0.13978869, b: 0.13978869, a: 1}
+  m_Color: {r: 0, g: 0.8235294, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -102,7 +102,7 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0.09
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -127,8 +127,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8dd7ec087b68ea47aa23def4ac63462, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHealthColorScale: 200
+  maxMoveSpeedColorScale: 15
   moveSpeed: 5
-  distanceOffset: 0.05
+  distanceOffset: 0.09
 --- !u!114 &4092464429332005036
 MonoBehaviour:
   m_ObjectHideFlags: 0

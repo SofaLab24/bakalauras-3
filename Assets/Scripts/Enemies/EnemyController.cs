@@ -6,14 +6,19 @@ public class EnemyController : MonoBehaviour
     Rigidbody2D body;
     List<Vector2> targets;
     EnemyHealthManager healthManager;
+    SpriteRenderer spriteRenderer;
+
+    [SerializeField] float maxHealthColorScale = 200f;
+    [SerializeField] float maxMoveSpeedColorScale = 15f;
 
     public float moveSpeed = 5f;
-    public float distanceOffset = 0.05f;
+    public float distanceOffset = 0.09f;
 
     void Awake()
     {
         body = GetComponent<Rigidbody2D>();
         healthManager = GetComponent<EnemyHealthManager>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void FixedUpdate()
@@ -23,10 +28,26 @@ public class EnemyController : MonoBehaviour
     public void SetHealth(int health)
     {
         healthManager.health = health;
+        float red;
+        if (health < maxHealthColorScale)
+        {
+            red = health / maxHealthColorScale;
+        }
+        else red = 1f;
+        Color currentColor = spriteRenderer.color;
+        spriteRenderer.color = new Color(red, currentColor.g, currentColor.b, currentColor.a);
     }
     public void SetMoveSpeed(float moveSpeed)
     {
         this.moveSpeed = moveSpeed;
+        float blue;
+        if (moveSpeed < maxMoveSpeedColorScale)
+        {
+            blue = moveSpeed / maxMoveSpeedColorScale;
+        }
+        else blue = 1f;
+        Color currentColor = spriteRenderer.color;
+        spriteRenderer.color = new Color(currentColor.r, currentColor.g, blue, currentColor.a);
     }
     private void Move()
     {
@@ -35,7 +56,8 @@ public class EnemyController : MonoBehaviour
         if (distance > distanceOffset)
         {
             Vector2Int direction = CalculateDirection(target);
-            body.velocity = new Vector2(direction.x * moveSpeed, direction.y * moveSpeed);
+            
+            body.velocity = new Vector2(direction.x, direction.y) * moveSpeed * Time.fixedDeltaTime * 40;
         }
         else // reached the current target
         {
