@@ -85,7 +85,6 @@ public class OverlayManager : MonoBehaviour
     {
         if (moneyText != null)
         {
-            // Format the money value with spaces for thousands
             string formattedMoney = FormatMoneyWithSpaces(currentMoney);
             moneyText.text = "x " + formattedMoney;
         }

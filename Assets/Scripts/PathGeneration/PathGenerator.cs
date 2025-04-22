@@ -123,7 +123,9 @@ public class PathGenerator : MonoBehaviour
             Vector2Int[] exits = new Vector2Int[exitCount];
             for (int j = 0; j < exitCount; j++)
             {
-                exits[j] = (possiblePaths[Random.Range(0, possiblePaths.Count)]);
+                int id = Random.Range(0, possiblePaths.Count);
+                exits[j] = possiblePaths[id];
+                possiblePaths.RemoveAt(id);
             }
             // only single path
             if (exitCount == 1)

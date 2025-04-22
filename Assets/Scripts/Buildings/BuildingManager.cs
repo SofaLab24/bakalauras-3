@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using System;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 public class BuildingManager : MonoBehaviour
 {
@@ -35,11 +36,12 @@ public class BuildingManager : MonoBehaviour
         economyManager = GetComponent<EconomyManager>();
         pathGenerator = GetComponent<PathGenerator>();
         mainCamera = Camera.main;
+
     }
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
             HandleBuildingPlacement();
         }

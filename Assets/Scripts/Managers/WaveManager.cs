@@ -6,11 +6,13 @@ public class WaveManager : MonoBehaviour
 {
     [SerializeField]
     EnemyController enemyPrefab;
+    public int waveNumber = 0;
 
     PathGenerator pathGenerator;
     private void Start()
     {
         pathGenerator = GetComponent<PathGenerator>();
+        waveNumber = 0;
     }
     public void StartNextWave(float splitChance)
     {
