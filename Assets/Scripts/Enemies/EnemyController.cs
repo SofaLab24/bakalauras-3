@@ -1,7 +1,4 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
@@ -11,9 +8,9 @@ public class EnemyController : MonoBehaviour
     EnemyHealthManager healthManager;
 
     public float moveSpeed = 5f;
-    public float distanceOffset = 0.02f;
+    public float distanceOffset = 0.05f;
 
-    void Start()
+    void Awake()
     {
         body = GetComponent<Rigidbody2D>();
         healthManager = GetComponent<EnemyHealthManager>();
@@ -23,7 +20,14 @@ public class EnemyController : MonoBehaviour
     {
         Move();
     }
-
+    public void SetHealth(int health)
+    {
+        healthManager.health = health;
+    }
+    public void SetMoveSpeed(float moveSpeed)
+    {
+        this.moveSpeed = moveSpeed;
+    }
     private void Move()
     {
         Vector2 target = targets[^1];

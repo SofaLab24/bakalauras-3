@@ -718,6 +718,7 @@ GameObject:
   - component: {fileID: 1429115354}
   - component: {fileID: 1429115355}
   - component: {fileID: 1429115356}
+  - component: {fileID: 1429115357}
   m_Layer: 0
   m_Name: GAME_MANAGER
   m_TagString: Untagged
@@ -770,6 +771,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 7305669390683419870, guid: eae32f9db5878bc4abce2bc898a736f6, type: 3}
+  enemyStatMultiplier: 3.1
+  enemyAmountMultiplier: 1.5
+  waveNumber: 0
 --- !u!114 &1429115355
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -799,6 +803,20 @@ MonoBehaviour:
   - {fileID: 11400000, guid: cea31ed8ee45f3048966bbaabe719d1c, type: 2}
   - {fileID: 11400000, guid: 2757f14bf8b3b804ebbcaf23641af36b, type: 2}
   tilemap: {fileID: 356289518}
+--- !u!114 &1429115357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1429115351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e6f050957199d548b3e62679fc9ab2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthMultiplier: 10
+  moveSpeedMultiplier: 1
 --- !u!1001 &6292206381227427851
 PrefabInstance:
   m_ObjectHideFlags: 0
