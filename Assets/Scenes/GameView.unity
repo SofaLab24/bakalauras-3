@@ -773,7 +773,10 @@ MonoBehaviour:
   enemyPrefab: {fileID: 7305669390683419870, guid: eae32f9db5878bc4abce2bc898a736f6, type: 3}
   enemyStatMultiplier: 3.1
   enemyAmountMultiplier: 1.5
+  enemySpawnInterval: 1.5
+  enemySpawnIntervalVariance: 0.5
   waveNumber: 0
+  enemiesLeftToDie: 0
 --- !u!114 &1429115355
 MonoBehaviour:
   m_ObjectHideFlags: 0

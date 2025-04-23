@@ -15,10 +15,13 @@ public class BuildingSettings : ScriptableObject
     [Header("Tower Settings")]
     public TowerType towerType;
     public float towerRange = 5f;
-    public float towerShootingSpeed = 0.5f;
+    public float towerShootingDelay = 0.5f;
+    public float towerProjectileSpeed = 10f;
+    public AnimationCurve projectileSpeedCurve;
     public int towerDamage = 20;
+    public float towerExplosionRadius = 2f;
     public LayerMask enemyLayer;
-    
+    public GameObject towerProjectilePrefab;
     [Header("Resource Building Settings")]
     public string resourceType;
     public int resourceMultiplier;
@@ -26,7 +29,6 @@ public class BuildingSettings : ScriptableObject
 
 public enum TowerType
 {
-    Basic,
     Arrow,
     Cannon
 }

@@ -2,12 +2,13 @@ using UnityEngine;
 
 public class ArrowTower : BaseTower
 {
-    protected override void ShootAtTarget()
-    {
-        EnemyHealthManager enemyHealth = currentTarget.GetComponent<EnemyHealthManager>();
-        if (enemyHealth != null)
+    public override void DealDamage(Vector3 targetPosition, Transform target)
+    {   
+        if (target != null)
         {
+            EnemyHealthManager enemyHealth = target.GetComponent<EnemyHealthManager>();
             enemyHealth.TakeDamage(damage);
         }
+
     }
 } 

@@ -3,11 +3,21 @@ using UnityEngine;
 public class CannonTower : BaseTower
 {
     [SerializeField] private float explosionRadius = 2f;
-
-    protected override void ShootAtTarget()
+    public override void Initialize(BuildingSettings settings)
+    {
+        this.range = settings.towerRange;
+        this.shootingSpeed = settings.towerShootingDelay;
+        this.projectileSpeed = settings.towerProjectileSpeed;
+        this.damage = settings.towerDamage;
+        this.explosionRadius = settings.towerExplosionRadius;
+        this.enemyLayer = settings.enemyLayer;
+        this.projectilePrefab = settings.towerProjectilePrefab;
+        this.projectileSpeedCurve = settings.projectileSpeedCurve;
+    }
+    public override void DealDamage(Vector3 targetPosition, Transform target)
     {
         // Find all enemies in explosion radius
-        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(currentTarget.position, explosionRadius, enemyLayer);
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(targetPosition, explosionRadius, enemyLayer);
         
         foreach (Collider2D collider in hitColliders)
         {
@@ -15,7 +25,7 @@ public class CannonTower : BaseTower
             if (enemyHealth != null)
             {
                 // Damage decreases with distance from explosion center
-                float distance = Vector2.Distance(currentTarget.position, collider.transform.position);
+                float distance = Vector2.Distance(targetPosition, collider.transform.position);
                 float damageMultiplier = 1 - (distance / explosionRadius);
                 int actualDamage = Mathf.RoundToInt(damage * damageMultiplier);
                 
@@ -23,6 +33,7 @@ public class CannonTower : BaseTower
             }
         }
     }
+
 
     protected override void OnDrawGizmosSelected()
     {

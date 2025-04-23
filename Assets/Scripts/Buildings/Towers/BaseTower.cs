@@ -6,8 +6,11 @@ public abstract class BaseTower : MonoBehaviour
 {
     [SerializeField] protected float range;
     [SerializeField] protected float shootingSpeed;
+    [SerializeField] protected float projectileSpeed;
     [SerializeField] protected int damage;
     [SerializeField] protected LayerMask enemyLayer;
+    [SerializeField] protected GameObject projectilePrefab;
+    [SerializeField] protected AnimationCurve projectileSpeedCurve;
     
     protected Coroutine shootingCoroutine;
     protected Transform currentTarget;
@@ -16,12 +19,15 @@ public abstract class BaseTower : MonoBehaviour
 
     public float Range => range;
     
-    public void Initialize(BuildingSettings settings)
+    public virtual void Initialize(BuildingSettings settings)
     {
         this.range = settings.towerRange;
-        this.shootingSpeed = settings.towerShootingSpeed;
+        this.shootingSpeed = settings.towerShootingDelay;
+        this.projectileSpeed = settings.towerProjectileSpeed;
         this.damage = settings.towerDamage;
         this.enemyLayer = settings.enemyLayer;
+        this.projectilePrefab = settings.towerProjectilePrefab;
+        this.projectileSpeedCurve = settings.projectileSpeedCurve;
     }
 
     protected virtual void OnEnable()
@@ -124,7 +130,18 @@ public abstract class BaseTower : MonoBehaviour
         }
     }
 
-    protected abstract void ShootAtTarget();
+    // shoots projectile at target
+    protected virtual void ShootAtTarget()
+    {
+        EnemyHealthManager enemyHealth = currentTarget.GetComponent<EnemyHealthManager>();
+        if (enemyHealth != null)
+        {
+            Projectile projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity).GetComponent<Projectile>();
+            projectile.Initialize(currentTarget, projectileSpeed, projectileSpeedCurve, this);
+        }
+    }
+    // called by projectile when it hits the target
+    public abstract void DealDamage(Vector3 targetPosition, Transform target);
 
     protected virtual void OnDrawGizmosSelected()
     {
