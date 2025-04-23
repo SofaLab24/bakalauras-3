@@ -17,7 +17,7 @@ MonoBehaviour:
   buildingPrefab: {fileID: 2857807080901524982, guid: b26cb1e9889eaac4d8357bb40a459c48, type: 3}
   isTower: 1
   towerType: 0
-  towerRange: 5
+  towerRange: 3
   towerShootingDelay: 0.8
   towerProjectileSpeed: 10
   projectileSpeedCurve:
@@ -45,6 +45,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   towerDamage: 30
+  towerBurnDamage: 0
   towerExplosionRadius: 2
   enemyLayer:
     serializedVersion: 2

@@ -19,6 +19,7 @@ public class BuildingSettings : ScriptableObject
     public float towerProjectileSpeed = 10f;
     public AnimationCurve projectileSpeedCurve;
     public int towerDamage = 20;
+    public int towerBurnDamage = 0;
     public float towerExplosionRadius = 2f;
     public LayerMask enemyLayer;
     public GameObject towerProjectilePrefab;
@@ -30,5 +31,6 @@ public class BuildingSettings : ScriptableObject
 public enum TowerType
 {
     Arrow,
-    Cannon
+    Cannon,
+    Wizard
 }

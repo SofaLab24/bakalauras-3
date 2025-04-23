@@ -10,46 +10,46 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 556192596e2423d43b48632c41d52a9e, type: 3}
-  m_Name: CannonTower
+  m_Name: FlamingArrowTower
   m_EditorClassIdentifier: 
-  buildingCost: 200
-  buildingIcon: {fileID: 2800000, guid: 7969ddc76f192b14a8bf613591a28188, type: 3}
-  buildingPrefab: {fileID: 2857807080901524982, guid: c2fce88191a100542bb2c7d3e0d67802, type: 3}
+  buildingCost: 250
+  buildingIcon: {fileID: 2800000, guid: 098808686c6e33f4288f3e7f77de34db, type: 3}
+  buildingPrefab: {fileID: 2857807080901524982, guid: 945da19b25c767c4db612463556fc992, type: 3}
   isTower: 1
-  towerType: 1
-  towerRange: 6
-  towerShootingDelay: 2.5
-  towerProjectileSpeed: 8
+  towerType: 0
+  towerRange: 3
+  towerShootingDelay: 0.9
+  towerProjectileSpeed: 10
   projectileSpeedCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0.19799805
-      inSlope: 2.1471179
-      outSlope: 2.1471179
+      value: 0.9993355
+      inSlope: -0.0012621289
+      outSlope: -0.0012621289
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.02903811
+      outWeight: 0.11966937
     - serializedVersion: 3
       time: 1
-      value: 0.7655258
-      inSlope: -1.4643161
-      outSlope: -1.4643161
+      value: 0.40005064
+      inSlope: -1.7363994
+      outSlope: -1.7363994
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.13974589
+      inWeight: 0.049475253
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  towerDamage: 50
-  towerBurnDamage: 0
+  towerDamage: 30
+  towerBurnDamage: 2
   towerExplosionRadius: 2
   enemyLayer:
     serializedVersion: 2
     m_Bits: 64
-  towerProjectilePrefab: {fileID: 7784466698744177259, guid: 0fa56d0d2bf401944a76b496bc4c1eb5, type: 3}
+  towerProjectilePrefab: {fileID: 7784466698744177259, guid: c245961681e2bae42b4c2a114d7353c5, type: 3}
   resourceType: 
   resourceMultiplier: 0

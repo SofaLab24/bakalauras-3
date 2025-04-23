@@ -108,7 +108,7 @@ public abstract class BaseTower : MonoBehaviour
             return false;
 
         EnemyHealthManager enemyHealth = currentTarget.GetComponent<EnemyHealthManager>();
-        if (enemyHealth == null || enemyHealth.health <= 0)
+        if (enemyHealth == null || enemyHealth.currentHealth <= 0)
             return false;
 
         return true;
@@ -122,7 +122,7 @@ public abstract class BaseTower : MonoBehaviour
         foreach (Collider2D collider in hitColliders)
         {
             EnemyHealthManager enemyHealth = collider.GetComponent<EnemyHealthManager>();
-            if (enemyHealth != null && enemyHealth.health > 0)
+            if (enemyHealth != null && enemyHealth.currentHealth > 0)
             {
                 currentTarget = collider.transform;
                 break;

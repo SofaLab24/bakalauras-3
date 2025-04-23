@@ -10,7 +10,15 @@ public class BaseManager : MonoBehaviour
 
     [SerializeField] private int maxHealth = 100;
     [SerializeField] private int currentHealth;
-    
+
+    void OnEnable()
+    {
+        EnemyHealthManager.OnEnemyDeath += HandleEnemyAttack;
+    }
+    void OnDisable()
+    {
+        EnemyHealthManager.OnEnemyDeath -= HandleEnemyAttack;
+    }
     private void Awake()
     {
         currentHealth = maxHealth;
@@ -22,18 +30,13 @@ public class BaseManager : MonoBehaviour
         OnHealthChanged?.Invoke(currentHealth);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void HandleEnemyAttack(EnemyHealthManager enemy, EnemyHealthManager.DeathReason reason)
     {
-        EnemyHealthManager enemy = collision.gameObject.GetComponent<EnemyHealthManager>();
-        
-        if (enemy != null)
+        if (reason == EnemyHealthManager.DeathReason.ReachedEnd)
         {
-            // Take damage based on enemy's damage value
             TakeDamage(enemy.damageValue);
-            enemy.ReachEnd();
         }
     }
-
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;

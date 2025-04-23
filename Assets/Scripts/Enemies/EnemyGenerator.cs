@@ -6,7 +6,7 @@ public class EnemyGenerator : MonoBehaviour
     [SerializeField] float moveSpeedMultiplier = 1.0f;
 
 
-    public (int health, float moveSpeed) GenerateEnemy(int statPoints)
+    public (int damage,int health, float moveSpeed) GenerateEnemy(int statPoints)
     {
         int leftStatPoints = statPoints + 1;
 
@@ -22,7 +22,7 @@ public class EnemyGenerator : MonoBehaviour
 
         Debug.Log("Generated enemy from " + statPoints + " stat points. Health: " + healthPoints * healthMultiplier 
         + " Move speed: " + moveSpeed * moveSpeedMultiplier);
-        return (healthPoints * healthMultiplier, moveSpeed * moveSpeedMultiplier);
+        return (statPoints, healthPoints * healthMultiplier, moveSpeed * moveSpeedMultiplier);
     }
 
 }

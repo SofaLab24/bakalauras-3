@@ -27,7 +27,7 @@ public class EnemyController : MonoBehaviour
     }
     public void SetHealth(int health)
     {
-        healthManager.health = health;
+        healthManager.currentHealth = health;
         float red;
         if (health < maxHealthColorScale)
         {
@@ -72,11 +72,14 @@ public class EnemyController : MonoBehaviour
             targets.RemoveAt(targets.Count - 1);
         }
     }
-
-    public void SetTargets(List<Vector2> targets)
+    public void Initialize(int damage, List<Vector2> targets, float moveSpeed, int health)
     {
+        this.healthManager.damageValue = damage;
         this.targets = new List<Vector2>(targets);
+        SetMoveSpeed(moveSpeed);
+        SetHealth(health);
     }
+
     public Vector2Int CalculateDirection(Vector2 target)
     {
         return Vector2Int.RoundToInt((new Vector2(target.x - transform.position.x, target.y - transform.position.y)).normalized);

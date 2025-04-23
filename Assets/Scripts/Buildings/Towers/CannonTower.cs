@@ -5,14 +5,8 @@ public class CannonTower : BaseTower
     [SerializeField] private float explosionRadius = 2f;
     public override void Initialize(BuildingSettings settings)
     {
-        this.range = settings.towerRange;
-        this.shootingSpeed = settings.towerShootingDelay;
-        this.projectileSpeed = settings.towerProjectileSpeed;
-        this.damage = settings.towerDamage;
-        this.explosionRadius = settings.towerExplosionRadius;
-        this.enemyLayer = settings.enemyLayer;
-        this.projectilePrefab = settings.towerProjectilePrefab;
-        this.projectileSpeedCurve = settings.projectileSpeedCurve;
+        base.Initialize(settings);
+        explosionRadius = settings.towerExplosionRadius;
     }
     public override void DealDamage(Vector3 targetPosition, Transform target)
     {

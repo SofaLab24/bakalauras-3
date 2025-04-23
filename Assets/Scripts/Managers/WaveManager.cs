@@ -16,7 +16,7 @@ public class WaveManager : MonoBehaviour
 
     private int enemiesToGenerate;
     public int enemiesLeftToDie;
-    private Stack<(int health, float moveSpeed)> enemyPool;
+    private Stack<(int damage, int health, float moveSpeed)> enemyPool;
     private EnemyGenerator enemyGenerator;
     private List<Path> currentPaths;
 
@@ -72,20 +72,20 @@ public class WaveManager : MonoBehaviour
         enemiesToGenerate = newEnemies;
         
         int totalStatPoints = 1 + (int)(enemyStatMultiplier * waveNumber);
-        enemyPool = new Stack<(int health, float moveSpeed)>();
+        enemyPool = new Stack<(int statPoints,int health, float moveSpeed)>();
 
         while (totalStatPoints > newEnemies)
         {
             if (newEnemies <= 1)
             {
-                (int health, float moveSpeed) lastEnemy = enemyGenerator.GenerateEnemy(totalStatPoints);
+                (int damage, int health, float moveSpeed) lastEnemy = enemyGenerator.GenerateEnemy(totalStatPoints);
                 enemyPool.Push(lastEnemy);
                 newEnemies--;
                 break;
             }
 
             int statPoints = UnityEngine.Random.Range(1, totalStatPoints);
-            (int health, float moveSpeed) enemy = enemyGenerator.GenerateEnemy(statPoints);
+            (int damage, int health, float moveSpeed) enemy = enemyGenerator.GenerateEnemy(statPoints);
             enemyPool.Push(enemy);
             totalStatPoints -= statPoints;
             newEnemies--;
@@ -95,7 +95,7 @@ public class WaveManager : MonoBehaviour
         {
             for (int i = 0; i < newEnemies; i++)
             {
-                (int health, float moveSpeed) enemy = enemyGenerator.GenerateEnemy(1);
+                (int damage, int health, float moveSpeed) enemy = enemyGenerator.GenerateEnemy(1);
                 enemyPool.Push(enemy);
             }
         }
@@ -104,11 +104,9 @@ public class WaveManager : MonoBehaviour
     {
         for (int j = 0; j < enemyAmountPerPath; j++)
         {
-            (int health, float moveSpeed) enemyStats = enemyPool.Pop();
+            (int damage, int health, float moveSpeed) enemyStats = enemyPool.Pop();
             EnemyController enemy = Instantiate(enemyPrefab, initPosition, Quaternion.identity);
-            enemy.SetTargets(enemyTargets);
-            enemy.SetMoveSpeed(enemyStats.moveSpeed);
-            enemy.SetHealth(enemyStats.health);
+            enemy.Initialize(enemyStats.damage, enemyTargets, enemyStats.moveSpeed, enemyStats.health);
             yield return new WaitForSeconds(enemySpawnInterval + UnityEngine.Random.Range(-enemySpawnIntervalVariance, enemySpawnIntervalVariance));
         }
     }

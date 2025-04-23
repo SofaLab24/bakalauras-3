@@ -805,6 +805,8 @@ MonoBehaviour:
   availableBuildings:
   - {fileID: 11400000, guid: cea31ed8ee45f3048966bbaabe719d1c, type: 2}
   - {fileID: 11400000, guid: 2757f14bf8b3b804ebbcaf23641af36b, type: 2}
+  - {fileID: 11400000, guid: 41120f22ce09f4844b3bc19977dca352, type: 2}
+  - {fileID: 11400000, guid: 6b5655cfd50e53b40a64addfb40e91fc, type: 2}
   tilemap: {fileID: 356289518}
 --- !u!114 &1429115357
 MonoBehaviour:
@@ -828,6 +830,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1871619152245633679, guid: 3fc2348549da0d54492de2c6b23961a0, type: 3}
+      propertyPath: maxHealth
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 6265112755385363870, guid: 3fc2348549da0d54492de2c6b23961a0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.5
