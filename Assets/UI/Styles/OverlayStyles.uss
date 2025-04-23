@@ -36,3 +36,9 @@
     border-bottom-left-radius: 15px;
     background-color: rgb(218, 73, 141);
 }
+
+.title {
+    -unity-font: url("project://database/Assets/UI/Fonts/poppins/Poppins.otf?fileID=12800000&guid=ba359f7f2e1c3d441bac988121e3bee8&type=3#Poppins");
+    font-size: 143px;
+    color: rgb(218, 73, 141);
+}

@@ -22,20 +22,16 @@ public class OverlayManager : MonoBehaviour
 
     private void OnEnable()
     {
-        // Subscribe to the money changed event
         EconomyManager.OnMoneyChanged += UpdateMoneyDisplay;
-        
-        // Subscribe to the health changed event
         BaseManager.OnHealthChanged += HandleHealthChanged;
+        WaveManager.OnWaveCompleted += OnWaveCompleted;
     }
 
     private void OnDisable()
     {
-        // Unsubscribe from the money changed event
         EconomyManager.OnMoneyChanged -= UpdateMoneyDisplay;
-        
-        // Unsubscribe from the health changed event
         BaseManager.OnHealthChanged -= HandleHealthChanged;
+        WaveManager.OnWaveCompleted -= OnWaveCompleted;
     }
 
     // Start is called before the first frame update
@@ -76,6 +72,12 @@ public class OverlayManager : MonoBehaviour
     private void OnNextWaveButtonClicked(ClickEvent evt)
     {
         waveManager.StartNextWave(splitChance);
+        nextWaveButton.visible = false;
+    }
+    private void OnWaveCompleted(int waveNumber)
+    {
+        nextWaveButton.visible = true;
+        // TODO: show wave completed UI
     }
     private void OnBuildingIconClicked(ClickEvent evt, BuildingSettings buildingSettings)
     {
