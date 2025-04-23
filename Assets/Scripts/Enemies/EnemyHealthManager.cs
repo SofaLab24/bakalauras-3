@@ -1,7 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyHealthManager : MonoBehaviour
 {
@@ -17,10 +16,17 @@ public class EnemyHealthManager : MonoBehaviour
     
     public int moneyValue = 10;
     public int health = 100;
+    private int maxHealth;
     public int damageValue = 10;
+    [SerializeField] private Slider healthBar;
 
-    // Method for when enemy dies by any cause
-    private void Die(DeathReason reason)
+    void Start()
+    {
+        maxHealth = health;
+        healthBar.maxValue = maxHealth;
+        healthBar.value = health;
+    }
+    public void Die(DeathReason reason)
     {
         // TODO: trigger particles
         OnEnemyDeath?.Invoke(this, reason);
@@ -28,13 +34,6 @@ public class EnemyHealthManager : MonoBehaviour
         Destroy(gameObject);
     }
 
-    // Called when enemy is killed by a tower
-    public void Die()
-    {
-        Die(DeathReason.KilledByTower);
-    }
-
-    // Called when enemy reaches the end
     public void ReachEnd()
     {
         Die(DeathReason.ReachedEnd);
@@ -43,6 +42,7 @@ public class EnemyHealthManager : MonoBehaviour
     public void TakeDamage(int damage)
     {
         health -= damage;
+        healthBar.value = health;
         if (health <= 0) { Die(DeathReason.KilledByTower); }
     }
 }
