@@ -18,17 +18,20 @@ public class BuildingManager : MonoBehaviour
     // TODO: trigger faulty sound effect and highlight missing money
     public static event Action<bool> TriggerRangeIndicator;
     public static event Action OnInsufficientFunds;
+    private bool canPlaceBuilding = true;
 
     private BuildingSettings selectedBuilding;
 
     private void OnEnable()
     {
         EconomyManager.OnPurchaseAttempted += HandlePurchaseAttempt;
+        OverlayManager.OnEscMenu += HandleEscMenu;
     }
 
     private void OnDisable()
     {
         EconomyManager.OnPurchaseAttempted -= HandlePurchaseAttempt;
+        OverlayManager.OnEscMenu -= HandleEscMenu;
     }
 
     private void Start()
@@ -46,6 +49,17 @@ public class BuildingManager : MonoBehaviour
             HandleBuildingPlacement();
         }
     }
+    public void HandleEscMenu(bool isOpen)
+    {
+        if (isOpen)
+        {
+            canPlaceBuilding = false;
+        }
+        else
+        {
+            canPlaceBuilding = true;
+        }
+    }
     public void SelectBuilding(BuildingSettings buildingSettings)
     {
         selectedBuilding = buildingSettings;
@@ -53,6 +67,7 @@ public class BuildingManager : MonoBehaviour
 
     private void HandleBuildingPlacement()
     {
+        if (!canPlaceBuilding) return;
         TriggerRangeIndicator?.Invoke(true);
 
         Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);

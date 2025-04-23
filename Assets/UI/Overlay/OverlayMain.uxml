@@ -23,7 +23,9 @@
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="Mid" picking-mode="Ignore" style="flex-grow: 1; width: 100%; height: 45%; position: absolute; left: 0; top: 25%;" />
+        <ui:VisualElement name="Mid" picking-mode="Ignore" style="flex-grow: 1; width: 100%; height: 45%; position: absolute; left: 0; top: 25%;">
+            <ui:VisualElement picking-mode="Ignore" name="EscMenuWrapper" style="flex-grow: 1; position: absolute; left: 20%; width: 60%; height: 100%; align-items: center; justify-content: center; align-self: center;" />
+        </ui:VisualElement>
         <ui:VisualElement name="Bot" picking-mode="Ignore" style="flex-grow: 1; height: 30%; top: 70%; width: 100%; position: absolute; left: 0; flex-direction: row;">
             <ui:VisualElement name="BotLeft" picking-mode="Ignore" style="flex-grow: 1; position: absolute; left: 0; top: 0; width: 80%; height: 100%;">
                 <ui:VisualElement name="BuildingsWrapper" picking-mode="Ignore" style="flex-grow: 1; position: absolute; right: 10%; width: 80%; height: 80%; flex-direction: row; justify-content: center; top: 0;" />

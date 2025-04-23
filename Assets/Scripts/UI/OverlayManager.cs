@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements; // Add UIElements namespace
 
 public class OverlayManager : MonoBehaviour
@@ -11,10 +13,15 @@ public class OverlayManager : MonoBehaviour
     [SerializeField] private BaseManager baseManager;
     [SerializeField] private UIDocument uiDocument;
     [SerializeField] private float splitChance = 0.3f;
-
     [SerializeField] private VisualTreeAsset buildingIconTemplate;
-    private VisualElement buildingsWrapper;
+    [SerializeField] private VisualTreeAsset escMenuTemplate;
 
+    public static event Action<bool> OnEscMenu;
+    private bool isEscMenuOpen = false;
+
+    private VisualElement buildingsWrapper;
+    private VisualElement escMenuWrapper;
+    private VisualElement escMenuButton;
     private VisualElement nextWaveButton;
     private Label moneyText;
     private VisualElement healthBarFill;
@@ -52,8 +59,68 @@ public class OverlayManager : MonoBehaviour
         // Initialize buildings icons
         buildingsWrapper = root.Q<VisualElement>("BuildingsWrapper");
         InitializeBuildingsIcons();
+
+        escMenuWrapper = root.Q<VisualElement>("EscMenuWrapper");
+        escMenuButton = root.Q<VisualElement>("EscButton");
+        escMenuButton.RegisterCallback<ClickEvent>(OnEscMenuButtonClicked);
+    }
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (isEscMenuOpen)
+            {
+                CloseEscMenu();
+            }
+            else
+            {
+                OpenEscMenu();
+            }
+        }
+    }
+    public void OpenEscMenu()
+    {
+        escMenuWrapper.Clear();
+        VisualElement escMenu = escMenuTemplate.CloneTree();
+        escMenuWrapper.Add(escMenu);
+        OnEscMenu?.Invoke(true);
+        isEscMenuOpen = true;
+        EscMenuButtonSetup();
+    }
+    public void CloseEscMenu()
+    {
+        escMenuWrapper.Clear();
+        OnEscMenu?.Invoke(false);
+        isEscMenuOpen = false;
     }
 
+    private void EscMenuButtonSetup()
+    {
+        VisualElement resumeButton = escMenuWrapper.Q<VisualElement>("ResumeButton");
+        resumeButton.RegisterCallback<ClickEvent>(OnResumeClicked);
+
+        VisualElement settingsButton = escMenuWrapper.Q<VisualElement>("SettingsButton");
+        settingsButton.RegisterCallback<ClickEvent>(OnSettingsClicked);
+
+        VisualElement mainMenuButton = escMenuWrapper.Q<VisualElement>("MainMenuButton");
+        mainMenuButton.RegisterCallback<ClickEvent>(OnMainMenuClicked);
+    }
+    private void OnEscMenuButtonClicked(ClickEvent evt)
+    {
+        OpenEscMenu();
+    }
+    private void OnResumeClicked(ClickEvent evt)
+    {
+        CloseEscMenu();
+    }
+    private void OnSettingsClicked(ClickEvent evt)
+    {
+        // TODO: show settings UI
+    }
+    private void OnMainMenuClicked(ClickEvent evt)
+    {
+        SceneManager.LoadScene(0);
+    }
     private void InitializeBuildingsIcons()
     {
         buildingsWrapper.Clear();
@@ -71,8 +138,11 @@ public class OverlayManager : MonoBehaviour
 
     private void OnNextWaveButtonClicked(ClickEvent evt)
     {
-        waveManager.StartNextWave(splitChance);
-        nextWaveButton.visible = false;
+        if (!isEscMenuOpen)
+        {
+            waveManager.StartNextWave(splitChance);
+            nextWaveButton.visible = false;
+        }
     }
     private void OnWaveCompleted(int waveNumber)
     {
