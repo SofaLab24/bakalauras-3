@@ -5,6 +5,7 @@ using System;
 [CreateAssetMenu(menuName = "Buildings/New Building", order = 1)]
 public class BuildingSettings : ScriptableObject
 {
+    public bool isUnlocked;
     public int buildingCost;
     public Texture2D buildingIcon;
     public GameObject buildingPrefab;

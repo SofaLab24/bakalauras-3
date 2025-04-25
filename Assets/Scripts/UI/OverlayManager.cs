@@ -127,6 +127,7 @@ public class OverlayManager : MonoBehaviour
         VisualElement buildingIcon = buildingIconTemplate.CloneTree().Q<VisualElement>("BuildingIcon");
         foreach (var building in buildingManager.availableBuildings)
         {
+            if (!building.isUnlocked) continue;
             buildingIcon.style.backgroundImage = new StyleBackground(building.buildingIcon);
             buildingIcon.Q<Label>("BuildingCost").text = building.buildingCost.ToString();
             buildingIcon.RegisterCallback<ClickEvent, BuildingSettings>(OnBuildingIconClicked, building);

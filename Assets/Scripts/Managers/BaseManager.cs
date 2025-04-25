@@ -57,28 +57,17 @@ public class BaseManager : MonoBehaviour
 
     private void HandleBaseDestruction()
     {
-        // Add game over logic here
         Debug.Log("Base destroyed! Game Over!");
-        
-        // You might want to trigger a game over screen, etc.
-        // This is a placeholder for your game-specific logic
+        // TODO: Reset save of game. Don't reset meta progression
     }
 
-    // Public method to get current health (for UI, etc.)
     public int GetCurrentHealth()
     {
         return currentHealth;
     }
 
-    // Public method to get max health (for UI, etc.)
     public int GetMaxHealth()
     {
         return maxHealth;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

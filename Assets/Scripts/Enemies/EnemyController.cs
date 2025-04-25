@@ -63,7 +63,6 @@ public class EnemyController : MonoBehaviour
         {
             if (targets.Count == 1) { 
                 // Enemy has reached the end of the path
-                Debug.Log("Enemy reached end of path");
                 healthManager.ReachEnd();
                 return; //just in case
             }
@@ -75,6 +74,7 @@ public class EnemyController : MonoBehaviour
     public void Initialize(int damage, List<Vector2> targets, float moveSpeed, int health)
     {
         this.healthManager.damageValue = damage;
+        this.healthManager.SetMoneyValue(damage);
         this.targets = new List<Vector2>(targets);
         SetMoveSpeed(moveSpeed);
         SetHealth(health);

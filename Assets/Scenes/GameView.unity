@@ -720,6 +720,7 @@ GameObject:
   - component: {fileID: 1429115355}
   - component: {fileID: 1429115356}
   - component: {fileID: 1429115357}
+  - component: {fileID: 1429115358}
   m_Layer: 0
   m_Name: GAME_MANAGER
   m_TagString: Untagged
@@ -823,6 +824,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthMultiplier: 10
   moveSpeedMultiplier: 1
+--- !u!114 &1429115358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1429115351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c373780906e1d084094dcf6dbf910e99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  saveFileName: saveData.json
 --- !u!1001 &6292206381227427851
 PrefabInstance:
   m_ObjectHideFlags: 0

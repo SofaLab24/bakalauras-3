@@ -1,16 +1,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using UnityEngine;
 
-[Serializable] // To be able to save
+[System.Serializable]
 public class PathTile
 {
     public bool isFilled = false;
     public bool isEnd = false;
     public int[,] tilesToFill; // 0 - tower placement tile, 1 - road tile, 2 - portal/spawn
-
+    [JsonProperty]
     private Vector2Int coordinates; // should be equal to dictionary's indexes
+    [JsonProperty]
     private int size; // should always be 3
 
     public PathTile(Vector2Int coordinates, int size)

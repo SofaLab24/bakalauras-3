@@ -20,8 +20,6 @@ public class EnemyGenerator : MonoBehaviour
         }
         else moveSpeed = 15f; // max move speed
 
-        Debug.Log("Generated enemy from " + statPoints + " stat points. Health: " + healthPoints * healthMultiplier 
-        + " Move speed: " + moveSpeed * moveSpeedMultiplier);
         return (statPoints, healthPoints * healthMultiplier, moveSpeed * moveSpeedMultiplier);
     }
 

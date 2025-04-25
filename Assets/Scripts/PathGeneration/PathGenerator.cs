@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
 
-public class PathGenerator : MonoBehaviour
+public class PathGenerator : MonoBehaviour, IDataPersistence
 {
     [SerializeField]
     Tilemap tilemap;
@@ -17,19 +17,18 @@ public class PathGenerator : MonoBehaviour
     public int tileSize = 3;
 
     public Dictionary<Vector2Int, PathTile> allTiles;
-    private List<Path> paths;
+    private List<WavePath> paths;
 
-    public void Start()
-    {
-        SetupTileGeneration();
-    }
-    public void SetupTileGeneration()
+    public List<WavePath> GetPaths => paths;
+    public void SetPaths(List<WavePath> newPaths) => paths = newPaths;
+
+    public void SetupNewMap()
     {
         allTiles = new Dictionary<Vector2Int, PathTile>();
-        paths = new List<Path>();
+        paths = new List<WavePath>();
         List<PathTile> initPath = new List<PathTile>();
         List<Vector2> enemyWalkPoints = new List<Vector2>();
-        paths.Add(new Path(initPath, enemyWalkPoints, Vector2Int.zero, Vector2Int.zero));
+        paths.Add(new WavePath(initPath, enemyWalkPoints, Vector2Int.zero, Vector2Int.zero));
 
         for (int i = 0; i < 2; i++)
         {
@@ -75,7 +74,7 @@ public class PathGenerator : MonoBehaviour
     /// Generates next paths for all the current paths
     /// </summary>
     /// <param name="splitChance"> 0.0 - 1.0 chance of paths to have a split tile </param>
-    public List<Path> GenerateNextPaths(float splitChance)
+    public List<WavePath> GenerateNextPaths(float splitChance)
     {
         for (int i = paths.Count - 1; i >= 0; i--)
         {
@@ -155,5 +154,36 @@ public class PathGenerator : MonoBehaviour
             }
         }
         return paths;
+    }
+
+    public void LoadData(GameData data)
+    {
+        this.paths = data.mapData.GetPaths();
+        if (paths == null)
+        {
+            SetupNewMap();
+        }
+        else
+        {
+            allTiles = new Dictionary<Vector2Int, PathTile>();
+            foreach (var path in paths)
+            {
+                foreach (var tile in path.pathTiles)
+                {
+                    Vector2Int coordinates = tile.GetCoordinates();
+                    allTiles[coordinates] = tile;
+                    PaintPathTile(tile);
+                }
+                Vector2Int targetTile = path.targetTile;
+                allTiles[targetTile] = new PathTile(targetTile, tileSize);
+            }
+        }
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        SerializableMapData serializableMapData = new SerializableMapData();
+        serializableMapData.SetPaths(paths);
+        data.mapData = serializableMapData;
     }
 }

@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WaveManager : MonoBehaviour
+public class WaveManager : MonoBehaviour, IDataPersistence
 {
     [SerializeField] EnemyController enemyPrefab;
     [SerializeField] float enemyStatMultiplier = 5.3f;
     [SerializeField] float enemyAmountMultiplier = 1.5f;
     [SerializeField] float enemySpawnInterval = 1.5f;
     [SerializeField] float enemySpawnIntervalVariance = 0.5f;
-    public int waveNumber = 0;
+    public int waveNumber;
 
     public static event Action<int> OnWaveCompleted;
 
@@ -18,7 +18,6 @@ public class WaveManager : MonoBehaviour
     public int enemiesLeftToDie;
     private Stack<(int damage, int health, float moveSpeed)> enemyPool;
     private EnemyGenerator enemyGenerator;
-    private List<Path> currentPaths;
 
     PathGenerator pathGenerator;
 
@@ -36,31 +35,30 @@ public class WaveManager : MonoBehaviour
     {
         pathGenerator = GetComponent<PathGenerator>();
         enemyGenerator = GetComponent<EnemyGenerator>();
-        waveNumber = 0;
     }
     public void StartNextWave(float splitChance)
     {
         waveNumber++;
-        currentPaths = pathGenerator.GenerateNextPaths(splitChance);
+        pathGenerator.GenerateNextPaths(splitChance);
         // this generates all enemies for all paths
         GenerateEnemyPool();
         enemiesLeftToDie = enemiesToGenerate;
 
-        for (int i = 0; i < currentPaths.Count; i++)
+        for (int i = 0; i < pathGenerator.GetPaths.Count; i++)
         {
             int enemyAmountPerPath;
 
             // if it's the last path, then all enemies are for this path
-            if (i == currentPaths.Count - 1)
+            if (i == pathGenerator.GetPaths.Count - 1)
             {
                 enemyAmountPerPath = enemiesToGenerate;
             }
             else // this leaves at least 1 enemy for the last path
             {
-                enemyAmountPerPath = UnityEngine.Random.Range(1, enemiesToGenerate - currentPaths.Count + i);
+                enemyAmountPerPath = UnityEngine.Random.Range(1, enemiesToGenerate - pathGenerator.GetPaths.Count + i);
             }
             enemiesToGenerate -= enemyAmountPerPath;
-            List<Vector2> enemyTargets = currentPaths[i].enemyWalkPoints;
+            List<Vector2> enemyTargets = pathGenerator.GetPaths[i].enemyWalkPoints;
             Vector3 initPosition = new Vector3(enemyTargets[^1].x, enemyTargets[^1].y);
             StartCoroutine(SpawnEnemies(enemyTargets, enemyAmountPerPath, initPosition));
         }
@@ -113,10 +111,21 @@ public class WaveManager : MonoBehaviour
     private void HandleEnemyCounter(EnemyHealthManager enemy, EnemyHealthManager.DeathReason reason)
     {
         enemiesLeftToDie--;
-        Debug.Log("Enemies left: " + enemiesLeftToDie);
         if (enemiesLeftToDie <= 0)
         {
             OnWaveCompleted?.Invoke(waveNumber);
         }
+    }
+
+    public void LoadData(GameData data)
+    {
+        Debug.Log("Loading wave number: " + data.currentWave);
+        this.waveNumber = data.currentWave;
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        Debug.Log("Saving wave number: " + this.waveNumber);
+        data.currentWave = this.waveNumber;
     }
 }

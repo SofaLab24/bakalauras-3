@@ -14,8 +14,9 @@ public class EnemyHealthManager : MonoBehaviour
     // Modified event to include death reason
     public static event Action<EnemyHealthManager, DeathReason> OnEnemyDeath;
     
-    public int moneyValue = 10;
+    [SerializeField] int moneyMultiplier = 10;
     public int currentHealth = 100;
+    public int moneyValue;
     private int maxHealth;
     public int damageValue = 10;
     [SerializeField] private Slider healthBar;
@@ -40,6 +41,10 @@ public class EnemyHealthManager : MonoBehaviour
                 burnTickTimer = 0f;
             }
         }
+    }
+    public void SetMoneyValue(int moneyValue)
+    {
+        this.moneyValue = moneyValue * moneyMultiplier;
     }
     public void Die(DeathReason reason)
     {

@@ -242,7 +242,7 @@ MonoBehaviour:
   maxHealthColorScale: 200
   maxMoveSpeedColorScale: 15
   moveSpeed: 5
-  distanceOffset: 0.09
+  distanceOffset: 0.13
 --- !u!114 &4092464429332005036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -256,9 +256,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moneyValue: 50
-  health: 90
+  currentHealth: 100
   damageValue: 10
   healthBar: {fileID: 4870179446102637062}
+  burnTickRate: 1
 --- !u!58 &6127112879626753412
 CircleCollider2D:
   m_ObjectHideFlags: 0

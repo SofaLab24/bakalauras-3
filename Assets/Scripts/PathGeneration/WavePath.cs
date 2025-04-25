@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static SerializableMapData;
 
-public class Path
+public class WavePath
 {
     public List<PathTile> pathTiles;
     public List<Vector2> enemyWalkPoints;
@@ -9,13 +10,26 @@ public class Path
     public Vector2Int lastFilledTile;
     public Vector2Int targetTile;
 
-    public Path(List<PathTile> pathTiles, List<Vector2> enemyWalkPoints, Vector2Int lastFilledTile, Vector2Int targetTile)
+    public WavePath(List<PathTile> pathTiles, List<Vector2> enemyWalkPoints, Vector2Int lastFilledTile, Vector2Int targetTile)
     {
         this.pathTiles = pathTiles;
         this.enemyWalkPoints = enemyWalkPoints;
         this.lastFilledTile = lastFilledTile;
         this.targetTile = targetTile;
         hasEnd = false;
+    }
+    public WavePath(SerializableWavePath serializableWavePath)
+    {
+        pathTiles = serializableWavePath.pathTiles;
+        hasEnd = serializableWavePath.hasEnd;
+        lastFilledTile = serializableWavePath.lastFilledTile;
+        targetTile = serializableWavePath.targetTile;
+        
+        enemyWalkPoints = new List<Vector2>();
+        foreach (var point in serializableWavePath.enemyWalkPoints)
+        {
+            enemyWalkPoints.Add(new Vector2(point.x, point.y));
+        }
     }
 
     public void SetLastFilledTile(Vector2Int coordinates)
@@ -35,8 +49,8 @@ public class Path
     {
         hasEnd = true;
     }
-    public Path GetCopy()
+    public WavePath GetCopy()
     {
-        return new Path(new List<PathTile>(pathTiles), new List<Vector2>(enemyWalkPoints), lastFilledTile, targetTile);
+        return new WavePath(new List<PathTile>(pathTiles), new List<Vector2>(enemyWalkPoints), lastFilledTile, targetTile);
     }
 }

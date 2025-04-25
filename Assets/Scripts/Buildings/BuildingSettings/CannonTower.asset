@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 556192596e2423d43b48632c41d52a9e, type: 3}
   m_Name: CannonTower
   m_EditorClassIdentifier: 
+  isUnlocked: 1
   buildingCost: 200
   buildingIcon: {fileID: 2800000, guid: 7969ddc76f192b14a8bf613591a28188, type: 3}
   buildingPrefab: {fileID: 2857807080901524982, guid: c2fce88191a100542bb2c7d3e0d67802, type: 3}
