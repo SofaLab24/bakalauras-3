@@ -8,7 +8,10 @@ public class DataPersistenceManager : MonoBehaviour
     [SerializeField] private string saveFileName;
     private FileDataHandler dataHandler;
     private GameData gameData;
+    // need to serialize/deserialize these differently
+    private List<BuildingSettings> buildingPresets;
     private List<IDataPersistence> dataPersistenceObjects;
+    private List<ISettingsPersistence> settingsPersistenceObjects;
 
     public static DataPersistenceManager Instance { get; private set; }
     void Awake()
@@ -21,11 +24,10 @@ public class DataPersistenceManager : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
-    }
-    void Start()
-    {
+        
         this.dataHandler = new FileDataHandler(Application.persistentDataPath, saveFileName);
         this.dataPersistenceObjects = FindAllDataPersistenceObjects();
+        this.settingsPersistenceObjects = FindAllSettingsPersistenceObjects();
         LoadGame();
     }
     void OnApplicationQuit()
@@ -40,16 +42,24 @@ public class DataPersistenceManager : MonoBehaviour
     public void LoadGame()
     {
         gameData = dataHandler.Load();
+        buildingPresets = dataHandler.LoadSettings();
+        Debug.Log("Loaded " + buildingPresets.Count + " building presets");
         if (gameData == null)
         {
             Debug.Log("No saves found. Creating new game...");
             NewGame();
         }
-
+        // load settings
+        foreach (ISettingsPersistence settingsPersistenceObj in settingsPersistenceObjects)
+        {
+            settingsPersistenceObj.LoadSettings(buildingPresets);
+        }
+        // load data (towers reference settings)
         foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects)
         {
             dataPersistenceObj.LoadData(gameData);
         }
+
     }
     public void SaveGame()
     {
@@ -57,12 +67,24 @@ public class DataPersistenceManager : MonoBehaviour
         {
             dataPersistenceObj.SaveData(ref gameData);
         }
+        List<BuildingSettings> buildingPresetsToSave = new List<BuildingSettings>();
+        foreach (ISettingsPersistence settingsPersistenceObj in settingsPersistenceObjects)
+        {
+            buildingPresetsToSave = settingsPersistenceObj.SaveSettings();
+        }
         dataHandler.Save(gameData);
+        dataHandler.SaveSettings(buildingPresetsToSave);
     }
     private List<IDataPersistence> FindAllDataPersistenceObjects()
     {
         IEnumerable<IDataPersistence> dataPersistenceObjects = FindObjectsOfType<MonoBehaviour>()
             .OfType<IDataPersistence>();
         return new List<IDataPersistence>(dataPersistenceObjects);
+    }
+    private List<ISettingsPersistence> FindAllSettingsPersistenceObjects()
+    {
+        IEnumerable<ISettingsPersistence> settingsPersistenceObjects = FindObjectsOfType<MonoBehaviour>()
+            .OfType<ISettingsPersistence>();
+        return new List<ISettingsPersistence>(settingsPersistenceObjects);
     }
 }

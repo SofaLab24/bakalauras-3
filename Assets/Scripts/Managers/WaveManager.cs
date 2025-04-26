@@ -119,13 +119,11 @@ public class WaveManager : MonoBehaviour, IDataPersistence
 
     public void LoadData(GameData data)
     {
-        Debug.Log("Loading wave number: " + data.currentWave);
         this.waveNumber = data.currentWave;
     }
 
     public void SaveData(ref GameData data)
     {
-        Debug.Log("Saving wave number: " + this.waveNumber);
         data.currentWave = this.waveNumber;
     }
 }

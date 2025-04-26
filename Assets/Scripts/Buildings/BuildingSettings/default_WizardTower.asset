@@ -10,8 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 556192596e2423d43b48632c41d52a9e, type: 3}
-  m_Name: WizardTower
+  m_Name: default_WizardTower
   m_EditorClassIdentifier: 
+  towerName: BaseWizardTower
+  isUnlocked: 1
   buildingCost: 300
   buildingIcon: {fileID: 2800000, guid: 1866806b407ed3646b986db602bc1f6e, type: 3}
   buildingPrefab: {fileID: 2857807080901524982, guid: 7e062c52b26b5eb489709618d857d2d4, type: 3}

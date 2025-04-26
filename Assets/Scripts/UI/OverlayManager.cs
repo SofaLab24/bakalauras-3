@@ -125,7 +125,7 @@ public class OverlayManager : MonoBehaviour
     {
         buildingsWrapper.Clear();
         VisualElement buildingIcon = buildingIconTemplate.CloneTree().Q<VisualElement>("BuildingIcon");
-        foreach (var building in buildingManager.availableBuildings)
+        foreach (var building in BuildingPresetsHandler.Instance.GetAllBuildingPresets())
         {
             if (!building.isUnlocked) continue;
             buildingIcon.style.backgroundImage = new StyleBackground(building.buildingIcon);
@@ -177,19 +177,15 @@ public class OverlayManager : MonoBehaviour
         healthText.text = $"{currentHealth} / {maxHealth}";
     }
 
-    // Helper method to format money with spaces for thousands
     private string FormatMoneyWithSpaces(int money)
     {
-        // Convert to string first
         string moneyStr = money.ToString();
         
-        // If the number is less than 1000, no formatting needed
         if (moneyStr.Length <= 3)
         {
             return moneyStr;
         }
 
-        // Add spaces for every thousand
         string result = "";
         int counter = 0;
         

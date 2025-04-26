@@ -42,3 +42,7 @@
     font-size: 143px;
     color: rgb(218, 73, 141);
 }
+
+.button:hover {
+    -unity-background-image-tint-color: rgb(115, 115, 115);
+}

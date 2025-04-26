@@ -4,11 +4,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 
-public class BuildingManager : MonoBehaviour
+public class BuildingManager : MonoBehaviour, IDataPersistence
 {
-    public List<BuildingSettings> availableBuildings;
-    [SerializeField]
-    private Tilemap tilemap;
+    [SerializeField] private Tilemap tilemap;
     
     private EconomyManager economyManager;
     private PathGenerator pathGenerator;
@@ -21,6 +19,7 @@ public class BuildingManager : MonoBehaviour
     private bool canPlaceBuilding = true;
 
     private BuildingSettings selectedBuilding;
+    private List<(float x, float y, string buildingName)> placedBuildings;
 
     private void OnEnable()
     {
@@ -101,7 +100,6 @@ public class BuildingManager : MonoBehaviour
     {
         if (buildingSettings == null)
         {
-            Debug.LogError("No building settings selected");
             return false;
         }
 
@@ -118,7 +116,6 @@ public class BuildingManager : MonoBehaviour
 
     private Transform IsBuildingAtPosition(Vector3 worldPosition)
     {
-        // Increased radius to 0.4f for better detection
         Collider2D[] colliders = Physics2D.OverlapCircleAll(worldPosition, 0.4f);
         
         foreach (Collider2D collider in colliders)
@@ -161,12 +158,33 @@ public class BuildingManager : MonoBehaviour
     private void PlaceBuilding(Vector3Int cellPosition, BuildingSettings buildingSettings)
     {
         Vector3 buildingPosition = tilemap.GetCellCenterWorld(cellPosition);
-        
-        GameObject building = Instantiate(buildingSettings.buildingPrefab, buildingPosition, Quaternion.identity);
+        GameObject building = InstantiateBuilding(buildingPosition, buildingSettings);
+        placedBuildings.Add((buildingPosition.x, buildingPosition.y, buildingSettings.name));
+
+        OnBuildingPlaced?.Invoke(buildingPosition);
+    }
+    private GameObject InstantiateBuilding(Vector3 position, BuildingSettings buildingSettings)
+    {
+        GameObject building = Instantiate(buildingSettings.buildingPrefab, position, Quaternion.identity);
         if (buildingSettings.isTower)
         {
             building.GetComponent<BaseTower>().Initialize(buildingSettings);
         }
-        OnBuildingPlaced?.Invoke(buildingPosition);
+        return building;
     }
+
+    public void LoadData(GameData data)
+    {
+        placedBuildings = data.mapData.placedBuildings;
+        foreach (var building in placedBuildings)
+        {
+            InstantiateBuilding(new Vector3(building.x, building.y, 0), BuildingPresetsHandler.Instance.GetBuildingPreset(building.buildingName));
+        }
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        data.mapData.placedBuildings = placedBuildings;
+    }
+
 } 
