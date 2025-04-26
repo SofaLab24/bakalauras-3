@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class EconomyManager : MonoBehaviour
+public class PlayerEconomyManager : MonoBehaviour
 {
     [SerializeField]
     private int _playerMoney = 0;

@@ -8,7 +8,7 @@ public class BuildingManager : MonoBehaviour, IDataPersistence
 {
     [SerializeField] private Tilemap tilemap;
     
-    private EconomyManager economyManager;
+    private PlayerEconomyManager economyManager;
     private PathGenerator pathGenerator;
     private Camera mainCamera;
 
@@ -23,19 +23,19 @@ public class BuildingManager : MonoBehaviour, IDataPersistence
 
     private void OnEnable()
     {
-        EconomyManager.OnPurchaseAttempted += HandlePurchaseAttempt;
+        PlayerEconomyManager.OnPurchaseAttempted += HandlePurchaseAttempt;
         OverlayManager.OnEscMenu += HandleEscMenu;
     }
 
     private void OnDisable()
     {
-        EconomyManager.OnPurchaseAttempted -= HandlePurchaseAttempt;
+        PlayerEconomyManager.OnPurchaseAttempted -= HandlePurchaseAttempt;
         OverlayManager.OnEscMenu -= HandleEscMenu;
     }
 
     private void Start()
     {
-        economyManager = GetComponent<EconomyManager>();
+        economyManager = GetComponent<PlayerEconomyManager>();
         pathGenerator = GetComponent<PathGenerator>();
         mainCamera = Camera.main;
 

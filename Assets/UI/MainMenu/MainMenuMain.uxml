@@ -1,20 +1,28 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/Styles/OverlayStyles.uss?fileID=7433441132597879392&amp;guid=1cf20f00a4f96f047826bc0af6db10b1&amp;type=3#OverlayStyles" />
     <ui:VisualElement name="RootElement" style="flex-grow: 1; background-color: rgb(105, 36, 124);">
-        <ui:VisualElement name="Top" style="flex-grow: 1; position: absolute; top: 0; left: 0; width: 100%; height: 35%;">
-            <ui:Label tabindex="-1" text="MYSTICAL" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Mystical" class="title" style="position: absolute; top: 10%; left: 25%; width: 60%; height: 30%;" />
-            <ui:Label tabindex="-1" text="FORT" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Fort" class="title" style="position: absolute; top: 50%; right: 20%; width: 28%; height: 30%;" />
+        <ui:VisualElement name="Top" style="flex-grow: 1; position: absolute; top: 0; left: 0; width: 100%; height: 35%; flex-direction: row;">
+            <ui:VisualElement name="Title" style="flex-grow: 1; position: absolute; left: 0; top: 0; height: 100%; width: 80%;">
+                <ui:Label tabindex="-1" text="MYSTICAL" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Mystical" class="title" style="position: absolute; top: 10%; left: 25%; width: 60%; height: 30%;" />
+                <ui:Label tabindex="-1" text="FORT" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Fort" class="title" style="position: absolute; top: 50%; right: 20%; width: 28%; height: 30%;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="Coins" style="flex-grow: 1; position: absolute; right: 0; top: 0; height: 100%; width: 20%; flex-direction: row;">
+                <ui:VisualElement name="MetaCoinsIcon" style="flex-grow: 1; position: absolute; top: 30%; width: 20%; height: 20%; background-image: url(&quot;project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=-4528830608231651361&amp;guid=c373d5426d4ebc64b868703d44a062a9&amp;type=3#arrow-up@2x&quot;); left: 0;" />
+                <ui:Label tabindex="-1" text="x 123" parse-escape-sequences="true" display-tooltip-when-elided="true" name="MetaCoinsAmount" class="buttonText" style="font-size: 58px; position: absolute; top: 30%; right: 40%;" />
+            </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="Bot" style="flex-grow: 1; position: absolute; left: 0; bottom: 0; height: 65%; width: 100%;">
-            <ui:VisualElement name="MenuWrapper" style="flex-grow: 1; position: absolute; left: 0; top: 10%; width: 100%; height: 80%; justify-content: center; align-self: center; align-items: center;">
-                <ui:VisualElement name="StartButton" class="button" style="flex-grow: 1; width: 25%; height: 15%; position: absolute; top: 10%; align-items: center; justify-content: center; align-self: center;">
-                    <ui:Label tabindex="-1" text="Start" parse-escape-sequences="true" display-tooltip-when-elided="true" name="StartLabel" class="buttonText" style="font-size: 50px;" />
-                </ui:VisualElement>
-                <ui:VisualElement name="SmthButton" class="button" style="flex-grow: 1; position: absolute; align-items: center; justify-content: center; align-self: center; width: 25%; top: 35%; height: 15%;">
-                    <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SmthLabel" class="buttonText" style="font-size: 50px;" />
-                </ui:VisualElement>
-                <ui:VisualElement name="ExitButton" class="button" style="flex-grow: 1; position: absolute; align-items: center; justify-content: center; align-self: center; top: 60%; width: 25%; height: 15%;">
-                    <ui:Label tabindex="-1" text="Exit" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ExitLabel" class="buttonText" style="font-size: 50px;" />
+            <ui:VisualElement name="MenuWrapper" style="position: absolute; left: 0; top: 10%; width: 100%; height: 80%; justify-content: center; align-self: flex-start; align-items: flex-start;">
+                <ui:VisualElement name="MainMenuButtons" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%;">
+                    <ui:VisualElement name="StartButton" class="button" style="flex-grow: 1; width: 25%; height: 15%; position: absolute; top: 10%; align-items: center; justify-content: center; align-self: center;">
+                        <ui:Label tabindex="-1" text="Start" parse-escape-sequences="true" display-tooltip-when-elided="true" name="StartLabel" class="buttonText" style="font-size: 50px;" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="UpgradesButton" class="button" style="flex-grow: 1; position: absolute; align-items: center; justify-content: center; align-self: center; width: 25%; top: 35%; height: 15%;">
+                        <ui:Label tabindex="-1" text="Upgrades" parse-escape-sequences="true" display-tooltip-when-elided="true" name="UpgradesLabel" class="buttonText" style="font-size: 50px;" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="ExitButton" class="button" style="flex-grow: 1; position: absolute; align-items: center; justify-content: center; align-self: center; top: 60%; width: 25%; height: 15%;">
+                        <ui:Label tabindex="-1" text="Exit" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ExitLabel" class="buttonText" style="font-size: 50px;" />
+                    </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

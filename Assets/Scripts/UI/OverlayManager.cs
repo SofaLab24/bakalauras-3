@@ -9,7 +9,7 @@ public class OverlayManager : MonoBehaviour
 {
     [SerializeField] private BuildingManager buildingManager;
     [SerializeField] private WaveManager waveManager;
-    [SerializeField] private EconomyManager economyManager;
+    [SerializeField] private PlayerEconomyManager economyManager;
     [SerializeField] private BaseManager baseManager;
     [SerializeField] private UIDocument uiDocument;
     [SerializeField] private float splitChance = 0.3f;
@@ -29,14 +29,14 @@ public class OverlayManager : MonoBehaviour
 
     private void OnEnable()
     {
-        EconomyManager.OnMoneyChanged += UpdateMoneyDisplay;
+        PlayerEconomyManager.OnMoneyChanged += UpdateMoneyDisplay;
         BaseManager.OnHealthChanged += HandleHealthChanged;
         WaveManager.OnWaveCompleted += OnWaveCompleted;
     }
 
     private void OnDisable()
     {
-        EconomyManager.OnMoneyChanged -= UpdateMoneyDisplay;
+        PlayerEconomyManager.OnMoneyChanged -= UpdateMoneyDisplay;
         BaseManager.OnHealthChanged -= HandleHealthChanged;
         WaveManager.OnWaveCompleted -= OnWaveCompleted;
     }

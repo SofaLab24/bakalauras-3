@@ -18,6 +18,7 @@ public class BuildingPresetsHandler : MonoBehaviour, ISettingsPersistence
     }
     [SerializeField] private List<BuildingSettings> defaultBuildingPresets;
     private List<BuildingSettings> buildingPresets;
+    [SerializeField] string fireTypeUpgradeName = "Flaming";
 
     public void LoadSettings(List<BuildingSettings> savedPresets)
     {
@@ -63,5 +64,14 @@ public class BuildingPresetsHandler : MonoBehaviour, ISettingsPersistence
     {
         return defaultBuildingPresets;
     }
-    // TODO: update buildingPreset
+    public void UpdateBuildingPreset(BuildingSettings buildingPreset)
+    {
+        buildingPresets.Remove(buildingPresets.Find(preset => preset.name == buildingPreset.name));
+        buildingPresets.Add(buildingPreset);
+    }
+    public void UnlockFireType(string buildingName)
+    {
+        string fullTowerName = fireTypeUpgradeName + buildingName;
+        buildingPresets.Find(preset => preset.name == fullTowerName).isUnlocked = true;
+    }
 }
