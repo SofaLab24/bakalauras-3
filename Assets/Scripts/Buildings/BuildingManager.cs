@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 
-public class BuildingManager : MonoBehaviour, IDataPersistence
+public class BuildingManager : MonoBehaviour, IRunDataPersistence
 {
     [SerializeField] private Tilemap tilemap;
     
@@ -159,7 +159,7 @@ public class BuildingManager : MonoBehaviour, IDataPersistence
     {
         Vector3 buildingPosition = tilemap.GetCellCenterWorld(cellPosition);
         GameObject building = InstantiateBuilding(buildingPosition, buildingSettings);
-        placedBuildings.Add((buildingPosition.x, buildingPosition.y, buildingSettings.name));
+        placedBuildings.Add((buildingPosition.x, buildingPosition.y, buildingSettings.towerName));
 
         OnBuildingPlaced?.Invoke(buildingPosition);
     }
@@ -173,7 +173,7 @@ public class BuildingManager : MonoBehaviour, IDataPersistence
         return building;
     }
 
-    public void LoadData(GameData data)
+    public void LoadData(RunData data)
     {
         placedBuildings = data.mapData.placedBuildings;
         foreach (var building in placedBuildings)
@@ -182,7 +182,7 @@ public class BuildingManager : MonoBehaviour, IDataPersistence
         }
     }
 
-    public void SaveData(ref GameData data)
+    public void SaveData(ref RunData data)
     {
         data.mapData.placedBuildings = placedBuildings;
     }

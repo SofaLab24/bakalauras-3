@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
 
-public class PathGenerator : MonoBehaviour, IDataPersistence
+public class PathGenerator : MonoBehaviour, IRunDataPersistence
 {
     [SerializeField]
     Tilemap tilemap;
@@ -156,10 +156,10 @@ public class PathGenerator : MonoBehaviour, IDataPersistence
         return paths;
     }
 
-    public void LoadData(GameData data)
+    public void LoadData(RunData data)
     {
         this.paths = data.mapData.GetPaths();
-        if (paths == null)
+        if (paths == default)
         {
             SetupNewMap();
         }
@@ -180,7 +180,7 @@ public class PathGenerator : MonoBehaviour, IDataPersistence
         }
     }
 
-    public void SaveData(ref GameData data)
+    public void SaveData(ref RunData data)
     {
         SerializableMapData serializableMapData = new SerializableMapData();
         serializableMapData.SetPaths(paths);

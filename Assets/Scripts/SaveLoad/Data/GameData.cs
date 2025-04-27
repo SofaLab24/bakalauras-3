@@ -8,9 +8,7 @@ public class GameData
 {
     public int waveHighscore;
     public int metaCoins;
-    public List<(string towerName, bool damageUpgraded, bool rangeUpgraded, bool fireRateUpgraded)> towerUpgradeStatus;
-    public int currentWave;
-    public SerializableMapData mapData;
+    public List<(string towerName, bool damageUpgraded, bool rangeUpgraded, bool fireRateUpgraded, bool fireTypeUnlocked)> towerUpgradeStatus;
 
     // Default values on new game
     public GameData()
@@ -18,9 +16,6 @@ public class GameData
         // all game data
         waveHighscore = 0;
         metaCoins = 0;
-        towerUpgradeStatus = new List<(string towerName, bool damageUpgraded, bool rangeUpgraded, bool fireRateUpgraded)>();
-        // current run data
-        currentWave = 0;
-        mapData = new SerializableMapData();
+        towerUpgradeStatus = new List<(string towerName, bool damageUpgraded, bool rangeUpgraded, bool fireRateUpgraded, bool fireTypeUnlocked)>();
     }
 }

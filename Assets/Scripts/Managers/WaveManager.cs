@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WaveManager : MonoBehaviour, IDataPersistence
+public class WaveManager : MonoBehaviour, IRunDataPersistence
 {
     [SerializeField] EnemyController enemyPrefab;
     [SerializeField] float enemyStatMultiplier = 5.3f;
@@ -35,9 +35,12 @@ public class WaveManager : MonoBehaviour, IDataPersistence
     {
         pathGenerator = GetComponent<PathGenerator>();
         enemyGenerator = GetComponent<EnemyGenerator>();
+        DataPersistenceManager.Instance.LoadRun();
     }
     public void StartNextWave(float splitChance)
     {
+        // Save run before starting each wave
+        DataPersistenceManager.Instance.SaveRun();
         waveNumber++;
         pathGenerator.GenerateNextPaths(splitChance);
         // this generates all enemies for all paths
@@ -114,15 +117,16 @@ public class WaveManager : MonoBehaviour, IDataPersistence
         if (enemiesLeftToDie <= 0)
         {
             OnWaveCompleted?.Invoke(waveNumber);
+            DataPersistenceManager.Instance.SaveRun();
         }
     }
 
-    public void LoadData(GameData data)
+    public void LoadData(RunData data)
     {
         this.waveNumber = data.currentWave;
     }
 
-    public void SaveData(ref GameData data)
+    public void SaveData(ref RunData data)
     {
         data.currentWave = this.waveNumber;
     }

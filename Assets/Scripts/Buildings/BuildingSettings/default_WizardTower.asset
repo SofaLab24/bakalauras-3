@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 556192596e2423d43b48632c41d52a9e, type: 3}
   m_Name: default_WizardTower
   m_EditorClassIdentifier: 
-  towerName: BaseWizardTower
+  towerName: WizardTower
   isUnlocked: 1
   buildingCost: 300
   buildingIcon: {fileID: 2800000, guid: 1866806b407ed3646b986db602bc1f6e, type: 3}

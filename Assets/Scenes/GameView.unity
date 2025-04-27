@@ -122,55 +122,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &203314108
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 203314109}
-  - component: {fileID: 203314110}
-  m_Layer: 0
-  m_Name: BUILDING_PRESETS_HANDLER
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &203314109
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 203314108}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &203314110
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 203314108}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ce6b4ea650602d4eae23b54945c2b2d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  defaultBuildingPresets:
-  - {fileID: 11400000, guid: cea31ed8ee45f3048966bbaabe719d1c, type: 2}
-  - {fileID: 11400000, guid: 2757f14bf8b3b804ebbcaf23641af36b, type: 2}
-  - {fileID: 11400000, guid: 41120f22ce09f4844b3bc19977dca352, type: 2}
-  - {fileID: 11400000, guid: 6b5655cfd50e53b40a64addfb40e91fc, type: 2}
 --- !u!1 &242981266
 GameObject:
   m_ObjectHideFlags: 0
@@ -769,7 +720,6 @@ GameObject:
   - component: {fileID: 1429115355}
   - component: {fileID: 1429115356}
   - component: {fileID: 1429115357}
-  - component: {fileID: 1429115358}
   m_Layer: 0
   m_Name: GAME_MANAGER
   m_TagString: Untagged
@@ -868,19 +818,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthMultiplier: 10
   moveSpeedMultiplier: 1
---- !u!114 &1429115358
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1429115351}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c373780906e1d084094dcf6dbf910e99, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  saveFileName: saveData.json
 --- !u!1001 &6292206381227427851
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -891,7 +828,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1871619152245633679, guid: 3fc2348549da0d54492de2c6b23961a0, type: 3}
       propertyPath: maxHealth
-      value: 100
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6265112755385363870, guid: 3fc2348549da0d54492de2c6b23961a0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -951,6 +888,5 @@ SceneRoots:
   - {fileID: 524706108}
   - {fileID: 242981269}
   - {fileID: 1429115352}
-  - {fileID: 203314109}
   - {fileID: 6292206381227427851}
   - {fileID: 288415514}

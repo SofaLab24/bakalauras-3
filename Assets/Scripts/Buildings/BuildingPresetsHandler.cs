@@ -9,7 +9,7 @@ public class BuildingPresetsHandler : MonoBehaviour, ISettingsPersistence
     {
         if (Instance != null)
         {
-            Debug.LogError("Found more than one Building Presets Handler in the scene");
+            Debug.Log("Found more than one Building Presets Handler in the scene");
             Destroy(gameObject);
             return;
         }
@@ -18,22 +18,23 @@ public class BuildingPresetsHandler : MonoBehaviour, ISettingsPersistence
     }
     [SerializeField] private List<BuildingSettings> defaultBuildingPresets;
     private List<BuildingSettings> buildingPresets;
-    [SerializeField] string fireTypeUpgradeName = "Flaming";
+    [SerializeField] string fireTypeUpgradePrefix = "Flaming";
 
     public void LoadSettings(List<BuildingSettings> savedPresets)
     {
+        this.buildingPresets = new List<BuildingSettings>();
         if (savedPresets.Count == 0)
         {
-            Debug.Log("No saved building presets found, using default ones");
-            this.buildingPresets = defaultBuildingPresets;
+            foreach (BuildingSettings preset in defaultBuildingPresets)
+            {
+                this.buildingPresets.Add(preset.CloneInstance());
+            }
+            Debug.Log("Presets count: " + this.buildingPresets.Count);
             return;
         }
-        Debug.Log("Loaded " + savedPresets.Count + " saved building presets");
-        this.buildingPresets = new List<BuildingSettings>();
         foreach (BuildingSettings savedPreset in savedPresets)
         {
-            BuildingSettings combinedPreset = CombineBuildingPresets(defaultBuildingPresets.Find(p => p.name == savedPreset.name), savedPreset);
-            Debug.Log("Loaded " + combinedPreset.name);
+            BuildingSettings combinedPreset = CombineBuildingPresets(defaultBuildingPresets.Find(p => p.towerName == savedPreset.towerName), savedPreset);
             this.buildingPresets.Add(combinedPreset);
         }
     }
@@ -42,7 +43,7 @@ public class BuildingPresetsHandler : MonoBehaviour, ISettingsPersistence
         BuildingSettings combinedPreset = savedPreset;
 
         // update not serialized fields
-        combinedPreset.name = defaultPreset.name;
+        combinedPreset.towerName = defaultPreset.towerName;
         combinedPreset.buildingPrefab = defaultPreset.buildingPrefab;
         combinedPreset.buildingIcon = defaultPreset.buildingIcon;
         combinedPreset.projectileSpeedCurve = defaultPreset.projectileSpeedCurve;
@@ -58,20 +59,35 @@ public class BuildingPresetsHandler : MonoBehaviour, ISettingsPersistence
 
     public BuildingSettings GetBuildingPreset(string buildingName)
     {
-        return buildingPresets.Find(preset => preset.name == buildingName);
+        return buildingPresets.Find(preset => preset.towerName == buildingName);
     }
     public List<BuildingSettings> GetAllBuildingPresets()
     {
-        return defaultBuildingPresets;
+        return buildingPresets;
     }
-    public void UpdateBuildingPreset(BuildingSettings buildingPreset)
+    // TODO: UPGRADES DON"T WORK :((((((( PLS FIX
+    public void UpgradeBuilding(string buildingName, UpgradeType upgradeType)
     {
-        buildingPresets.Remove(buildingPresets.Find(preset => preset.name == buildingPreset.name));
-        buildingPresets.Add(buildingPreset);
+        switch(upgradeType)
+        {
+            case UpgradeType.Damage:
+                buildingPresets.Find(preset => preset.towerName == buildingName).towerDamage *= 2;
+                break;
+            case UpgradeType.Range:
+                buildingPresets.Find(preset => preset.towerName == buildingName).towerRange *= 2;
+                break;
+            case UpgradeType.FireRate:
+                buildingPresets.Find(preset => preset.towerName == buildingName).towerShootingDelay /= 2;
+                break;
+            case UpgradeType.FireType:
+                UnlockFireType(buildingName);
+                break;
+        }
+        DataPersistenceManager.Instance.SaveGame();
     }
     public void UnlockFireType(string buildingName)
     {
-        string fullTowerName = fireTypeUpgradeName + buildingName;
-        buildingPresets.Find(preset => preset.name == fullTowerName).isUnlocked = true;
+        string fullTowerName = fireTypeUpgradePrefix + buildingName;
+        buildingPresets.Find(preset => preset.towerName == fullTowerName).isUnlocked = true;
     }
 }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 556192596e2423d43b48632c41d52a9e, type: 3}
   m_Name: default_CannonTower
   m_EditorClassIdentifier: 
-  towerName: BaseCannonTower
+  towerName: CannonTower
   isUnlocked: 1
   buildingCost: 200
   buildingIcon: {fileID: 2800000, guid: 7969ddc76f192b14a8bf613591a28188, type: 3}
@@ -46,7 +46,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  towerDamage: 50
+  towerDamage: 35
   towerBurnDamage: 0
   towerExplosionRadius: 2
   enemyLayer:

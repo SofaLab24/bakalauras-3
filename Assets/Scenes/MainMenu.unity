@@ -122,6 +122,56 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &736004391
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 736004392}
+  - component: {fileID: 736004393}
+  m_Layer: 0
+  m_Name: PRESETS_HANDLER
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &736004392
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 736004391}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 4.0055537, y: 8.325334, z: 0.046584487}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &736004393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 736004391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ce6b4ea650602d4eae23b54945c2b2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultBuildingPresets:
+  - {fileID: 11400000, guid: cea31ed8ee45f3048966bbaabe719d1c, type: 2}
+  - {fileID: 11400000, guid: 2757f14bf8b3b804ebbcaf23641af36b, type: 2}
+  - {fileID: 11400000, guid: 41120f22ce09f4844b3bc19977dca352, type: 2}
+  - {fileID: 11400000, guid: 6b5655cfd50e53b40a64addfb40e91fc, type: 2}
+  fireTypeUpgradeName: Flaming
 --- !u!1 &1141309812
 GameObject:
   m_ObjectHideFlags: 0
@@ -152,6 +202,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   metaCoins: 500
+  waveHighscore: 0
 --- !u!4 &1141309814
 Transform:
   m_ObjectHideFlags: 0
@@ -259,6 +310,54 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2009522820
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2009522822}
+  - component: {fileID: 2009522821}
+  m_Layer: 0
+  m_Name: SAVE_MANAGER
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2009522821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2009522820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c373780906e1d084094dcf6dbf910e99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  saveFileName: saveData.json
+  runDataFilePrefix: run_
+  gameDataFilePrefix: game_
+  settingsFilePrefix: buildings_
+--- !u!4 &2009522822
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2009522820}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 4.0055537, y: 8.325334, z: 0.046584487}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2074106381
 GameObject:
   m_ObjectHideFlags: 0
@@ -320,8 +419,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3a33abdc46d9ca4ca3830ed56ea0486, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  upgradePurchasedIcon: {fileID: 2800000, guid: fbea9150152d65e4aad8e41b3c361f87, type: 3}
   upgradesMenuTemplate: {fileID: 9197481963319205126, guid: acf58f0c3390f3346a4de572ddf49213, type: 3}
-  towerUpgradesMenuTemplate: {fileID: 0}
+  towerUpgradesMenuTemplate: {fileID: 9197481963319205126, guid: 5464eed16ffeb1e40a9275dcf3c97666, type: 3}
   towerIconButtonTemplate: {fileID: 9197481963319205126, guid: 155a807859d054d46b4cb8226b0ca7ea, type: 3}
   baseTowers:
   - {fileID: 11400000, guid: cea31ed8ee45f3048966bbaabe719d1c, type: 2}
@@ -334,3 +434,5 @@ SceneRoots:
   - {fileID: 1839856329}
   - {fileID: 2074106383}
   - {fileID: 1141309814}
+  - {fileID: 2009522822}
+  - {fileID: 736004392}

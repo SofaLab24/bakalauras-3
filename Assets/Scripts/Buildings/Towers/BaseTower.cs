@@ -21,6 +21,7 @@ public abstract class BaseTower : MonoBehaviour
     
     public virtual void Initialize(BuildingSettings settings)
     {
+        Debug.Log("Initializing tower: " + settings.towerName + " with damage: " + settings.towerDamage);
         this.range = settings.towerRange;
         this.shootingSpeed = settings.towerShootingDelay;
         this.projectileSpeed = settings.towerProjectileSpeed;

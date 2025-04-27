@@ -2,14 +2,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BaseManager : MonoBehaviour
 {
     public static event Action<int> OnHealthChanged;
-    public static event Action OnBaseDestroyed;
+    public static event Action<int> OnBaseDestroyed;
 
     [SerializeField] private int maxHealth = 100;
     [SerializeField] private int currentHealth;
+    private WaveManager waveManager;
 
     void OnEnable()
     {
@@ -22,6 +24,7 @@ public class BaseManager : MonoBehaviour
     private void Awake()
     {
         currentHealth = maxHealth;
+        waveManager = FindObjectOfType<WaveManager>();
     }
 
     // Notify listeners of initial health after they are set up
@@ -40,17 +43,13 @@ public class BaseManager : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        
-        // Clamp health to minimum of 0
         currentHealth = Mathf.Max(0, currentHealth);
-        
-        // Notify listeners that health has changed
         OnHealthChanged?.Invoke(currentHealth);
         
-        // Check if the base is destroyed
         if (currentHealth <= 0)
         {
-            OnBaseDestroyed?.Invoke();
+            // -1 because the player died during current wave
+            OnBaseDestroyed?.Invoke(waveManager.waveNumber - 1);
             HandleBaseDestruction();
         }
     }
@@ -58,7 +57,9 @@ public class BaseManager : MonoBehaviour
     private void HandleBaseDestruction()
     {
         Debug.Log("Base destroyed! Game Over!");
-        // TODO: Reset save of game. Don't reset meta progression
+        DataPersistenceManager.Instance.SaveGame();
+        DataPersistenceManager.Instance.ResetRun();
+        SceneManager.LoadScene(0);
     }
 
     public int GetCurrentHealth()

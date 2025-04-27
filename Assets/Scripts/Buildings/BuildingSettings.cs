@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 public class BuildingSettings : ScriptableObject
 {
     [JsonProperty][SerializeField]
-    private string towerName;
+    public string towerName;
     public bool isUnlocked;
     public int buildingCost;
     [JsonIgnore]
@@ -35,6 +35,30 @@ public class BuildingSettings : ScriptableObject
     [Header("Resource Building Settings")]
     public string resourceType;
     public int resourceMultiplier;
+
+    public BuildingSettings CloneInstance()
+    {
+        BuildingSettings clone = ScriptableObject.CreateInstance<BuildingSettings>();
+        clone.towerName = towerName;
+        clone.isUnlocked = isUnlocked;
+        clone.buildingCost = buildingCost;
+        clone.buildingIcon = buildingIcon;
+        clone.buildingPrefab = buildingPrefab;
+        clone.isTower = isTower;
+        clone.towerType = towerType;
+        clone.towerRange = towerRange;
+        clone.towerShootingDelay = towerShootingDelay;
+        clone.towerProjectileSpeed = towerProjectileSpeed;
+        clone.projectileSpeedCurve = projectileSpeedCurve;
+        clone.towerDamage = towerDamage;
+        clone.towerBurnDamage = towerBurnDamage;
+        clone.towerExplosionRadius = towerExplosionRadius;
+        clone.enemyLayer = enemyLayer;
+        clone.towerProjectilePrefab = towerProjectilePrefab;
+        clone.resourceType = resourceType;
+        clone.resourceMultiplier = resourceMultiplier;
+        return clone;
+    }
 }
 
 [System.Serializable]

@@ -16,10 +16,10 @@ public class FileDataHandler
         this.dataFileName = dataFileName;
     }
 
-    public GameData Load()
+    public T LoadObjectData<T>(string prefix = "")
     {
-        string fullPath = Path.Combine(dataDirPath, dataFileName);
-        GameData loadedData = null;
+        string fullPath = Path.Combine(dataDirPath, prefix + dataFileName);
+        T loadedData = default(T);
         if (File.Exists(fullPath))
         {
             try
@@ -32,7 +32,7 @@ public class FileDataHandler
                         dataToLoad = reader.ReadToEnd();
                     }
                 }
-                loadedData = JsonConvert.DeserializeObject<GameData>(dataToLoad);
+                loadedData = JsonConvert.DeserializeObject<T>(dataToLoad);
             }
             catch (Exception e)
             {
@@ -41,9 +41,9 @@ public class FileDataHandler
         }
         return loadedData;
     }
-    public void Save(GameData data)
+    public void Save<T>(T data, string prefix = "")
     {
-        string fullPath = Path.Combine(dataDirPath, dataFileName);
+        string fullPath = Path.Combine(dataDirPath, prefix + dataFileName);
         try
         {
             Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
@@ -61,9 +61,9 @@ public class FileDataHandler
             Debug.LogError("Error occured when saving data to file: " + fullPath + "\n" + e);
         }
     }
-    public List<BuildingSettings> LoadSettings()
+    public List<BuildingSettings> LoadSettings(string prefix = "")
     {
-        string fullPath = Path.Combine(dataDirPath, "settings_" + dataFileName);
+        string fullPath = Path.Combine(dataDirPath, prefix + dataFileName);
         List<BuildingSettings> buildingSettings = new List<BuildingSettings>();
         
         if (File.Exists(fullPath))
@@ -109,9 +109,9 @@ public class FileDataHandler
         Debug.Log("Loaded " + buildingSettings.Count + " building presets");
         return buildingSettings;
     }
-    public void SaveSettings(List<BuildingSettings> buildingPresets)
+    public void SaveSettings(List<BuildingSettings> buildingPresets, string prefix = "")
     {
-        string fullPath = Path.Combine(dataDirPath, "settings_" + dataFileName);
+        string fullPath = Path.Combine(dataDirPath, prefix + dataFileName);
         try
         {
             Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
@@ -127,6 +127,14 @@ public class FileDataHandler
         catch (Exception e)
         {
             Debug.LogError("Error occured when saving data to file: " + fullPath + "\n" + e);
+        }
+    }
+    public void DeleteRunData(string prefix)
+    {
+        string fullPath = Path.Combine(dataDirPath, prefix + dataFileName);
+        if (File.Exists(fullPath))
+        {
+            File.Delete(fullPath);
         }
     }
 }
