@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class PlayerEconomyManager : MonoBehaviour
+public class PlayerEconomyManager : MonoBehaviour, IRunDataPersistence
 {
     [SerializeField]
     private int _playerMoney = 0;
@@ -66,5 +66,16 @@ public class PlayerEconomyManager : MonoBehaviour
         OnPurchaseAttempted?.Invoke(amount, success);
         
         return success;
+    }
+
+    public void LoadData(RunData data)
+    {
+        this._playerMoney = data.currentMoney;
+        OnMoneyChanged?.Invoke(_playerMoney);
+    }
+
+    public void SaveData(ref RunData data)
+    {
+        data.currentMoney = this._playerMoney;
     }
 }

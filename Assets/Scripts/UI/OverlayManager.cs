@@ -26,6 +26,7 @@ public class OverlayManager : MonoBehaviour
     private Label moneyText;
     private VisualElement healthBarFill;
     private Label healthText;
+    private Label currentWaveLabel;
 
     private void OnEnable()
     {
@@ -63,6 +64,11 @@ public class OverlayManager : MonoBehaviour
         escMenuWrapper = root.Q<VisualElement>("EscMenuWrapper");
         escMenuButton = root.Q<VisualElement>("EscButton");
         escMenuButton.RegisterCallback<ClickEvent>(OnEscMenuButtonClicked);
+
+        currentWaveLabel = root.Q<Label>("CurrentWave");
+
+        waveManager = FindObjectOfType<WaveManager>();
+        UpdateCurrentWave(waveManager.waveNumber);
     }
     void Update()
     {
@@ -77,6 +83,10 @@ public class OverlayManager : MonoBehaviour
                 OpenEscMenu();
             }
         }
+    }
+    public void UpdateCurrentWave(int waveNumber)
+    {
+        currentWaveLabel.text = "Current wave: " + waveNumber;
     }
     public void OpenEscMenu()
     {
@@ -148,7 +158,7 @@ public class OverlayManager : MonoBehaviour
     private void OnWaveCompleted(int waveNumber)
     {
         nextWaveButton.visible = true;
-        // TODO: show wave completed UI
+        UpdateCurrentWave(waveNumber);
     }
     private void OnBuildingIconClicked(ClickEvent evt, BuildingSettings buildingSettings)
     {

@@ -117,17 +117,18 @@ public class WaveManager : MonoBehaviour, IRunDataPersistence
         if (enemiesLeftToDie <= 0)
         {
             OnWaveCompleted?.Invoke(waveNumber);
-            DataPersistenceManager.Instance.SaveRun();
         }
     }
 
     public void LoadData(RunData data)
     {
         this.waveNumber = data.currentWave;
+        OnWaveCompleted?.Invoke(waveNumber);
     }
 
     public void SaveData(ref RunData data)
     {
+        Debug.Log("Saving wave " + waveNumber);
         data.currentWave = this.waveNumber;
     }
 }

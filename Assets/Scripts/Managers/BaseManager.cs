@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class BaseManager : MonoBehaviour
+public class BaseManager : MonoBehaviour, IRunDataPersistence
 {
     public static event Action<int> OnHealthChanged;
     public static event Action<int> OnBaseDestroyed;
@@ -23,14 +23,7 @@ public class BaseManager : MonoBehaviour
     }
     private void Awake()
     {
-        currentHealth = maxHealth;
         waveManager = FindObjectOfType<WaveManager>();
-    }
-
-    // Notify listeners of initial health after they are set up
-    void LateStart()
-    {
-        OnHealthChanged?.Invoke(currentHealth);
     }
 
     private void HandleEnemyAttack(EnemyHealthManager enemy, EnemyHealthManager.DeathReason reason)
@@ -70,5 +63,23 @@ public class BaseManager : MonoBehaviour
     public int GetMaxHealth()
     {
         return maxHealth;
+    }
+
+    public void LoadData(RunData data)
+    {
+        if (data.currentHealth <= 0)
+        {
+            this.currentHealth = maxHealth;
+        }
+        else
+        {
+            this.currentHealth = data.currentHealth;
+        }
+        OnHealthChanged?.Invoke(currentHealth);
+    }
+
+    public void SaveData(ref RunData data)
+    {
+        data.currentHealth = this.currentHealth;
     }
 }

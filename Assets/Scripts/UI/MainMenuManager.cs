@@ -11,7 +11,9 @@ public class MainMenuManager : MonoBehaviour
     private UIDocument uiDocument;
     private VisualElement root;
     private Label metaCoinsAmount;
-
+    private UIUtils uiUtils;
+    [SerializeField] List<Texture2D> upgradeIconsFrames;
+    [SerializeField] float animationDelayBetweenFrames = 0.33f;
     [SerializeField] Texture2D upgradePurchasedIcon;
     [SerializeField] VisualTreeAsset upgradesMenuTemplate;
     private VisualElement upgradesWrapper;
@@ -24,6 +26,7 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] List<BuildingSettings> baseTowers;
     private void Awake()
     {
+        uiUtils = GetComponent<UIUtils>();
         uiDocument = GetComponent<UIDocument>();
         root = uiDocument.rootVisualElement;
         mainMenuButtons = root.Q<VisualElement>("MainMenuButtons");
@@ -93,6 +96,7 @@ public class MainMenuManager : MonoBehaviour
         else
         {
             damageUpgrade.RegisterCallback<ClickEvent>(evt => OnUpgradeButtonClick(evt, UpgradeType.Damage, damageUpgrade));
+            uiUtils.AnimateIcon(damageUpgrade.name, damageUpgrade, upgradeIconsFrames, animationDelayBetweenFrames);
             upgrades.Q<VisualElement>("DamageUpgrade").Q<Label>("Cost").text = ""+ProgressionManager.Instance.GetUpgradeCost(UpgradeType.Damage, tower.towerName);
         }
         upgradesWrapper.Add(upgrades.Q<VisualElement>("DamageUpgrade"));
@@ -106,6 +110,7 @@ public class MainMenuManager : MonoBehaviour
         else
         {
             rangeUpgrade.RegisterCallback<ClickEvent>(evt => OnUpgradeButtonClick(evt, UpgradeType.Range, rangeUpgrade));
+            uiUtils.AnimateIcon(rangeUpgrade.name, rangeUpgrade, upgradeIconsFrames, animationDelayBetweenFrames);
             upgrades.Q<VisualElement>("RangeUpgrade").Q<Label>("Cost").text = ""+ProgressionManager.Instance.GetUpgradeCost(UpgradeType.Range, tower.towerName);
         }
         upgradesWrapper.Add(upgrades.Q<VisualElement>("RangeUpgrade"));
@@ -118,6 +123,7 @@ public class MainMenuManager : MonoBehaviour
         else
         {
             fireRateUpgrade.RegisterCallback<ClickEvent>(evt => OnUpgradeButtonClick(evt, UpgradeType.FireRate, fireRateUpgrade));
+            uiUtils.AnimateIcon(fireRateUpgrade.name, fireRateUpgrade, upgradeIconsFrames, animationDelayBetweenFrames);
             upgrades.Q<VisualElement>("FireRateUpgrade").Q<Label>("Cost").text = ""+ProgressionManager.Instance.GetUpgradeCost(UpgradeType.FireRate, tower.towerName);
         }
         upgradesWrapper.Add(upgrades.Q<VisualElement>("FireRateUpgrade"));
@@ -130,6 +136,7 @@ public class MainMenuManager : MonoBehaviour
         else
         {
             fireTypeUpgrade.RegisterCallback<ClickEvent>(evt => OnUpgradeButtonClick(evt, UpgradeType.FireType, fireTypeUpgrade));
+            uiUtils.AnimateIcon(fireTypeUpgrade.name, fireTypeUpgrade, upgradeIconsFrames, animationDelayBetweenFrames);
             upgrades.Q<VisualElement>("FireUpgrade").Q<Label>("Cost").text = ""+ProgressionManager.Instance.GetUpgradeCost(UpgradeType.FireType, tower.towerName);
         }
         upgradesWrapper.Add(upgrades.Q<VisualElement>("FireUpgrade"));
@@ -146,6 +153,7 @@ public class MainMenuManager : MonoBehaviour
     }
     private void SetupPurchasedUpgrade(VisualElement upgradeButton)
     {
+        uiUtils.StopCoroutineByReference(upgradeButton.name);
         upgradeButton.parent.Q<Label>("Cost").text = "Purchased";
         upgradeButton.style.backgroundImage = new StyleBackground(upgradePurchasedIcon);
         upgradeButton.pickingMode = PickingMode.Ignore;

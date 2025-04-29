@@ -171,7 +171,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2757f14bf8b3b804ebbcaf23641af36b, type: 2}
   - {fileID: 11400000, guid: 41120f22ce09f4844b3bc19977dca352, type: 2}
   - {fileID: 11400000, guid: 6b5655cfd50e53b40a64addfb40e91fc, type: 2}
-  fireTypeUpgradeName: Flaming
+  fireTypeUpgradePrefix: Flaming
 --- !u!1 &1141309812
 GameObject:
   m_ObjectHideFlags: 0
@@ -369,6 +369,7 @@ GameObject:
   - component: {fileID: 2074106383}
   - component: {fileID: 2074106382}
   - component: {fileID: 2074106384}
+  - component: {fileID: 2074106385}
   m_Layer: 5
   m_Name: MAIN_MENU
   m_TagString: Untagged
@@ -419,6 +420,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3a33abdc46d9ca4ca3830ed56ea0486, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  upgradeIconsFrames:
+  - {fileID: 2800000, guid: 173c24df69d2bae4bb0ac9becca7a636, type: 3}
+  - {fileID: 2800000, guid: e289a816c60ade3489f26374c53f20ce, type: 3}
+  - {fileID: 2800000, guid: a622c4ec22fdf2b4e83c114b87f14d5a, type: 3}
+  animationDelayBetweenFrames: 0.33
   upgradePurchasedIcon: {fileID: 2800000, guid: fbea9150152d65e4aad8e41b3c361f87, type: 3}
   upgradesMenuTemplate: {fileID: 9197481963319205126, guid: acf58f0c3390f3346a4de572ddf49213, type: 3}
   towerUpgradesMenuTemplate: {fileID: 9197481963319205126, guid: 5464eed16ffeb1e40a9275dcf3c97666, type: 3}
@@ -427,6 +433,18 @@ MonoBehaviour:
   - {fileID: 11400000, guid: cea31ed8ee45f3048966bbaabe719d1c, type: 2}
   - {fileID: 11400000, guid: 2757f14bf8b3b804ebbcaf23641af36b, type: 2}
   - {fileID: 11400000, guid: 6b5655cfd50e53b40a64addfb40e91fc, type: 2}
+--- !u!114 &2074106385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2074106381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbbe105f0f56dcc4bacfda195be76ac6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -7,7 +7,7 @@
                 <ui:Label tabindex="-1" text="FORT" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Fort" class="title" style="position: absolute; top: 50%; right: 20%; width: 28%; height: 30%;" />
             </ui:VisualElement>
             <ui:VisualElement name="Coins" style="flex-grow: 1; position: absolute; right: 0; top: 0; height: 100%; width: 20%; flex-direction: row;">
-                <ui:VisualElement name="MetaCoinsIcon" style="flex-grow: 1; position: absolute; top: 30%; width: 20%; height: 20%; background-image: url(&quot;project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=-4528830608231651361&amp;guid=c373d5426d4ebc64b868703d44a062a9&amp;type=3#arrow-up@2x&quot;); left: 0;" />
+                <ui:VisualElement name="MetaCoinsIcon" style="flex-grow: 1; position: absolute; top: 30%; width: 20%; height: 20%; background-image: url(&quot;project://database/Assets/Art/Placeholder/TowerIcons/diamondIcon.png?fileID=2800000&amp;guid=73a3ae705b3566047b428eefb1330f2b&amp;type=3#diamondIcon&quot;); left: 0;" />
                 <ui:Label tabindex="-1" text="x 123" parse-escape-sequences="true" display-tooltip-when-elided="true" name="MetaCoinsAmount" class="buttonText" style="font-size: 58px; position: absolute; top: 30%; right: 40%;" />
             </ui:VisualElement>
         </ui:VisualElement>

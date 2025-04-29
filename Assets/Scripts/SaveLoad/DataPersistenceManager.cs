@@ -91,6 +91,7 @@ public class DataPersistenceManager : MonoBehaviour
     }
     public void SaveRun()
     {
+        Debug.Log("Save run called");
         foreach (IRunDataPersistence dataPersistenceObj in runDataPersistenceObjects)
         {
             dataPersistenceObj.SaveData(ref runData);

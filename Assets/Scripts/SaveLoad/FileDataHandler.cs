@@ -134,6 +134,7 @@ public class FileDataHandler
         string fullPath = Path.Combine(dataDirPath, prefix + dataFileName);
         if (File.Exists(fullPath))
         {
+            Debug.Log("deleting " + fullPath);
             File.Delete(fullPath);
         }
     }

@@ -755,9 +755,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilemap: {fileID: 356289518}
-  road: {fileID: 11400000, guid: dd29c28bf41f8e7458089ac990cf58ae, type: 2}
-  towerSpot: {fileID: 11400000, guid: 425e4f57ad951464b86a401381a7b1a0, type: 2}
-  portal: {fileID: 11400000, guid: 31145727c6ea075448410e5573454e36, type: 2}
+  road: {fileID: 11400000, guid: bdbad05f9ca50a84b8194d68cce57f39, type: 2}
+  towerSpot: {fileID: 11400000, guid: 647005781fcffed40891bce9f1372a88, type: 2}
+  portal: {fileID: 11400000, guid: ba2b82f4809eaa44a899eba95c613e54, type: 2}
   tileSize: 3
 --- !u!114 &1429115354
 MonoBehaviour:

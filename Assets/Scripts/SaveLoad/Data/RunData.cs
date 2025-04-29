@@ -7,6 +7,8 @@ using Newtonsoft.Json;
 public class RunData
 {
     public int currentWave;
+    public int currentMoney;
+    public int currentHealth;
     public SerializableMapData mapData;
 
     // Default values on new game
@@ -14,6 +16,8 @@ public class RunData
     {
         // current run data
         currentWave = 0;
+        currentMoney = 400;
+        currentHealth = 0;
         mapData = new SerializableMapData();
     }
 }
