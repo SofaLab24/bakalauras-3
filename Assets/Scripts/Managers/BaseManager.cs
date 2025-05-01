@@ -6,7 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class BaseManager : MonoBehaviour, IRunDataPersistence
 {
-    public static event Action<int> OnHealthChanged;
+    public static event Action<int> OnBaseHealthChange;
+    public static event Action OnBaseDamaged;
     public static event Action<int> OnBaseDestroyed;
 
     [SerializeField] private int maxHealth = 100;
@@ -37,8 +38,9 @@ public class BaseManager : MonoBehaviour, IRunDataPersistence
     {
         currentHealth -= damage;
         currentHealth = Mathf.Max(0, currentHealth);
-        OnHealthChanged?.Invoke(currentHealth);
-        
+        OnBaseHealthChange?.Invoke(currentHealth);
+        OnBaseDamaged?.Invoke();
+
         if (currentHealth <= 0)
         {
             // -1 because the player died during current wave
@@ -75,7 +77,7 @@ public class BaseManager : MonoBehaviour, IRunDataPersistence
         {
             this.currentHealth = data.currentHealth;
         }
-        OnHealthChanged?.Invoke(currentHealth);
+        OnBaseHealthChange?.Invoke(currentHealth);
     }
 
     public void SaveData(ref RunData data)

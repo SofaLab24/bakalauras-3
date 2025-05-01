@@ -16,7 +16,7 @@ MonoBehaviour:
   isUnlocked: 1
   buildingCost: 150
   buildingIcon: {fileID: 2800000, guid: 4d1769c6d500dc14aa7451ea2d323d85, type: 3}
-  buildingPrefab: {fileID: 2857807080901524982, guid: b26cb1e9889eaac4d8357bb40a459c48, type: 3}
+  buildingPrefab: {fileID: 1192505338540290890, guid: 03b3284d9dcec76408dcf612e49058d0, type: 3}
   isTower: 1
   towerType: 0
   towerRange: 6

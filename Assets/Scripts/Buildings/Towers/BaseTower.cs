@@ -11,6 +11,7 @@ public abstract class BaseTower : MonoBehaviour
     [SerializeField] protected LayerMask enemyLayer;
     [SerializeField] protected GameObject projectilePrefab;
     [SerializeField] protected AnimationCurve projectileSpeedCurve;
+    [SerializeField] protected Transform towerHead;
     
     protected Coroutine shootingCoroutine;
     protected Transform currentTarget;
@@ -126,6 +127,10 @@ public abstract class BaseTower : MonoBehaviour
             if (enemyHealth != null && enemyHealth.currentHealth > 0)
             {
                 currentTarget = collider.transform;
+                if (towerHead != null)
+                {
+                    towerHead.up = currentTarget.position - towerHead.position;
+                }
                 break;
             }
         }

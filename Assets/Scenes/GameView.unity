@@ -568,6 +568,8 @@ MonoBehaviour:
   zoomSpeed: 2
   minZoom: 5
   maxZoom: 15
+  shakeDuration: 0.5
+  shakeMagnitude: 0.1
 --- !u!1 &524706106
 GameObject:
   m_ObjectHideFlags: 0
@@ -828,7 +830,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1871619152245633679, guid: 3fc2348549da0d54492de2c6b23961a0, type: 3}
       propertyPath: maxHealth
-      value: 2
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 6265112755385363870, guid: 3fc2348549da0d54492de2c6b23961a0, type: 3}
       propertyPath: m_LocalPosition.x

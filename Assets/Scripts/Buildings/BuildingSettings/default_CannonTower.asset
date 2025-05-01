@@ -48,10 +48,11 @@ MonoBehaviour:
     m_RotationOrder: 4
   towerDamage: 35
   towerBurnDamage: 0
-  towerExplosionRadius: 2
   enemyLayer:
     serializedVersion: 2
     m_Bits: 64
   towerProjectilePrefab: {fileID: 7784466698744177259, guid: 0fa56d0d2bf401944a76b496bc4c1eb5, type: 3}
+  towerExplosionRadius: 2
+  towerExplosionPrefab: {fileID: 8131147760250337703, guid: d4cb11215f8085b41a7aee55a7245b94, type: 3}
   resourceType: 
   resourceMultiplier: 0

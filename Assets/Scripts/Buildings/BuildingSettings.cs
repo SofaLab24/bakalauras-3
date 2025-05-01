@@ -28,10 +28,14 @@ public class BuildingSettings : ScriptableObject
     public AnimationCurve projectileSpeedCurve;
     public int towerDamage = 20;
     public int towerBurnDamage = 0;
-    public float towerExplosionRadius = 2f;
     public LayerMask enemyLayer;
     [JsonIgnore]
     public GameObject towerProjectilePrefab;
+    [Header("Cannon Tower Settings")]
+    public float towerExplosionRadius = 2f;
+    [JsonIgnore]
+    public GameObject towerExplosionPrefab;
+
     [Header("Resource Building Settings")]
     public string resourceType;
     public int resourceMultiplier;
@@ -53,6 +57,7 @@ public class BuildingSettings : ScriptableObject
         clone.towerDamage = towerDamage;
         clone.towerBurnDamage = towerBurnDamage;
         clone.towerExplosionRadius = towerExplosionRadius;
+        clone.towerExplosionPrefab = towerExplosionPrefab;
         clone.enemyLayer = enemyLayer;
         clone.towerProjectilePrefab = towerProjectilePrefab;
         clone.resourceType = resourceType;

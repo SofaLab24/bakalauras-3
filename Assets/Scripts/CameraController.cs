@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
@@ -11,8 +12,24 @@ public class CameraController : MonoBehaviour
     [SerializeField]
     private float maxZoom = 15f;
 
-    private Camera cam;
+    [Header("Screen shake settings")]
+    [SerializeField]
+    private float shakeDuration = 0.5f;
+    [SerializeField]
+    private float shakeMagnitude = 0.1f;
+    private float shakeLeftTime = 0f;
+    private Vector3 originalPosition;
 
+    private Camera cam;
+    void OnEnable()
+    {
+        BaseManager.OnBaseDamaged += ShakeCamera;
+    }
+
+    void OnDisable()
+    {
+        BaseManager.OnBaseDamaged -= ShakeCamera;
+    }
     private void Start()
     {
         cam = Camera.main;
@@ -22,8 +39,17 @@ public class CameraController : MonoBehaviour
     {
         HandleMovement();
         HandleZoom();
+        if (shakeLeftTime > 0)
+        {
+            transform.localPosition = originalPosition + UnityEngine.Random.insideUnitSphere * shakeMagnitude;
+            shakeLeftTime -= Time.deltaTime;
+        }
     }
-
+    private void ShakeCamera()
+    {
+        originalPosition = transform.position;
+        shakeLeftTime = shakeDuration;
+    }
     private void HandleMovement()
     {
         float horizontal = Input.GetAxis("Horizontal");

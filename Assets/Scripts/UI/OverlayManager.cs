@@ -31,14 +31,14 @@ public class OverlayManager : MonoBehaviour
     private void OnEnable()
     {
         PlayerEconomyManager.OnMoneyChanged += UpdateMoneyDisplay;
-        BaseManager.OnHealthChanged += HandleHealthChanged;
+        BaseManager.OnBaseHealthChange += HandleHealthChanged;
         WaveManager.OnWaveCompleted += OnWaveCompleted;
     }
 
     private void OnDisable()
     {
         PlayerEconomyManager.OnMoneyChanged -= UpdateMoneyDisplay;
-        BaseManager.OnHealthChanged -= HandleHealthChanged;
+        BaseManager.OnBaseHealthChange -= HandleHealthChanged;
         WaveManager.OnWaveCompleted -= OnWaveCompleted;
     }
 

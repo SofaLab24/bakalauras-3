@@ -48,6 +48,7 @@ public class BuildingPresetsHandler : MonoBehaviour, ISettingsPersistence
         combinedPreset.buildingIcon = defaultPreset.buildingIcon;
         combinedPreset.projectileSpeedCurve = defaultPreset.projectileSpeedCurve;
         combinedPreset.towerProjectilePrefab = defaultPreset.towerProjectilePrefab;
+        combinedPreset.towerExplosionPrefab = defaultPreset.towerExplosionPrefab;
 
         return combinedPreset;
     }
@@ -65,7 +66,6 @@ public class BuildingPresetsHandler : MonoBehaviour, ISettingsPersistence
     {
         return buildingPresets;
     }
-    // TODO: UPGRADES DON"T WORK :((((((( PLS FIX
     public void UpgradeBuilding(string buildingName, UpgradeType upgradeType)
     {
         switch(upgradeType)
