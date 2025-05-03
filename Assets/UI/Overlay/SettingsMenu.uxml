@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Styles/OverlayStyles.uss?fileID=7433441132597879392&amp;guid=1cf20f00a4f96f047826bc0af6db10b1&amp;type=3#OverlayStyles" />
+    <ui:VisualElement name="SettingsRoot" style="flex-grow: 1; width: 100%; height: 100%;">
+        <ui:SliderInt label="MUSIC" high-value="100" name="MusicSlider" class="button slider" style="width: 80%; height: 20%; left: 10%; top: 0; position: absolute;" />
+        <ui:SliderInt label="EFFECTS" high-value="100" name="SFXSlider" class="button slider" style="left: 10%; top: 35%; width: 80%; height: 20%; position: absolute;" />
+        <ui:VisualElement name="BackButton" class="button" style="flex-grow: 1; position: absolute; top: 70%; left: 20%; width: 60%; height: 20%; justify-content: center;">
+            <ui:Label tabindex="-1" text="BACK" parse-escape-sequences="true" display-tooltip-when-elided="true" name="MainMenuLabel" class="buttonText" style="font-size: 40px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

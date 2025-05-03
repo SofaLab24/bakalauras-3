@@ -1,12 +1,14 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/Styles/OverlayStyles.uss?fileID=7433441132597879392&amp;guid=1cf20f00a4f96f047826bc0af6db10b1&amp;type=3#OverlayStyles" />
-    <ui:VisualElement name="ResumeButton" class="button" style="flex-grow: 1; position: relative; top: 0; left: 0; width: 100%; height: 40%; justify-content: center;">
-        <ui:Label tabindex="-1" text="RESUME" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ResumeLabel" class="buttonText" style="font-size: 40px;" />
-    </ui:VisualElement>
-    <ui:VisualElement name="SettingsButton" class="button" style="flex-grow: 1; position: relative; top: 35%; left: 0; width: 100%; height: 40%; justify-content: center;">
-        <ui:Label tabindex="-1" text="SETTINGS" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SettingsLabel" class="buttonText" style="font-size: 40px;" />
-    </ui:VisualElement>
-    <ui:VisualElement name="MainMenuButton" class="button" style="flex-grow: 1; position: relative; top: 70%; left: 0; width: 100%; height: 40%; justify-content: center;">
-        <ui:Label tabindex="-1" text="MAIN MENU" parse-escape-sequences="true" display-tooltip-when-elided="true" name="MainMenuLabel" class="buttonText" style="font-size: 40px;" />
+    <ui:VisualElement name="EscRoot" style="flex-grow: 1; width: 100%; height: 100%; justify-content: center; align-self: center;">
+        <ui:VisualElement name="ResumeButton" class="button" style="flex-grow: 1; position: absolute; top: 0; left: 10%; width: 80%; height: 20%; justify-content: center;">
+            <ui:Label tabindex="-1" text="RESUME" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ResumeLabel" class="buttonText" style="font-size: 40px;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="SettingsButton" class="button" style="flex-grow: 1; position: absolute; top: 35%; left: 10%; width: 80%; height: 20%; justify-content: center;">
+            <ui:Label tabindex="-1" text="SETTINGS" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SettingsLabel" class="buttonText" style="font-size: 40px;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="MainMenuButton" class="button" style="flex-grow: 1; position: absolute; top: 70%; left: 10%; width: 80%; height: 20%; justify-content: center;">
+            <ui:Label tabindex="-1" text="MAIN MENU" parse-escape-sequences="true" display-tooltip-when-elided="true" name="MainMenuLabel" class="buttonText" style="font-size: 40px;" />
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

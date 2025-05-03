@@ -22,7 +22,6 @@ public abstract class BaseTower : MonoBehaviour
     
     public virtual void Initialize(BuildingSettings settings)
     {
-        Debug.Log("Initializing tower: " + settings.towerName + " with damage: " + settings.towerDamage);
         this.range = settings.towerRange;
         this.shootingSpeed = settings.towerShootingDelay;
         this.projectileSpeed = settings.towerProjectileSpeed;
@@ -144,6 +143,7 @@ public abstract class BaseTower : MonoBehaviour
         {
             Projectile projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity).GetComponent<Projectile>();
             projectile.Initialize(currentTarget, projectileSpeed, projectileSpeedCurve, this);
+            SFXManager.instance.ShootSFX(GetComponent<AudioSource>());
         }
     }
     // called by projectile when it hits the target

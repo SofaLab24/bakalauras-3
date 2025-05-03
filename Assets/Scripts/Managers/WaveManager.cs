@@ -128,7 +128,6 @@ public class WaveManager : MonoBehaviour, IRunDataPersistence
 
     public void SaveData(ref RunData data)
     {
-        Debug.Log("Saving wave " + waveNumber);
         data.currentWave = this.waveNumber;
     }
 }

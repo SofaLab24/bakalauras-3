@@ -270,6 +270,7 @@ MonoBehaviour:
   splitChance: 0.3
   buildingIconTemplate: {fileID: 9197481963319205126, guid: 325bdd0759364104385b9b3ebed204ed, type: 3}
   escMenuTemplate: {fileID: 9197481963319205126, guid: 791a351e1200c7640a93474fd3a05f47, type: 3}
+  settingsMenuTemplate: {fileID: 9197481963319205126, guid: 221add52337032d41a851c2614f07c1f, type: 3}
 --- !u!1 &356289515
 GameObject:
   m_ObjectHideFlags: 0

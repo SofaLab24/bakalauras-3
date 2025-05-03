@@ -61,7 +61,6 @@ public class Projectile : MonoBehaviour
         this.moveSpeed = moveSpeed;
         this.speedCurve = speedCurve;
         this.parentTower = parentTower;
-        Debug.Log("Parent tower: " + parentTower.gameObject.name);
         isInitialized = true;
     }
     public Vector3 GetMoveDirection()

@@ -46,3 +46,11 @@
 .button:hover {
     -unity-background-image-tint-color: rgb(115, 115, 115);
 }
+
+.slider {
+    -unity-font: url("project://database/Assets/UI/Fonts/poppins/Poppins.otf?fileID=12800000&guid=ba359f7f2e1c3d441bac988121e3bee8&type=3#Poppins");
+    color: rgb(250, 198, 122);
+    font-size: 40px;
+    -unity-text-align: middle-left;
+    -unity-font-style: bold;
+}

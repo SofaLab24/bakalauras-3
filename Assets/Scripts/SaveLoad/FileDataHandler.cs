@@ -81,17 +81,13 @@ public class FileDataHandler
                 
                 // First deserialize to a temporary list of dictionaries
                 List<Dictionary<string, object>> tempData = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(dataToLoad);
-                Debug.Log("Loaded " + tempData.Count + " building presets (list of dictionaries)");
 
                 foreach (var itemData in tempData)
                 {
                     // Create a ScriptableObject instance
                     BuildingSettings newSettings = ScriptableObject.CreateInstance<BuildingSettings>();
                     
-                    // Use JsonConvert to convert the dictionary to a JSON string
                     string itemJson = JsonConvert.SerializeObject(itemData);
-                    Debug.Log(itemJson);
-                    // Populate the ScriptableObject with the JSON data
                     JsonConvert.PopulateObject(itemJson, newSettings);
                     
                     buildingSettings.Add(newSettings);
@@ -106,7 +102,6 @@ public class FileDataHandler
         {
             Debug.Log("Settings file not found: " + fullPath);
         }
-        Debug.Log("Loaded " + buildingSettings.Count + " building presets");
         return buildingSettings;
     }
     public void SaveSettings(List<BuildingSettings> buildingPresets, string prefix = "")

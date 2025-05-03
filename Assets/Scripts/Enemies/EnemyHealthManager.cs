@@ -48,7 +48,6 @@ public class EnemyHealthManager : MonoBehaviour
     }
     public void Die(DeathReason reason)
     {
-        // TODO: trigger particles
         OnEnemyDeath?.Invoke(this, reason);
 
         Destroy(gameObject);

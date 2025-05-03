@@ -13,8 +13,10 @@ public class OverlayManager : MonoBehaviour
     [SerializeField] private BaseManager baseManager;
     [SerializeField] private UIDocument uiDocument;
     [SerializeField] private float splitChance = 0.3f;
+    [Header("UI Templates")]
     [SerializeField] private VisualTreeAsset buildingIconTemplate;
     [SerializeField] private VisualTreeAsset escMenuTemplate;
+    [SerializeField] private VisualTreeAsset settingsMenuTemplate;
 
     public static event Action<bool> OnEscMenu;
     private bool isEscMenuOpen = false;
@@ -81,6 +83,8 @@ public class OverlayManager : MonoBehaviour
             else
             {
                 OpenEscMenu();
+                OnEscMenu?.Invoke(true);
+
             }
         }
     }
@@ -91,9 +95,7 @@ public class OverlayManager : MonoBehaviour
     public void OpenEscMenu()
     {
         escMenuWrapper.Clear();
-        VisualElement escMenu = escMenuTemplate.CloneTree();
-        escMenuWrapper.Add(escMenu);
-        OnEscMenu?.Invoke(true);
+        escMenuTemplate.CloneTree(escMenuWrapper);
         isEscMenuOpen = true;
         EscMenuButtonSetup();
     }
@@ -117,6 +119,7 @@ public class OverlayManager : MonoBehaviour
     }
     private void OnEscMenuButtonClicked(ClickEvent evt)
     {
+        OnEscMenu?.Invoke(true);
         OpenEscMenu();
     }
     private void OnResumeClicked(ClickEvent evt)
@@ -125,7 +128,34 @@ public class OverlayManager : MonoBehaviour
     }
     private void OnSettingsClicked(ClickEvent evt)
     {
-        // TODO: show settings UI
+        escMenuWrapper.Clear();
+        settingsMenuTemplate.CloneTree(escMenuWrapper);
+
+        SliderInt musicSlider = escMenuWrapper.Q<SliderInt>("MusicSlider");
+        musicSlider.value = SFXManager.instance.musicVolume;
+        musicSlider.RegisterCallback<ChangeEvent<int>>(OnMusicSliderChanged);
+
+        SliderInt sfxSlider = escMenuWrapper.Q<SliderInt>("SFXSlider");
+        sfxSlider.value = SFXManager.instance.sfxVolume;
+        sfxSlider.RegisterCallback<ChangeEvent<int>>(OnSFXSliderChanged);
+
+        VisualElement backButton = escMenuWrapper.Q<VisualElement>("BackButton");
+        backButton.RegisterCallback<ClickEvent>(OnSettingsBackButtonClicked);
+    }
+
+    private void OnMusicSliderChanged(ChangeEvent<int> evt)
+    {
+        SFXManager.instance.SetMusicVolume(evt.newValue);
+    }
+
+    private void OnSFXSliderChanged(ChangeEvent<int> evt)
+    {
+        SFXManager.instance.sfxVolume = evt.newValue;
+    }
+
+    private void OnSettingsBackButtonClicked(ClickEvent evt)
+    {
+        OpenEscMenu();
     }
     private void OnMainMenuClicked(ClickEvent evt)
     {

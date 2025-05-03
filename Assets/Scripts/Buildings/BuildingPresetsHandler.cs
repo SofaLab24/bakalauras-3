@@ -29,7 +29,6 @@ public class BuildingPresetsHandler : MonoBehaviour, ISettingsPersistence
             {
                 this.buildingPresets.Add(preset.CloneInstance());
             }
-            Debug.Log("Presets count: " + this.buildingPresets.Count);
             return;
         }
         foreach (BuildingSettings savedPreset in savedPresets)
