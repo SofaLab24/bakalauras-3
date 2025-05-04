@@ -10,57 +10,49 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 556192596e2423d43b48632c41d52a9e, type: 3}
-  m_Name: default_WizardTower
+  m_Name: default_ArrowTower
   m_EditorClassIdentifier: 
-  towerName: WizardTower
+  towerName: ArrowTower
   isUnlocked: 1
-  buildingCost: 300
-  buildingIcon: {fileID: 2800000, guid: 1866806b407ed3646b986db602bc1f6e, type: 3}
-  buildingPrefab: {fileID: 2857807080901524982, guid: 7e062c52b26b5eb489709618d857d2d4, type: 3}
+  buildingCost: 100
+  buildingIcon: {fileID: 2800000, guid: 8599cb8a13030f443b2ac62b92a6d908, type: 3}
+  buildingPrefab: {fileID: 1192505338540290890, guid: 03b3284d9dcec76408dcf612e49058d0, type: 3}
   isTower: 1
-  towerType: 2
-  towerRange: 9
-  towerShootingDelay: 4
-  towerProjectileSpeed: 20
+  towerType: 0
+  towerRange: 6
+  towerShootingDelay: 0.8
+  towerProjectileSpeed: 10
   projectileSpeedCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0.8866577
-      inSlope: 0
-      outSlope: 0
+      value: 0.9993355
+      inSlope: -0.0012621289
+      outSlope: -0.0012621289
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 0.8044661
-      value: 0.9425361
-      inSlope: 0.16999865
-      outSlope: 0.16999865
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      outWeight: 0.11966937
     - serializedVersion: 3
       time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
+      value: 0.40005064
+      inSlope: -1.7363994
+      outSlope: -1.7363994
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.049475253
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  towerDamage: 50
+  towerDamage: 8
   towerBurnDamage: 0
-  towerExplosionRadius: 2
   enemyLayer:
     serializedVersion: 2
     m_Bits: 64
   towerProjectilePrefab: {fileID: 7784466698744177259, guid: c245961681e2bae42b4c2a114d7353c5, type: 3}
+  towerExplosionRadius: 2
+  towerExplosionPrefab: {fileID: 0}
   resourceType: 
   resourceMultiplier: 0

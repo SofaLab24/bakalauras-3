@@ -149,7 +149,7 @@ Transform:
   m_GameObject: {fileID: 142600131}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.49318415, y: 1.3901157, z: -1.2321327}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -167,6 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 863ac52b63ee13740a2efbae74bf3566, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  musicVolume: 100
   sfxVolume: 100
   sfxSource: {fileID: 5104108201507337563, guid: f3a5fef4ce18f1f42a750689db7114ff, type: 3}
   shootingSFX: {fileID: 8300000, guid: 829b99177ae6cea4097900d2744eb84f, type: 3}
@@ -294,7 +295,7 @@ Transform:
   m_GameObject: {fileID: 736004391}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.0055537, y: 8.325334, z: 0.046584487}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -315,8 +316,10 @@ MonoBehaviour:
   defaultBuildingPresets:
   - {fileID: 11400000, guid: cea31ed8ee45f3048966bbaabe719d1c, type: 2}
   - {fileID: 11400000, guid: 2757f14bf8b3b804ebbcaf23641af36b, type: 2}
-  - {fileID: 11400000, guid: 41120f22ce09f4844b3bc19977dca352, type: 2}
   - {fileID: 11400000, guid: 6b5655cfd50e53b40a64addfb40e91fc, type: 2}
+  - {fileID: 11400000, guid: 41120f22ce09f4844b3bc19977dca352, type: 2}
+  - {fileID: 11400000, guid: a29e2229c4ac1d74d9987cdfb1e8ec2f, type: 2}
+  - {fileID: 11400000, guid: ce61fcdf028d32942a0ee2a9bcf0d4a7, type: 2}
   fireTypeUpgradePrefix: Flaming
 --- !u!1 &1141309812
 GameObject:
@@ -358,7 +361,7 @@ Transform:
   m_GameObject: {fileID: 1141309812}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.0055537, y: 8.325334, z: 0.046584487}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -498,7 +501,7 @@ Transform:
   m_GameObject: {fileID: 2009522820}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.0055537, y: 8.325334, z: 0.046584487}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

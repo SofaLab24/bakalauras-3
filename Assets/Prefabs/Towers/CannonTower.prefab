@@ -9,11 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9183332490174408138}
-  - component: {fileID: 1391216975951494563}
   - component: {fileID: 3105589398671208908}
-  - component: {fileID: 1563537472751291701}
+  - component: {fileID: 2252790289023832527}
+  - component: {fileID: 7359696416692874265}
   m_Layer: 0
-  m_Name: ArrowTower
+  m_Name: CannonTower
   m_TagString: Tower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36,33 +36,6 @@ Transform:
   - {fileID: 2672588020741695859}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1391216975951494563
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1192505338540290890}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8a37925fe1674d4eb2704652c6957de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  range: 0
-  shootingSpeed: 0
-  projectileSpeed: 0
-  damage: 0
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  projectilePrefab: {fileID: 0}
-  projectileSpeedCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  towerHead: {fileID: 1643181842009637642}
 --- !u!82 &3105589398671208908
 AudioSource:
   m_ObjectHideFlags: 0
@@ -159,7 +132,36 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!58 &1563537472751291701
+--- !u!114 &2252790289023832527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1192505338540290890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a05f90a3dc6caf4e85c4adefbe738db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  range: 0
+  shootingSpeed: 0
+  projectileSpeed: 0
+  damage: 0
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  projectilePrefab: {fileID: 0}
+  projectileSpeedCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  towerHead: {fileID: 1643181842009637642}
+  explosionRadius: 2
+  explosionPrefab: {fileID: 0}
+--- !u!58 &7359696416692874265
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -267,7 +269,7 @@ SpriteRenderer:
   m_SortingLayerID: -420405061
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 8599cb8a13030f443b2ac62b92a6d908, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5d66bdb49541fe14d818b469f98d9186, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

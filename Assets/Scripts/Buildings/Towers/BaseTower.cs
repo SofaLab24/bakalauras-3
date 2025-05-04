@@ -126,12 +126,16 @@ public abstract class BaseTower : MonoBehaviour
             if (enemyHealth != null && enemyHealth.currentHealth > 0)
             {
                 currentTarget = collider.transform;
-                if (towerHead != null)
-                {
-                    towerHead.up = currentTarget.position - towerHead.position;
-                }
+                LookAtTarget();
                 break;
             }
+        }
+    }
+    protected virtual void LookAtTarget()
+    {
+        if (towerHead != null)
+        {
+            towerHead.up = currentTarget.position - towerHead.position;
         }
     }
 

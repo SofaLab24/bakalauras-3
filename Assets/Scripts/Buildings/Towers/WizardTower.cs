@@ -14,7 +14,6 @@ public class WizardTower : BaseTower
         {
             EnemyHealthManager enemyHealth = target.GetComponent<EnemyHealthManager>();
             enemyHealth.TakeDamage(damage);
-            // TODO: only visual explosion
         }
 
     }
@@ -23,6 +22,7 @@ public class WizardTower : BaseTower
     {
         currentTarget = null;
         Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, range, enemyLayer);
+        if (hitColliders.Length == 0) return;
         float maxHealth = hitColliders[0].GetComponent<EnemyHealthManager>().currentHealth;
         Collider2D targetEnemy = hitColliders[0];
         
@@ -37,5 +37,6 @@ public class WizardTower : BaseTower
         }
         
         currentTarget = targetEnemy.transform;
+        LookAtTarget();
     }
 } 

@@ -3,12 +3,12 @@
     <ui:VisualElement name="RootElement" style="flex-grow: 1; background-color: rgb(105, 36, 124);">
         <ui:VisualElement name="Top" style="flex-grow: 1; position: absolute; top: 0; left: 0; width: 100%; height: 35%; flex-direction: row;">
             <ui:VisualElement name="Title" style="flex-grow: 1; position: absolute; left: 0; top: 0; height: 100%; width: 80%;">
-                <ui:Label tabindex="-1" text="MYSTICAL" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Mystical" class="title" style="position: absolute; top: 10%; left: 25%; width: 60%; height: 30%;" />
-                <ui:Label tabindex="-1" text="FORT" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Fort" class="title" style="position: absolute; top: 50%; right: 20%; width: 28%; height: 30%;" />
+                <ui:Label tabindex="-1" text="DOUGHNUT" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Mystical" class="title" style="position: absolute; top: 10%; left: 25%; width: 60%; height: 30%;" />
+                <ui:Label tabindex="-1" text="DEFENCE" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Fort" class="title" style="position: absolute; top: 50%; right: 20%; width: 28%; height: 30%;" />
             </ui:VisualElement>
-            <ui:VisualElement name="Coins" style="flex-grow: 1; position: absolute; right: 0; top: 0; height: 100%; width: 20%; flex-direction: row;">
-                <ui:VisualElement name="MetaCoinsIcon" style="flex-grow: 1; position: absolute; top: 30%; width: 20%; height: 20%; background-image: url(&quot;project://database/Assets/Art/Placeholder/TowerIcons/diamondIcon.png?fileID=2800000&amp;guid=73a3ae705b3566047b428eefb1330f2b&amp;type=3#diamondIcon&quot;); left: 0;" />
-                <ui:Label tabindex="-1" text="x 123" parse-escape-sequences="true" display-tooltip-when-elided="true" name="MetaCoinsAmount" class="buttonText" style="font-size: 58px; position: absolute; top: 30%; right: 40%;" />
+            <ui:VisualElement name="Coins" style="flex-grow: 1; position: absolute; right: 0; top: 0; height: 100%; width: 20%; flex-direction: row; justify-content: space-around;">
+                <ui:VisualElement name="MetaCoinsIcon" style="flex-grow: 1; position: absolute; top: 32%; width: 20%; height: 20%; background-image: url(&quot;project://database/Assets/Art/Placeholder/TowerIcons/diamondIcon.png?fileID=2800000&amp;guid=73a3ae705b3566047b428eefb1330f2b&amp;type=3#diamondIcon&quot;); left: 10%;" />
+                <ui:Label tabindex="-1" text="x 99" parse-escape-sequences="true" display-tooltip-when-elided="true" name="MetaCoinsAmount" class="buttonText" style="font-size: 58px; position: absolute; top: 30%; right: 15%; align-self: flex-start;" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="Bot" style="flex-grow: 1; position: absolute; left: 0; bottom: 0; height: 65%; width: 100%;">

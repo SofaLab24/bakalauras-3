@@ -86,6 +86,7 @@ public class ProgressionManager : MonoBehaviour, IGameDataPersistence
         towerUpgradeStatus[selectedBuildingIndex] = upgradeStatus;
         metaCoins -= cost;
         mainMenuManager.UpdateMetaCoins(metaCoins);
+        DataPersistenceManager.Instance.SaveGame();
         return true;
     }
     public int GetUpgradeCost(UpgradeType upgradeType, string towerName = "")

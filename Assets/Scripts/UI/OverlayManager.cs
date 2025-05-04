@@ -159,6 +159,8 @@ public class OverlayManager : MonoBehaviour
     }
     private void OnMainMenuClicked(ClickEvent evt)
     {
+        DataPersistenceManager.Instance.SaveRun();
+        DataPersistenceManager.Instance.SaveGame();
         SceneManager.LoadScene(0);
     }
     private void InitializeBuildingsIcons()
