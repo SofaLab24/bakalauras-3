@@ -14,6 +14,7 @@ public class WizardTower : BaseTower
         {
             EnemyHealthManager enemyHealth = target.GetComponent<EnemyHealthManager>();
             enemyHealth.TakeDamage(damage);
+            DealBurnDamage(enemyHealth);
         }
 
     }

@@ -26,6 +26,7 @@ public class CannonTower : BaseTower
                 int actualDamage = Mathf.RoundToInt(damage * damageMultiplier);
                 
                 enemyHealth.TakeDamage(actualDamage);
+                DealBurnDamage(enemyHealth);
             }
         }
     }

@@ -17,6 +17,7 @@ public abstract class BaseTower : MonoBehaviour
     protected Transform currentTarget;
     protected bool rangeIndicatorActive;
     protected GameObject rangeIndicator;
+    protected int burnDamage;
 
     public float Range => range;
     
@@ -29,6 +30,7 @@ public abstract class BaseTower : MonoBehaviour
         this.enemyLayer = settings.enemyLayer;
         this.projectilePrefab = settings.towerProjectilePrefab;
         this.projectileSpeedCurve = settings.projectileSpeedCurve;
+        this.burnDamage = settings.towerBurnDamage;
     }
 
     protected virtual void OnEnable()
@@ -152,6 +154,13 @@ public abstract class BaseTower : MonoBehaviour
     }
     // called by projectile when it hits the target
     public abstract void DealDamage(Vector3 targetPosition, Transform target);
+    public virtual void DealBurnDamage(EnemyHealthManager enemyHealth)
+    {
+        if (enemyHealth != null)
+        {
+            enemyHealth.SetBurnDamage(burnDamage);
+        }
+    }
 
     protected virtual void OnDrawGizmosSelected()
     {
