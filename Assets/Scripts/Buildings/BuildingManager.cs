@@ -130,8 +130,6 @@ public class BuildingManager : MonoBehaviour, IRunDataPersistence
 
     private void HandlePurchaseAttempt(int amount, bool success)
     {
-        // We can use this to respond to purchase attempts if needed
-        // For example, play a sound when purchase fails
         if (!success)
         {
             OnInsufficientFunds?.Invoke();
@@ -148,14 +146,8 @@ public class BuildingManager : MonoBehaviour, IRunDataPersistence
         Vector2Int localCoords = new Vector2Int(position.x % pathGenerator.tileSize, position.y % pathGenerator.tileSize);
         if (localCoords.x < 0) localCoords.x += pathGenerator.tileSize;
         if (localCoords.y < 0) localCoords.y += pathGenerator.tileSize;
-        // Get the PathTile and check its tilesToFill array
         if (pathGenerator.allTiles.TryGetValue(pathTileCoords, out PathTile tile))
         {
-            Debug.Log("Position: " + position);
-            Debug.Log("PathTile coords: " + pathTileCoords);
-            Debug.Log("Tile: " + tile.ToString());
-            // Debug.Log("Local coords: " + localCoords);
-            // Debug.Log("Selected Tile value: " + tile.tilesToFill[localCoords.x, localCoords.y]);
             return tile.tilesToFill[localCoords.x, localCoords.y] == 0;
         }
         return false;
