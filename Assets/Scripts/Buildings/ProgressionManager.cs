@@ -109,6 +109,7 @@ public class ProgressionManager : MonoBehaviour, IGameDataPersistence
     public void LoadData(GameData data)
     {
         this.metaCoins = data.metaCoins;
+        this.waveHighscore = data.waveHighscore;
         mainMenuManager.UpdateMetaCoins(metaCoins);
         if(data.towerUpgradeStatus.Count <= 0)
         {

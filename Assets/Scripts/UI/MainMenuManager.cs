@@ -21,6 +21,7 @@ public class MainMenuManager : MonoBehaviour
     private VisualElement upgradesButton;
     private VisualElement mainMenuButtons;
     private VisualElement menuWrapper;
+    private Label highscore;
     [SerializeField] VisualTreeAsset towerUpgradesMenuTemplate;
     [SerializeField] VisualTreeAsset towerIconButtonTemplate;
     [SerializeField] List<BuildingSettings> baseTowers;
@@ -42,15 +43,21 @@ public class MainMenuManager : MonoBehaviour
         upgradesButton.RegisterCallback<ClickEvent>(OnUpgradesMenuClick);
 
         metaCoinsAmount = root.Q<Label>("MetaCoinsAmount");
+        highscore = root.Q<Label>("Highscore");
     }
     void Start()
     {
         DataPersistenceManager.Instance.LoadGame();
         UpdateMetaCoins(ProgressionManager.Instance.metaCoins);
+        UpdateHighscore(ProgressionManager.Instance.waveHighscore);
     }
     public void UpdateMetaCoins(int amount)
     {
         metaCoinsAmount.text = "x " + amount;
+    }
+    public void UpdateHighscore(int amount)
+    {
+        highscore.text = "Highscore: " + amount;
     }
     private void OnStartButtonClick(ClickEvent evt)
     {
