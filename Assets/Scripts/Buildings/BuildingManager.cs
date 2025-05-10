@@ -13,7 +13,6 @@ public class BuildingManager : MonoBehaviour, IRunDataPersistence
     private Camera mainCamera;
 
     public static event Action<Vector3> OnBuildingPlaced;
-    // TODO: trigger faulty sound effect and highlight missing money
     public static event Action<bool> TriggerRangeIndicator;
     public static event Action OnInsufficientFunds;
     private bool canPlaceBuilding = true;
@@ -142,14 +141,21 @@ public class BuildingManager : MonoBehaviour, IRunDataPersistence
     private bool IsBuildingSpot(Vector3Int position)
     {
         // Convert tilemap position to PathTile coordinates
-        Vector2Int pathTileCoords = new Vector2Int(position.x / pathGenerator.tileSize, position.y / pathGenerator.tileSize);
+        Vector2Int pathTileCoords = new Vector2Int(
+            Mathf.FloorToInt((float)position.x / pathGenerator.tileSize),
+            Mathf.FloorToInt((float)position.y / pathGenerator.tileSize)
+        );
         Vector2Int localCoords = new Vector2Int(position.x % pathGenerator.tileSize, position.y % pathGenerator.tileSize);
         if (localCoords.x < 0) localCoords.x += pathGenerator.tileSize;
         if (localCoords.y < 0) localCoords.y += pathGenerator.tileSize;
-
         // Get the PathTile and check its tilesToFill array
         if (pathGenerator.allTiles.TryGetValue(pathTileCoords, out PathTile tile))
         {
+            Debug.Log("Position: " + position);
+            Debug.Log("PathTile coords: " + pathTileCoords);
+            Debug.Log("Tile: " + tile.ToString());
+            // Debug.Log("Local coords: " + localCoords);
+            // Debug.Log("Selected Tile value: " + tile.tilesToFill[localCoords.x, localCoords.y]);
             return tile.tilesToFill[localCoords.x, localCoords.y] == 0;
         }
         return false;

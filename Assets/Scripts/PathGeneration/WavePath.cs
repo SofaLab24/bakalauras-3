@@ -10,13 +10,13 @@ public class WavePath
     public Vector2Int lastFilledTile;
     public Vector2Int targetTile;
 
-    public WavePath(List<PathTile> pathTiles, List<Vector2> enemyWalkPoints, Vector2Int lastFilledTile, Vector2Int targetTile)
+    public WavePath(List<PathTile> pathTiles, List<Vector2> enemyWalkPoints, Vector2Int lastFilledTile, Vector2Int targetTile, bool hasEnd = false)
     {
         this.pathTiles = pathTiles;
         this.enemyWalkPoints = enemyWalkPoints;
         this.lastFilledTile = lastFilledTile;
         this.targetTile = targetTile;
-        hasEnd = false;
+        this.hasEnd = hasEnd;
     }
     public WavePath(SerializableWavePath serializableWavePath)
     {

@@ -15,6 +15,22 @@ public class PathTile
     [JsonProperty]
     private int size; // should always be 3
 
+    public override string ToString()
+    {
+       string str = "";
+       str += "PathTile: " + coordinates + "\n";
+       str += "Tiles to fill: \n";
+       for (int i = 0; i < size; i++)
+       {
+        for (int j = 0; j < size; j++)
+        {
+            str += tilesToFill[i, j] + " ";
+        }
+        str += "\n";
+       }
+       return str;
+    }
+
     public PathTile(Vector2Int coordinates, int size)
     {
         this.coordinates = coordinates;
