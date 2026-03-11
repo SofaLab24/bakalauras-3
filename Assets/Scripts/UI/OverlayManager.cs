@@ -17,6 +17,9 @@ public class OverlayManager : MonoBehaviour
     [SerializeField] private VisualTreeAsset buildingIconTemplate;
     [SerializeField] private VisualTreeAsset escMenuTemplate;
     [SerializeField] private VisualTreeAsset settingsMenuTemplate;
+    [Header("Building Buttons")]
+    [SerializeField] private Color unselectedColor;
+    [SerializeField] private Color selectedColor;
 
     public static event Action<bool> OnEscMenu;
     private bool isEscMenuOpen = false;
@@ -166,17 +169,15 @@ public class OverlayManager : MonoBehaviour
     private void InitializeBuildingsIcons()
     {
         buildingsWrapper.Clear();
-        VisualElement buildingIcon = buildingIconTemplate.CloneTree().Q<VisualElement>("BuildingIcon");
         foreach (var building in BuildingPresetsHandler.Instance.GetAllBuildingPresets())
         {
             if (!building.isUnlocked) continue;
+            VisualElement buildingIcon = buildingIconTemplate.CloneTree().Q<VisualElement>("BuildingIcon");
             buildingIcon.style.backgroundImage = new StyleBackground(building.buildingIcon);
             buildingIcon.Q<Label>("BuildingCost").text = building.buildingCost.ToString();
-            buildingIcon.RegisterCallback<ClickEvent, BuildingSettings>(OnBuildingIconClicked, building);
+            buildingIcon.RegisterCallback<ClickEvent>(evt => OnBuildingIconClicked(building, buildingIcon));
             buildingsWrapper.Add(buildingIcon);
-            buildingIcon = buildingIconTemplate.CloneTree().Q<VisualElement>("BuildingIcon");
         }
-
     }
 
     private void OnNextWaveButtonClicked(ClickEvent evt)
@@ -192,9 +193,26 @@ public class OverlayManager : MonoBehaviour
         nextWaveButton.visible = true;
         UpdateCurrentWave(waveNumber);
     }
-    private void OnBuildingIconClicked(ClickEvent evt, BuildingSettings buildingSettings)
+    private void OnBuildingIconClicked(BuildingSettings buildingSettings, VisualElement buildingButton)
     {
         buildingManager.SelectBuilding(buildingSettings);
+        UpdateSelectedBuildingIcon(buildingButton);
+    }
+    private void UpdateSelectedBuildingIcon(VisualElement buildingButton)
+    {
+        // Remove border from the other building buttons
+        foreach (VisualElement button in buildingsWrapper.Children())
+        {
+            button.style.borderBottomColor = unselectedColor;
+            button.style.borderLeftColor = unselectedColor;
+            button.style.borderRightColor = unselectedColor;
+            button.style.borderTopColor = unselectedColor;
+        }
+        // Add border to the selected building button
+        buildingButton.style.borderBottomColor = selectedColor;
+        buildingButton.style.borderLeftColor = selectedColor;
+        buildingButton.style.borderRightColor = selectedColor;
+        buildingButton.style.borderTopColor = selectedColor;
     }
     private void UpdateMoneyDisplay(int currentMoney)
     {

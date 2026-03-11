@@ -45,6 +45,7 @@
 
 .button:hover {
     -unity-background-image-tint-color: rgb(115, 115, 115);
+    background-color: rgba(218, 73, 141, 0.59);
 }
 
 .slider {

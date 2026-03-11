@@ -7,7 +7,8 @@ using UnityEngine.EventSystems;
 public class BuildingManager : MonoBehaviour, IRunDataPersistence
 {
     [SerializeField] private Tilemap tilemap;
-    
+    public static BuildingManager Instance { get; private set; } = null;
+
     private PlayerEconomyManager economyManager;
     private PathGenerator pathGenerator;
     private Camera mainCamera;
@@ -19,6 +20,17 @@ public class BuildingManager : MonoBehaviour, IRunDataPersistence
 
     private BuildingSettings selectedBuilding;
     private List<(float x, float y, string buildingName)> placedBuildings;
+
+    void Awake()
+    {
+        if (Instance != null)
+        {
+            Debug.Log("Found more than one Building Manager in the scene. Destroying duplicate.");
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
 
     private void OnEnable()
     {
@@ -42,6 +54,10 @@ public class BuildingManager : MonoBehaviour, IRunDataPersistence
 
     private void Update()
     {
+        if (selectedBuilding != null && !EventSystem.current.IsPointerOverGameObject())
+        {
+            HandleBuildingPreview();
+        }
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
             HandleBuildingPlacement();
@@ -63,6 +79,32 @@ public class BuildingManager : MonoBehaviour, IRunDataPersistence
         selectedBuilding = buildingSettings;
     }
 
+    public Vector3Int GetHoveredTilePosition()
+    {
+        Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        Vector3Int cellPosition = tilemap.WorldToCell(mousePosition);
+        return cellPosition;
+    }
+
+    private void HandleBuildingPreview()
+    {
+        Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        Vector3Int cellPosition = tilemap.WorldToCell(mousePosition);
+        TileBase hoveredTile = tilemap.GetTile(cellPosition);
+
+        if (hoveredTile != null && IsBuildingSpot(cellPosition))
+        {
+            // Check if there's already a building at this position
+            Vector3 worldPosition = tilemap.GetCellCenterWorld(cellPosition);
+            if (!IsBuildingAtPosition(worldPosition))
+            {
+                // show ghost building
+                ShowBuildingPreview(worldPosition, cellPosition, selectedBuilding);
+            }
+        }
+        
+        
+    }
     private void HandleBuildingPlacement()
     {
         if (!canPlaceBuilding) return;
@@ -152,7 +194,45 @@ public class BuildingManager : MonoBehaviour, IRunDataPersistence
         }
         return false;
     }
+    private void ShowBuildingPreview(Vector3 position, Vector3Int hoveredCellPosition, BuildingSettings buildingSettings)
+    {
+        // Check if there's already a building preview at this position
+        if (IsBuildingPreviewAtPosition(position))
+        {
+            return;
+        }
+        GameObject buildingPreviewObject = InstantiateBuildingPreview(position, hoveredCellPosition, buildingSettings);
+    }
+    private bool IsBuildingPreviewAtPosition(Vector3 worldPosition)
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(worldPosition, 0.4f);
+        
+        foreach (Collider2D collider in colliders)
+        {
+            if (collider.CompareTag("BuildingPreview"))
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    private GameObject InstantiateBuildingPreview(Vector3 position, Vector3Int cellPosition, BuildingSettings buildingSettings)
+    {
+        // Instantiate a sprite and a TowerPreviewHandler component
+        GameObject buildingPreviewObject = new GameObject(buildingSettings.towerName + " Preview");
+        buildingPreviewObject.tag = "BuildingPreview";
+        SpriteRenderer spriteRenderer = buildingPreviewObject.AddComponent<SpriteRenderer>();
+        Sprite towerSprite = Sprite.Create(buildingSettings.buildingIcon, new Rect(0, 0, buildingSettings.buildingIcon.width, buildingSettings.buildingIcon.height), new Vector2(0.5f, 0.5f), 32f);
+        spriteRenderer.sprite = towerSprite;
+        BoxCollider2D boxCollider = buildingPreviewObject.AddComponent<BoxCollider2D>();
+        boxCollider.size = new Vector2(0.5f, 0.5f);
+        TowerPreviewHandler towerPreviewHandler = buildingPreviewObject.AddComponent<TowerPreviewHandler>();
+        towerPreviewHandler.baseTile = cellPosition;
 
+        buildingPreviewObject.transform.SetPositionAndRotation(position, Quaternion.identity);
+        return buildingPreviewObject;
+    }
     private void PlaceBuilding(Vector3Int cellPosition, BuildingSettings buildingSettings)
     {
         Vector3 buildingPosition = tilemap.GetCellCenterWorld(cellPosition);
