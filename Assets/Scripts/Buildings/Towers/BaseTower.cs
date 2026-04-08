@@ -18,12 +18,24 @@ public abstract class BaseTower : MonoBehaviour
     protected Transform currentTarget;
     protected bool rangeIndicatorActive;
     protected GameObject rangeIndicator;
-    protected int burnDamage;
+    protected int poisonDamage;
+    protected BuildingSettings settings;
 
     public float Range => range;
-    
+    public bool DamageUpgraded { get; private set; }
+    public bool SpecialtyUpgraded { get; private set; }
+    public int DamageCost => 100;
+    public int SpecialtyCost => settings != null ? settings.buildingCost : 0;
+
+    protected virtual void Awake()
+    {
+        if (animator == null)
+            animator = GetComponentInChildren<Animator>();
+    }
+
     public virtual void Initialize(BuildingSettings settings)
     {
+        this.settings = settings;
         this.range = settings.towerRange;
         this.shootingSpeed = settings.towerShootingDelay;
         this.projectileSpeed = settings.towerProjectileSpeed;
@@ -31,7 +43,7 @@ public abstract class BaseTower : MonoBehaviour
         this.enemyLayer = settings.enemyLayer;
         this.projectilePrefab = settings.towerProjectilePrefab;
         this.projectileSpeedCurve = settings.projectileSpeedCurve;
-        this.burnDamage = settings.towerBurnDamage;
+        this.poisonDamage = settings.towerPoisonDamage;
     }
 
     protected virtual void OnEnable()
@@ -156,12 +168,41 @@ public abstract class BaseTower : MonoBehaviour
     }
     // called by projectile when it hits the target
     public abstract void DealDamage(Vector3 targetPosition, Transform target);
-    public virtual void DealBurnDamage(EnemyHealthManager enemyHealth)
+    public virtual void DealPoisonDamage(EnemyHealthManager enemyHealth)
     {
         if (enemyHealth != null)
         {
-            enemyHealth.SetBurnDamage(burnDamage);
+            enemyHealth.SetPoisonDamage(poisonDamage);
         }
+    }
+
+    public bool TryUpgradeDamage(PlayerEconomyManager economy)
+    {
+        if (DamageUpgraded) return false;
+        if (!economy.SpendMoney(DamageCost)) return false;
+        damage = Mathf.RoundToInt(damage * 1.5f);
+        DamageUpgraded = true;
+        return true;
+    }
+
+    public bool TryUpgradeSpecialty(PlayerEconomyManager economy)
+    {
+        if (SpecialtyUpgraded) return false;
+        if (!economy.SpendMoney(SpecialtyCost)) return false;
+        ApplySpecialtyUpgrade();
+        SpecialtyUpgraded = true;
+        return true;
+    }
+
+    protected virtual void ApplySpecialtyUpgrade()
+    {
+        if (poisonDamage > 0)
+            poisonDamage = Mathf.RoundToInt(poisonDamage * 1.5f);
+    }
+
+    public virtual string GetSpecialtyName()
+    {
+        return poisonDamage > 0 ? "SPECIALTY + POISON" : "SPECIALTY";
     }
 
     protected virtual void OnDrawGizmosSelected()

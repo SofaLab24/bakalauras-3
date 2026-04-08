@@ -18,7 +18,8 @@ public class BuildingPresetsHandler : MonoBehaviour, ISettingsPersistence
     }
     [SerializeField] private List<BuildingSettings> defaultBuildingPresets;
     private List<BuildingSettings> buildingPresets;
-    [SerializeField] string fireTypeUpgradePrefix = "Flaming";
+    [SerializeField] string poisonTypeUpgradePrefix = "Poison";
+
 
     public void LoadSettings(List<BuildingSettings> savedPresets)
     {
@@ -78,15 +79,15 @@ public class BuildingPresetsHandler : MonoBehaviour, ISettingsPersistence
             case UpgradeType.FireRate:
                 buildingPresets.Find(preset => preset.towerName == buildingName).towerShootingDelay /= 2;
                 break;
-            case UpgradeType.FireType:
-                UnlockFireType(buildingName);
+            case UpgradeType.PoisonType:
+                UnlockPoisonType(buildingName);
                 break;
         }
         DataPersistenceManager.Instance.SaveGame();
     }
-    public void UnlockFireType(string buildingName)
+    public void UnlockPoisonType(string buildingName)
     {
-        string fullTowerName = fireTypeUpgradePrefix + buildingName;
+        string fullTowerName = poisonTypeUpgradePrefix + buildingName;
         buildingPresets.Find(preset => preset.towerName == fullTowerName).isUnlocked = true;
     }
 }

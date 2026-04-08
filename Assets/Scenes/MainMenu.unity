@@ -320,7 +320,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 41120f22ce09f4844b3bc19977dca352, type: 2}
   - {fileID: 11400000, guid: a29e2229c4ac1d74d9987cdfb1e8ec2f, type: 2}
   - {fileID: 11400000, guid: ce61fcdf028d32942a0ee2a9bcf0d4a7, type: 2}
-  fireTypeUpgradePrefix: Flaming
+  poisonTypeUpgradePrefix: Poison
 --- !u!1 &1141309812
 GameObject:
   m_ObjectHideFlags: 0

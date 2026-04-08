@@ -16,7 +16,7 @@ public class OverlayManager : MonoBehaviour
     [Header("UI Templates")]
     [SerializeField] private VisualTreeAsset buildingIconTemplate;
     [SerializeField] private VisualTreeAsset escMenuTemplate;
-    [SerializeField] private VisualTreeAsset buildingUpgradeMenuTemplate;
+    [SerializeField] private VisualTreeAsset towerUpgradeMenuTemplate;
     [SerializeField] private VisualTreeAsset settingsMenuTemplate;
     [Header("Building Buttons")]
     [SerializeField] private Color unselectedColor;
@@ -24,21 +24,25 @@ public class OverlayManager : MonoBehaviour
 
     public static event Action<bool> OnEscMenu;
     private bool isEscMenuOpen = false;
+    private bool isTowerUpgradeMenuOpen = false;
 
     private VisualElement buildingsWrapper;
     private VisualElement escMenuWrapper;
     private VisualElement escMenuButton;
     private VisualElement nextWaveButton;
+    private VisualElement towerUpgradeWrapper;
     private Label moneyText;
     private VisualElement healthBarFill;
     private Label healthText;
     private Label currentWaveLabel;
+    private BaseTower selectedTower;
 
     private void OnEnable()
     {
         PlayerEconomyManager.OnMoneyChanged += UpdateMoneyDisplay;
         BaseManager.OnBaseHealthChange += HandleHealthChanged;
         WaveManager.OnWaveCompleted += OnWaveCompleted;
+        BuildingManager.OnTowerClicked += OpenTowerUpgradeMenu;
     }
 
     private void OnDisable()
@@ -46,6 +50,7 @@ public class OverlayManager : MonoBehaviour
         PlayerEconomyManager.OnMoneyChanged -= UpdateMoneyDisplay;
         BaseManager.OnBaseHealthChange -= HandleHealthChanged;
         WaveManager.OnWaveCompleted -= OnWaveCompleted;
+        BuildingManager.OnTowerClicked -= OpenTowerUpgradeMenu;
     }
 
     // Start is called before the first frame update
@@ -68,6 +73,7 @@ public class OverlayManager : MonoBehaviour
         InitializeBuildingsIcons();
 
         escMenuWrapper = root.Q<VisualElement>("EscMenuWrapper");
+        towerUpgradeWrapper = root.Q<VisualElement>("TowerUpgradeWrapper");
         escMenuButton = root.Q<VisualElement>("EscButton");
         escMenuButton.RegisterCallback<ClickEvent>(OnEscMenuButtonClicked);
 
@@ -80,7 +86,11 @@ public class OverlayManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (isEscMenuOpen)
+            if (isTowerUpgradeMenuOpen)
+            {
+                CloseTowerUpgradeMenu();
+            }
+            else if (isEscMenuOpen)
             {
                 CloseEscMenu();
             }
@@ -88,7 +98,6 @@ public class OverlayManager : MonoBehaviour
             {
                 OpenEscMenu();
                 OnEscMenu?.Invoke(true);
-
             }
         }
     }
@@ -236,6 +245,77 @@ public class OverlayManager : MonoBehaviour
         float healthPercentage = Mathf.Clamp01((float)currentHealth / maxHealth) * 100f;
         healthBarFill.style.width = new StyleLength(new Length(healthPercentage, LengthUnit.Percent));
         healthText.text = $"{currentHealth} / {maxHealth}";
+    }
+
+    private void OpenTowerUpgradeMenu(BaseTower tower)
+    {
+        if (isEscMenuOpen) return;
+
+        selectedTower = tower;
+        towerUpgradeWrapper.Clear();
+        towerUpgradeMenuTemplate.CloneTree(towerUpgradeWrapper);
+        isTowerUpgradeMenuOpen = true;
+        OnEscMenu?.Invoke(true);
+
+        Label damageLabel = towerUpgradeWrapper.Q<Label>("DamageLabel");
+        VisualElement damageButton = towerUpgradeWrapper.Q<VisualElement>("DamageButton");
+        if (tower.DamageUpgraded)
+        {
+            damageLabel.text = "Sold";
+        }
+        else
+        {
+            damageLabel.text = $"DAMAGE - {tower.DamageCost}";
+            damageButton.RegisterCallback<ClickEvent>(OnDamageUpgradeClicked);
+        }
+
+        Label specialtyLabel = towerUpgradeWrapper.Q<Label>("SpecialtyLabel");
+        VisualElement specialtyButton = towerUpgradeWrapper.Q<VisualElement>("SpecialtyButton");
+        if (tower.SpecialtyUpgraded)
+        {
+            specialtyLabel.text = "Sold";
+        }
+        else
+        {
+            specialtyLabel.text = $"{tower.GetSpecialtyName()} - {tower.SpecialtyCost}";
+            specialtyButton.RegisterCallback<ClickEvent>(OnSpecialtyUpgradeClicked);
+        }
+
+        VisualElement closeButton = towerUpgradeWrapper.Q<VisualElement>("CloseButton");
+        closeButton.RegisterCallback<ClickEvent>(OnTowerUpgradeCloseClicked);
+    }
+
+    private void CloseTowerUpgradeMenu()
+    {
+        towerUpgradeWrapper.Clear();
+        selectedTower = null;
+        isTowerUpgradeMenuOpen = false;
+        OnEscMenu?.Invoke(false);
+    }
+
+    private void OnDamageUpgradeClicked(ClickEvent evt)
+    {
+        if (selectedTower == null || selectedTower.DamageUpgraded) return;
+        if (selectedTower.TryUpgradeDamage(economyManager))
+        {
+            Label damageLabel = towerUpgradeWrapper.Q<Label>("DamageLabel");
+            damageLabel.text = "Sold";
+        }
+    }
+
+    private void OnSpecialtyUpgradeClicked(ClickEvent evt)
+    {
+        if (selectedTower == null || selectedTower.SpecialtyUpgraded) return;
+        if (selectedTower.TryUpgradeSpecialty(economyManager))
+        {
+            Label specialtyLabel = towerUpgradeWrapper.Q<Label>("SpecialtyLabel");
+            specialtyLabel.text = "Sold";
+        }
+    }
+
+    private void OnTowerUpgradeCloseClicked(ClickEvent evt)
+    {
+        CloseTowerUpgradeMenu();
     }
 
     private string FormatMoneyWithSpaces(int money)

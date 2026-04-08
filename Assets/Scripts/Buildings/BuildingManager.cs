@@ -16,6 +16,7 @@ public class BuildingManager : MonoBehaviour, IRunDataPersistence
     public static event Action<Vector3> OnBuildingPlaced;
     public static event Action<bool> TriggerRangeIndicator;
     public static event Action OnInsufficientFunds;
+    public static event Action<BaseTower> OnTowerClicked;
     private bool canPlaceBuilding = true;
 
     private BuildingSettings selectedBuilding;
@@ -125,6 +126,7 @@ public class BuildingManager : MonoBehaviour, IRunDataPersistence
                 if (building.TryGetComponent<BaseTower>(out BaseTower tower))
                 {
                     tower.ToggleRangeIndicator();
+                    OnTowerClicked?.Invoke(tower);
                     return;
                 }
                 return;

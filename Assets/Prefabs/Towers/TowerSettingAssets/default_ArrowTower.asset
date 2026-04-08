@@ -47,7 +47,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   towerDamage: 8
-  towerBurnDamage: 0
+  towerPoisonDamage: 0
   enemyLayer:
     serializedVersion: 2
     m_Bits: 64

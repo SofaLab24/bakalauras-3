@@ -20,10 +20,10 @@ public class EnemyHealthManager : MonoBehaviour
     private int maxHealth;
     public int damageValue = 10;
     [SerializeField] private Slider healthBar;
-    [SerializeField] private float burnTickRate = 1f;
+    [SerializeField] private float poisonTickRate = 1f;
 
-    private int burnDamage = 0;
-    private float burnTickTimer = 0f;
+    private int poisonDamage = 0;
+    private float poisonTickTimer = 0f;
     void Start()
     {
         maxHealth = currentHealth;
@@ -32,13 +32,13 @@ public class EnemyHealthManager : MonoBehaviour
     }
     void Update()
     {
-        if (burnDamage > 0)
+        if (poisonDamage > 0)
         {
-            burnTickTimer += Time.deltaTime;
-            if (burnTickTimer >= burnTickRate)
+            poisonTickTimer += Time.deltaTime;
+            if (poisonTickTimer >= poisonTickRate)
             {
-                TakeDamage(burnDamage);
-                burnTickTimer = 0f;
+                TakeDamage(poisonDamage);
+                poisonTickTimer = 0f;
             }
         }
     }
@@ -58,9 +58,9 @@ public class EnemyHealthManager : MonoBehaviour
         Die(DeathReason.ReachedEnd);
     }
 
-    public void SetBurnDamage(int damage)
+    public void SetPoisonDamage(int damage)
     {
-        burnDamage = damage;
+        poisonDamage = damage;
     }
 
     public void TakeDamage(int damage)

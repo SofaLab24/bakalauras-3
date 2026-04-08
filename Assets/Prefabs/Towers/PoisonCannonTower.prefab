@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 9183332490174408138}
   - component: {fileID: 3105589398671208908}
-  - component: {fileID: 3699065809515249313}
-  - component: {fileID: 2277591118406832612}
+  - component: {fileID: 2252790289023832527}
+  - component: {fileID: 7359696416692874265}
   m_Layer: 0
-  m_Name: FlamingWizardTower
+  m_Name: PoisonCannonTower
   m_TagString: Tower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -132,7 +132,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &3699065809515249313
+--- !u!114 &2252790289023832527
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -141,7 +141,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1192505338540290890}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 466ef63ef5ac3844fae84664b569b413, type: 3}
+  m_Script: {fileID: 11500000, guid: 4a05f90a3dc6caf4e85c4adefbe738db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   range: 0
@@ -159,8 +159,9 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   towerHead: {fileID: 1643181842009637642}
-  towerExplosionRadius: 0
---- !u!58 &2277591118406832612
+  explosionRadius: 2
+  explosionPrefab: {fileID: 0}
+--- !u!58 &7359696416692874265
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -268,7 +269,7 @@ SpriteRenderer:
   m_SortingLayerID: -420405061
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 16e233210a85ecc4d9f2bbd73104e3d0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e803b465a62786e419a18dc44d5ee0d4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class WizardTower : BaseTower
+public class SniperTower : BaseTower
 {
     public float towerExplosionRadius;
     override public void Initialize(BuildingSettings settings)
@@ -14,7 +14,7 @@ public class WizardTower : BaseTower
         {
             EnemyHealthManager enemyHealth = target.GetComponent<EnemyHealthManager>();
             enemyHealth.TakeDamage(damage);
-            DealBurnDamage(enemyHealth);
+            DealPoisonDamage(enemyHealth);
         }
 
     }
@@ -39,5 +39,16 @@ public class WizardTower : BaseTower
         
         currentTarget = targetEnemy.transform;
         LookAtTarget();
+    }
+
+    protected override void ApplySpecialtyUpgrade()
+    {
+        base.ApplySpecialtyUpgrade();
+        range *= 1.5f;
+    }
+
+    public override string GetSpecialtyName()
+    {
+        return poisonDamage > 0 ? "ATK RANGE + POISON" : "ATK RANGE";
     }
 } 

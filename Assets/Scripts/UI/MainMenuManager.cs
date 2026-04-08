@@ -135,18 +135,18 @@ public class MainMenuManager : MonoBehaviour
         }
         upgradesWrapper.Add(upgrades.Q<VisualElement>("FireRateUpgrade"));
 
-        VisualElement fireTypeUpgrade = upgrades.Q<VisualElement>("FireButton");
-        if(ProgressionManager.Instance.IsUpgradePurchased(UpgradeType.FireType))
+        VisualElement poisonTypeUpgrade = upgrades.Q<VisualElement>("PoisonButton");
+        if(ProgressionManager.Instance.IsUpgradePurchased(UpgradeType.PoisonType))
         {
-            SetupPurchasedUpgrade(fireTypeUpgrade);
+            SetupPurchasedUpgrade(poisonTypeUpgrade);
         }
         else
         {
-            fireTypeUpgrade.RegisterCallback<ClickEvent>(evt => OnUpgradeButtonClick(evt, UpgradeType.FireType, fireTypeUpgrade));
-            uiUtils.AnimateIcon(fireTypeUpgrade.name, fireTypeUpgrade, upgradeIconsFrames, animationDelayBetweenFrames);
-            upgrades.Q<VisualElement>("FireUpgrade").Q<Label>("Cost").text = ""+ProgressionManager.Instance.GetUpgradeCost(UpgradeType.FireType, tower.towerName);
+            poisonTypeUpgrade.RegisterCallback<ClickEvent>(evt => OnUpgradeButtonClick(evt, UpgradeType.PoisonType, poisonTypeUpgrade));
+            uiUtils.AnimateIcon(poisonTypeUpgrade.name, poisonTypeUpgrade, upgradeIconsFrames, animationDelayBetweenFrames);
+            upgrades.Q<VisualElement>("PoisonUpgrade").Q<Label>("Cost").text = ""+ProgressionManager.Instance.GetUpgradeCost(UpgradeType.PoisonType, tower.towerName);
         }
-        upgradesWrapper.Add(upgrades.Q<VisualElement>("FireUpgrade"));
+        upgradesWrapper.Add(upgrades.Q<VisualElement>("PoisonUpgrade"));
 
         upgradesBackButton.UnregisterCallback<ClickEvent>(OnUpgradesBackButtonClick);
         upgradesBackButton.RegisterCallback<ClickEvent>(OnUpgradesMenuClick);

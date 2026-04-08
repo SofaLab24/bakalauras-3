@@ -270,6 +270,7 @@ MonoBehaviour:
   splitChance: 0.3
   buildingIconTemplate: {fileID: 9197481963319205126, guid: 325bdd0759364104385b9b3ebed204ed, type: 3}
   escMenuTemplate: {fileID: 9197481963319205126, guid: 791a351e1200c7640a93474fd3a05f47, type: 3}
+  towerUpgradeMenuTemplate: {fileID: 9197481963319205126, guid: 15e572b13c940164eadd625d34c76150, type: 3}
   settingsMenuTemplate: {fileID: 9197481963319205126, guid: 221add52337032d41a851c2614f07c1f, type: 3}
   unselectedColor: {r: 0.41176474, g: 0.14117648, b: 0.48235297, a: 1}
   selectedColor: {r: 0.9803922, g: 0.77647066, b: 0.4784314, a: 1}

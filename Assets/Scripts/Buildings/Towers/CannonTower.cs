@@ -26,7 +26,7 @@ public class CannonTower : BaseTower
                 int actualDamage = Mathf.RoundToInt(damage * damageMultiplier);
                 
                 enemyHealth.TakeDamage(actualDamage);
-                DealBurnDamage(enemyHealth);
+                DealPoisonDamage(enemyHealth);
             }
         }
     }
@@ -39,11 +39,21 @@ public class CannonTower : BaseTower
     }
 
 
+    protected override void ApplySpecialtyUpgrade()
+    {
+        base.ApplySpecialtyUpgrade();
+        explosionRadius *= 1.5f;
+    }
+
+    public override string GetSpecialtyName()
+    {
+        return poisonDamage > 0 ? "EXPL. RADIUS + POISON" : "EXPL. RADIUS";
+    }
+
     protected override void OnDrawGizmosSelected()
     {
         base.OnDrawGizmosSelected();
         
-        // Draw explosion radius
         if (currentTarget != null)
         {
             Gizmos.color = Color.yellow;

@@ -8,7 +8,18 @@ public class ArrowTower : BaseTower
         {
             EnemyHealthManager enemyHealth = target.GetComponent<EnemyHealthManager>();
             enemyHealth.TakeDamage(damage);
-            DealBurnDamage(enemyHealth);
+            DealPoisonDamage(enemyHealth);
         }
+    }
+
+    protected override void ApplySpecialtyUpgrade()
+    {
+        base.ApplySpecialtyUpgrade();
+        shootingSpeed *= 0.67f;
+    }
+
+    public override string GetSpecialtyName()
+    {
+        return poisonDamage > 0 ? "ATK SPEED + POISON" : "ATK SPEED";
     }
 } 

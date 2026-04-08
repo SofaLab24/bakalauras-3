@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3699065809515249313}
   - component: {fileID: 2277591118406832612}
   m_Layer: 0
-  m_Name: WizardTower
+  m_Name: PoisonSniperTower
   m_TagString: Tower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -268,7 +268,7 @@ SpriteRenderer:
   m_SortingLayerID: -420405061
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: c7f3f13cb7d492549b816521c851270c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 16e233210a85ecc4d9f2bbd73104e3d0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

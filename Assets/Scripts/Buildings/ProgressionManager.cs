@@ -8,7 +8,7 @@ public class ProgressionManager : MonoBehaviour, IGameDataPersistence
     private int selectedBuildingIndex;
     private MainMenuManager mainMenuManager;
 
-    public List<(string towerName, bool damageUpgraded, bool rangeUpgraded, bool fireRateUpgraded, bool fireTypeUnlocked)> towerUpgradeStatus;
+    public List<(string towerName, bool damageUpgraded, bool rangeUpgraded, bool fireRateUpgraded, bool poisonTypeUnlocked)> towerUpgradeStatus;
     public int metaCoins;
     public int waveHighscore;
 
@@ -54,8 +54,8 @@ public class ProgressionManager : MonoBehaviour, IGameDataPersistence
                 return towerUpgradeStatus[selectedBuildingIndex].rangeUpgraded;
             case UpgradeType.FireRate:
                 return towerUpgradeStatus[selectedBuildingIndex].fireRateUpgraded;
-            case UpgradeType.FireType:
-                return towerUpgradeStatus[selectedBuildingIndex].fireTypeUnlocked;
+            case UpgradeType.PoisonType:
+                return towerUpgradeStatus[selectedBuildingIndex].poisonTypeUnlocked;
         }
         return false;
     }
@@ -79,8 +79,8 @@ public class ProgressionManager : MonoBehaviour, IGameDataPersistence
             case UpgradeType.FireRate:
                 upgradeStatus.fireRateUpgraded = true;
                 break;
-            case UpgradeType.FireType:
-                upgradeStatus.fireTypeUnlocked = true;
+            case UpgradeType.PoisonType:
+                upgradeStatus.poisonTypeUnlocked = true;
                 break;
         }
         towerUpgradeStatus[selectedBuildingIndex] = upgradeStatus;
@@ -92,7 +92,7 @@ public class ProgressionManager : MonoBehaviour, IGameDataPersistence
     public int GetUpgradeCost(UpgradeType upgradeType, string towerName = "")
     {
         if(towerName == "") towerName = selectedBuildingName;
-        if (upgradeType == UpgradeType.FireType)
+        if (upgradeType == UpgradeType.PoisonType)
         {
             return BuildingPresetsHandler.Instance.GetBuildingPreset(towerName).buildingCost;
         }
@@ -114,7 +114,7 @@ public class ProgressionManager : MonoBehaviour, IGameDataPersistence
         if(data.towerUpgradeStatus.Count <= 0)
         {
             List<BuildingSettings> buildingPresets = BuildingPresetsHandler.Instance.GetAllBuildingPresets();
-            towerUpgradeStatus = new List<(string towerName, bool damageUpgraded, bool rangeUpgraded, bool fireRateUpgraded, bool fireTypeUnlocked)>();
+            towerUpgradeStatus = new List<(string towerName, bool damageUpgraded, bool rangeUpgraded, bool fireRateUpgraded, bool poisonTypeUnlocked)>();
             foreach (BuildingSettings building in buildingPresets)
             {
                 towerUpgradeStatus.Add((building.towerName, false, false, false, false));
@@ -138,5 +138,5 @@ public enum UpgradeType
     Damage,
     Range,
     FireRate,
-    FireType
+    PoisonType
 }

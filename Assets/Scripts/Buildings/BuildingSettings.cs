@@ -27,7 +27,7 @@ public class BuildingSettings : ScriptableObject
     [JsonIgnore]
     public AnimationCurve projectileSpeedCurve;
     public int towerDamage = 20;
-    public int towerBurnDamage = 0;
+    public int towerPoisonDamage = 0;
     public LayerMask enemyLayer;
     [JsonIgnore]
     public GameObject towerProjectilePrefab;
@@ -55,7 +55,7 @@ public class BuildingSettings : ScriptableObject
         clone.towerProjectileSpeed = towerProjectileSpeed;
         clone.projectileSpeedCurve = projectileSpeedCurve;
         clone.towerDamage = towerDamage;
-        clone.towerBurnDamage = towerBurnDamage;
+        clone.towerPoisonDamage = towerPoisonDamage;
         clone.towerExplosionRadius = towerExplosionRadius;
         clone.towerExplosionPrefab = towerExplosionPrefab;
         clone.enemyLayer = enemyLayer;
@@ -71,5 +71,5 @@ public enum TowerType
 {
     Arrow,
     Cannon,
-    Wizard
+    Sniper
 }
