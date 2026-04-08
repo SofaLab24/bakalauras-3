@@ -7,13 +7,13 @@ using UnityEngine;
 public class SerializableMapData
 {
     public List<SerializableWavePath> serializablePaths;
-    public List<(float x, float y, string buildingName)> placedBuildings;
+    public List<PlacedBuildingData> placedBuildings;
 
     // Default values on new game
     public SerializableMapData()
     {
         serializablePaths = null;
-        placedBuildings = new List<(float x, float y, string buildingName)>();
+        placedBuildings = new List<PlacedBuildingData>();
     }
     public void SetPaths(List<WavePath> newPaths)
     {
@@ -64,4 +64,14 @@ public class SerializableMapData
             pathTiles = wavePath.pathTiles;
         }
     }
+}
+
+[System.Serializable]
+public class PlacedBuildingData
+{
+    public float x;
+    public float y;
+    public string buildingName;
+    public bool damageUpgraded;
+    public bool specialtyUpgraded;
 }

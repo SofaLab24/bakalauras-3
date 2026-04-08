@@ -20,7 +20,8 @@ public class BuildingManager : MonoBehaviour, IRunDataPersistence
     private bool canPlaceBuilding = true;
 
     private BuildingSettings selectedBuilding;
-    private List<(float x, float y, string buildingName)> placedBuildings;
+    private List<PlacedBuildingData> placedBuildings;
+    private List<(GameObject obj, string buildingName)> placedBuildingObjects = new List<(GameObject, string)>();
 
     void Awake()
     {
@@ -239,7 +240,7 @@ public class BuildingManager : MonoBehaviour, IRunDataPersistence
     {
         Vector3 buildingPosition = tilemap.GetCellCenterWorld(cellPosition);
         GameObject building = InstantiateBuilding(buildingPosition, buildingSettings);
-        placedBuildings.Add((buildingPosition.x, buildingPosition.y, buildingSettings.towerName));
+        placedBuildingObjects.Add((building, buildingSettings.towerName));
 
         OnBuildingPlaced?.Invoke(buildingPosition);
     }
@@ -256,15 +257,38 @@ public class BuildingManager : MonoBehaviour, IRunDataPersistence
     public void LoadData(RunData data)
     {
         placedBuildings = data.mapData.placedBuildings;
+        placedBuildingObjects = new List<(GameObject, string)>();
         foreach (var building in placedBuildings)
         {
-            InstantiateBuilding(new Vector3(building.x, building.y, 0), BuildingPresetsHandler.Instance.GetBuildingPreset(building.buildingName));
+            BuildingSettings settings = BuildingPresetsHandler.Instance.GetBuildingPreset(building.buildingName);
+            GameObject obj = InstantiateBuilding(new Vector3(building.x, building.y, 0), settings);
+            if (building.damageUpgraded || building.specialtyUpgraded)
+            {
+                BaseTower tower = obj.GetComponent<BaseTower>();
+                if (tower != null)
+                    tower.LoadUpgrades(building.damageUpgraded, building.specialtyUpgraded);
+            }
+            placedBuildingObjects.Add((obj, building.buildingName));
         }
     }
 
     public void SaveData(ref RunData data)
     {
-        data.mapData.placedBuildings = placedBuildings;
+        var savedBuildings = new List<PlacedBuildingData>();
+        foreach (var (obj, buildingName) in placedBuildingObjects)
+        {
+            if (obj == null) continue;
+            BaseTower tower = obj.GetComponent<BaseTower>();
+            savedBuildings.Add(new PlacedBuildingData
+            {
+                x = obj.transform.position.x,
+                y = obj.transform.position.y,
+                buildingName = buildingName,
+                damageUpgraded = tower != null && tower.DamageUpgraded,
+                specialtyUpgraded = tower != null && tower.SpecialtyUpgraded
+            });
+        }
+        data.mapData.placedBuildings = savedBuildings;
     }
 
 } 

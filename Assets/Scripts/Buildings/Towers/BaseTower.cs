@@ -24,7 +24,7 @@ public abstract class BaseTower : MonoBehaviour
     public float Range => range;
     public bool DamageUpgraded { get; private set; }
     public bool SpecialtyUpgraded { get; private set; }
-    public int DamageCost => 100;
+    public int DamageCost = 100;
     public int SpecialtyCost => settings != null ? settings.buildingCost : 0;
 
     protected virtual void Awake()
@@ -173,6 +173,20 @@ public abstract class BaseTower : MonoBehaviour
         if (enemyHealth != null)
         {
             enemyHealth.SetPoisonDamage(poisonDamage);
+        }
+    }
+
+    public virtual void LoadUpgrades(bool damageUpgraded, bool specialtyUpgraded)
+    {
+        if (damageUpgraded)
+        {
+            damage = Mathf.RoundToInt(damage * 1.5f);
+            DamageUpgraded = true;
+        }
+        if (specialtyUpgraded)
+        {
+            ApplySpecialtyUpgrade();
+            SpecialtyUpgraded = true;
         }
     }
 
