@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Tower_placement
   m_EditorClassIdentifier: 
   m_AnimatedSprites:
-  - {fileID: 21300000, guid: 27c32ae4eec227247b7a566cb95d2bc9, type: 3}
-  - {fileID: 21300000, guid: a28327ee6f9ec9a4aa5558a36f7afa89, type: 3}
+  - {fileID: 21300000, guid: 7b8842f691dd71c438389203f87e0e0b, type: 3}
+  - {fileID: 21300000, guid: cf1a9de2a188dd44ca5a1b32b07c07f3, type: 3}
   m_MinSpeed: 1
   m_MaxSpeed: 1
   m_AnimationStartTime: 0

@@ -12,6 +12,7 @@ public abstract class BaseTower : MonoBehaviour
     [SerializeField] protected GameObject projectilePrefab;
     [SerializeField] protected AnimationCurve projectileSpeedCurve;
     [SerializeField] protected Transform towerHead;
+    [SerializeField] protected Animator animator;
     
     protected Coroutine shootingCoroutine;
     protected Transform currentTarget;
@@ -147,6 +148,7 @@ public abstract class BaseTower : MonoBehaviour
         EnemyHealthManager enemyHealth = currentTarget.GetComponent<EnemyHealthManager>();
         if (enemyHealth != null)
         {
+            animator.SetTrigger("Shoot");
             Projectile projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity).GetComponent<Projectile>();
             projectile.Initialize(currentTarget, projectileSpeed, projectileSpeedCurve, this);
             SFXManager.instance.ShootSFX(GetComponent<AudioSource>());

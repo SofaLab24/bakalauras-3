@@ -499,7 +499,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.41176474, g: 0.14117648, b: 0.48627454, a: 0}
+  m_BackGroundColor: {r: 0.4862745, g: 0.31324226, b: 0.14117648, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -761,7 +761,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilemap: {fileID: 356289518}
   road: {fileID: 11400000, guid: bdbad05f9ca50a84b8194d68cce57f39, type: 2}
-  towerSpot: {fileID: 11400000, guid: 647005781fcffed40891bce9f1372a88, type: 2}
+  towerSpot: {fileID: 11400000, guid: b8869fb373517f944bb08f66497f5d0d, type: 2}
   portal: {fileID: 11400000, guid: ba2b82f4809eaa44a899eba95c613e54, type: 2}
   tileSize: 3
 --- !u!114 &1429115354
@@ -837,7 +837,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4265286080730397780, guid: 3fc2348549da0d54492de2c6b23961a0, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6265112755385363870, guid: 3fc2348549da0d54492de2c6b23961a0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -883,6 +883,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BASE
       objectReference: {fileID: 0}
+    - target: {fileID: 8780134181599081049, guid: 3fc2348549da0d54492de2c6b23961a0, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -65441722, guid: 8ffc19d0480bf2349829aed1ba5a765a, type: 3}
     m_RemovedComponents:
     - {fileID: 312782056001433497, guid: 3fc2348549da0d54492de2c6b23961a0, type: 3}
     m_RemovedGameObjects: []

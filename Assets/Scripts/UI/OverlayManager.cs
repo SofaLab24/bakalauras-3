@@ -16,6 +16,7 @@ public class OverlayManager : MonoBehaviour
     [Header("UI Templates")]
     [SerializeField] private VisualTreeAsset buildingIconTemplate;
     [SerializeField] private VisualTreeAsset escMenuTemplate;
+    [SerializeField] private VisualTreeAsset buildingUpgradeMenuTemplate;
     [SerializeField] private VisualTreeAsset settingsMenuTemplate;
     [Header("Building Buttons")]
     [SerializeField] private Color unselectedColor;

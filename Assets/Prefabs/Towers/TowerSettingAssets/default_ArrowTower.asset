@@ -15,13 +15,13 @@ MonoBehaviour:
   towerName: ArrowTower
   isUnlocked: 1
   buildingCost: 100
-  buildingIcon: {fileID: 2800000, guid: 6d57b95ea4e262f44a61a58de5916b50, type: 3}
+  buildingIcon: {fileID: 2800000, guid: eee91ab6af5a3f8439b4e0f746678328, type: 3}
   buildingPrefab: {fileID: 1192505338540290890, guid: 03b3284d9dcec76408dcf612e49058d0, type: 3}
   isTower: 1
   towerType: 0
   towerRange: 6
   towerShootingDelay: 0.8
-  towerProjectileSpeed: 10
+  towerProjectileSpeed: 20
   projectileSpeedCurve:
     serializedVersion: 2
     m_Curve:

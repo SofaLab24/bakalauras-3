@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: RoadTile
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 21300000, guid: 73c7bc7725eca414fa102a8642d0669f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: acd8c3d0e772f7742b00be4be2301b3b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1

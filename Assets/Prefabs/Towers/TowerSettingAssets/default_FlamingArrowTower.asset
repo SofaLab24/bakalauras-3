@@ -21,7 +21,7 @@ MonoBehaviour:
   towerType: 0
   towerRange: 3
   towerShootingDelay: 0.9
-  towerProjectileSpeed: 10
+  towerProjectileSpeed: 20
   projectileSpeedCurve:
     serializedVersion: 2
     m_Curve:

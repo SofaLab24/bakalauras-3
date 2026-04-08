@@ -34,7 +34,9 @@
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
     border-bottom-left-radius: 15px;
-    background-color: rgb(218, 73, 141);
+    background-image: url("project://database/Assets/UI/MainMenu/buttonBackground.png?fileID=2800000&guid=19fa50f4d0f160f4596b2c34e27b6a07&type=3#buttonBackground");
+    -unity-background-scale-mode: scale-to-fit;
+    background-repeat: repeat;
 }
 
 .title {
@@ -45,7 +47,7 @@
 
 .button:hover {
     -unity-background-image-tint-color: rgb(115, 115, 115);
-    background-color: rgba(218, 73, 141, 0.59);
+    background-color: rgba(0, 0, 0, 0.53);
 }
 
 .slider {
