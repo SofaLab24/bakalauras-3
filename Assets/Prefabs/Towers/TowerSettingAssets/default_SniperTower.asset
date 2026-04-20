@@ -15,7 +15,7 @@ MonoBehaviour:
   towerName: SniperTower
   isUnlocked: 1
   buildingCost: 200
-  buildingIcon: {fileID: 2800000, guid: c7f3f13cb7d492549b816521c851270c, type: 3}
+  buildingIcon: {fileID: 2800000, guid: 23e94d3bf24c80c4aa0d157a03ccc2b3, type: 3}
   buildingPrefab: {fileID: 1192505338540290890, guid: 66c564798237a4f419c1d4167ddf116a, type: 3}
   isTower: 1
   towerType: 2

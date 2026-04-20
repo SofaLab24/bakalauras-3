@@ -53,6 +53,6 @@ MonoBehaviour:
     m_Bits: 64
   towerProjectilePrefab: {fileID: 7784466698744177259, guid: 0fa56d0d2bf401944a76b496bc4c1eb5, type: 3}
   towerExplosionRadius: 2
-  towerExplosionPrefab: {fileID: 8131147760250337703, guid: d4cb11215f8085b41a7aee55a7245b94, type: 3}
+  towerExplosionPrefab: {fileID: 2343985259345415784, guid: 9d006ae6bc374bb488aea75576352dd0, type: 3}
   resourceType: 
   resourceMultiplier: 0

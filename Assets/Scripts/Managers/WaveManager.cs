@@ -6,6 +6,8 @@ using UnityEngine;
 public class WaveManager : MonoBehaviour, IRunDataPersistence
 {
     [SerializeField] EnemyController enemyPrefab;
+    [SerializeField] MoabController moabPrefab;
+    [SerializeField] int moabWaveInterval = 10;
     [SerializeField] float enemyStatMultiplier = 5.3f;
     [SerializeField] float enemyAmountMultiplier = 1.5f;
     [SerializeField] float enemySpawnInterval = 1.5f;
@@ -46,6 +48,8 @@ public class WaveManager : MonoBehaviour, IRunDataPersistence
         // this generates all enemies for all paths
         GenerateEnemyPool();
         enemiesLeftToDie = enemiesToGenerate;
+
+        TrySpawnMoabs();
 
         for (int i = 0; i < pathGenerator.GetPaths.Count; i++)
         {
@@ -111,6 +115,36 @@ public class WaveManager : MonoBehaviour, IRunDataPersistence
             yield return new WaitForSeconds(enemySpawnInterval + UnityEngine.Random.Range(-enemySpawnIntervalVariance, enemySpawnIntervalVariance));
         }
     }
+    private void TrySpawnMoabs()
+    {
+        if (moabPrefab == null) return;
+        if (moabWaveInterval <= 0) return;
+        if (waveNumber % moabWaveInterval != 0) return;
+
+        int moabCount = waveNumber / moabWaveInterval;
+        enemiesLeftToDie += moabCount;
+
+        List<Vector2> moabTargets = pathGenerator.GetPaths[0].enemyWalkPoints;
+        Vector3 initPosition = new Vector3(moabTargets[^1].x, moabTargets[^1].y);
+        StartCoroutine(SpawnMoabs(moabTargets, moabCount, initPosition));
+    }
+
+    private IEnumerator SpawnMoabs(List<Vector2> moabTargets, int moabCount, Vector3 initPosition)
+    {
+        for (int i = 0; i < moabCount; i++)
+        {
+            MoabController moab = Instantiate(moabPrefab, initPosition, Quaternion.identity);
+            // Values are overridden by MoabController to its fixed stats.
+            moab.Initialize(0, moabTargets, 0f, 0);
+            yield return new WaitForSeconds(enemySpawnInterval + UnityEngine.Random.Range(-enemySpawnIntervalVariance, enemySpawnIntervalVariance));
+        }
+    }
+
+    public void RegisterExtraEnemies(int count)
+    {
+        enemiesLeftToDie += count;
+    }
+
     private void HandleEnemyCounter(EnemyHealthManager enemy, EnemyHealthManager.DeathReason reason)
     {
         enemiesLeftToDie--;

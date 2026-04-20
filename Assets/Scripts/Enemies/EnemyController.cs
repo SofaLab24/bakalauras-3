@@ -4,7 +4,7 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     Rigidbody2D body;
-    List<Vector2> targets;
+    protected List<Vector2> targets;
     EnemyHealthManager healthManager;
     SpriteRenderer spriteRenderer;
 
@@ -71,7 +71,7 @@ public class EnemyController : MonoBehaviour
             targets.RemoveAt(targets.Count - 1);
         }
     }
-    public void Initialize(int damage, List<Vector2> targets, float moveSpeed, int health)
+    public virtual void Initialize(int damage, List<Vector2> targets, float moveSpeed, int health)
     {
         this.healthManager.damageValue = damage;
         this.healthManager.SetMoneyValue(damage);

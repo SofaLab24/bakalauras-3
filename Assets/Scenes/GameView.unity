@@ -778,6 +778,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 7305669390683419870, guid: eae32f9db5878bc4abce2bc898a736f6, type: 3}
+  moabPrefab: {fileID: 8683952593032317218, guid: e185f30a35233dc4d9d45e253cfc4bfc, type: 3}
+  moabWaveInterval: 10
   enemyStatMultiplier: 3.1
   enemyAmountMultiplier: 1.5
   enemySpawnInterval: 1.5
