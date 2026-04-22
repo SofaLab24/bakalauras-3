@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UIElements; // Add UIElements namespace
+using UnityEngine.UIElements;
 
 public class OverlayManager : MonoBehaviour
 {
@@ -107,6 +105,10 @@ public class OverlayManager : MonoBehaviour
     }
     public void OpenEscMenu()
     {
+        if (isTowerUpgradeMenuOpen)
+        {
+            CloseTowerUpgradeMenu();
+        }
         escMenuWrapper.Clear();
         escMenuTemplate.CloneTree(escMenuWrapper);
         isEscMenuOpen = true;
@@ -182,11 +184,12 @@ public class OverlayManager : MonoBehaviour
         foreach (var building in BuildingPresetsHandler.Instance.GetAllBuildingPresets())
         {
             if (!building.isUnlocked) continue;
-            VisualElement buildingIcon = buildingIconTemplate.CloneTree().Q<VisualElement>("BuildingIcon");
+            VisualElement buttonParent = buildingIconTemplate.CloneTree().Q<VisualElement>("TowerSelectButton");
+            VisualElement buildingIcon = buttonParent.Q<VisualElement>("BuildingIcon");
             buildingIcon.style.backgroundImage = new StyleBackground(building.buildingIcon);
-            buildingIcon.Q<Label>("BuildingCost").text = building.buildingCost.ToString();
-            buildingIcon.RegisterCallback<ClickEvent>(evt => OnBuildingIconClicked(building, buildingIcon));
-            buildingsWrapper.Add(buildingIcon);
+            buttonParent.Q<Label>("BuildingCost").text = building.buildingCost.ToString();
+            buttonParent.RegisterCallback<ClickEvent>(evt => OnBuildingIconClicked(building, buildingIcon));
+            buildingsWrapper.Add(buttonParent);
         }
     }
 
@@ -257,29 +260,25 @@ public class OverlayManager : MonoBehaviour
         isTowerUpgradeMenuOpen = true;
         OnEscMenu?.Invoke(true);
 
-        Label damageLabel = towerUpgradeWrapper.Q<Label>("DamageLabel");
-        VisualElement damageButton = towerUpgradeWrapper.Q<VisualElement>("DamageButton");
-        if (tower.DamageUpgraded)
+        Label towerNameLabel = towerUpgradeWrapper.Q<Label>("TowerName");
+        if (towerNameLabel != null)
         {
-            damageLabel.text = "Sold";
-        }
-        else
-        {
-            damageLabel.text = $"DAMAGE - {tower.DamageCost}";
-            damageButton.RegisterCallback<ClickEvent>(OnDamageUpgradeClicked);
+            towerNameLabel.text = $"{tower.TowerName} Upgrades";
         }
 
-        Label specialtyLabel = towerUpgradeWrapper.Q<Label>("SpecialtyLabel");
-        VisualElement specialtyButton = towerUpgradeWrapper.Q<VisualElement>("SpecialtyButton");
-        if (tower.SpecialtyUpgraded)
-        {
-            specialtyLabel.text = "Sold";
-        }
-        else
-        {
-            specialtyLabel.text = $"{tower.GetSpecialtyName()} - {tower.SpecialtyCost}";
-            specialtyButton.RegisterCallback<ClickEvent>(OnSpecialtyUpgradeClicked);
-        }
+        new UpgradeSlot(towerUpgradeWrapper, "DamageLabel", "DamageButton")
+            .WithName(() => "Damage")
+            .WithCost(() => tower.DamageCost)
+            .WithBoughtState(() => tower.DamageUpgraded)
+            .OnPurchase(() => tower.TryUpgradeDamage(economyManager))
+            .Bind();
+
+        new UpgradeSlot(towerUpgradeWrapper, "SpecialtyLabel", "SpecialtyButton")
+            .WithName(tower.GetSpecialtyName)
+            .WithCost(() => tower.SpecialtyCost)
+            .WithBoughtState(() => tower.SpecialtyUpgraded)
+            .OnPurchase(() => tower.TryUpgradeSpecialty(economyManager))
+            .Bind();
 
         VisualElement closeButton = towerUpgradeWrapper.Q<VisualElement>("CloseButton");
         closeButton.RegisterCallback<ClickEvent>(OnTowerUpgradeCloseClicked);
@@ -287,30 +286,14 @@ public class OverlayManager : MonoBehaviour
 
     private void CloseTowerUpgradeMenu()
     {
+        if (selectedTower != null)
+        {
+            selectedTower.ToggleRangeIndicator(true);
+        }
         towerUpgradeWrapper.Clear();
         selectedTower = null;
         isTowerUpgradeMenuOpen = false;
         OnEscMenu?.Invoke(false);
-    }
-
-    private void OnDamageUpgradeClicked(ClickEvent evt)
-    {
-        if (selectedTower == null || selectedTower.DamageUpgraded) return;
-        if (selectedTower.TryUpgradeDamage(economyManager))
-        {
-            Label damageLabel = towerUpgradeWrapper.Q<Label>("DamageLabel");
-            damageLabel.text = "Sold";
-        }
-    }
-
-    private void OnSpecialtyUpgradeClicked(ClickEvent evt)
-    {
-        if (selectedTower == null || selectedTower.SpecialtyUpgraded) return;
-        if (selectedTower.TryUpgradeSpecialty(economyManager))
-        {
-            Label specialtyLabel = towerUpgradeWrapper.Q<Label>("SpecialtyLabel");
-            specialtyLabel.text = "Sold";
-        }
     }
 
     private void OnTowerUpgradeCloseClicked(ClickEvent evt)

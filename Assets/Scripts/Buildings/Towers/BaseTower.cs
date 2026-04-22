@@ -4,6 +4,7 @@ using System;
 
 public abstract class BaseTower : MonoBehaviour
 {
+    [SerializeField] protected string towerName;
     [SerializeField] protected float range;
     [SerializeField] protected float shootingSpeed;
     [SerializeField] protected float projectileSpeed;
@@ -21,6 +22,7 @@ public abstract class BaseTower : MonoBehaviour
     protected int poisonDamage;
     protected BuildingSettings settings;
 
+    public string TowerName => towerName;
     public float Range => range;
     public bool DamageUpgraded { get; private set; }
     public bool SpecialtyUpgraded { get; private set; }
@@ -36,6 +38,7 @@ public abstract class BaseTower : MonoBehaviour
     public virtual void Initialize(BuildingSettings settings)
     {
         this.settings = settings;
+        this.towerName = settings.towerName;
         this.range = settings.towerRange;
         this.shootingSpeed = settings.towerShootingDelay;
         this.projectileSpeed = settings.towerProjectileSpeed;
