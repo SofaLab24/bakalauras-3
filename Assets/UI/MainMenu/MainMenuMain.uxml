@@ -6,7 +6,7 @@
                 <ui:VisualElement name="TitleImage" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/UI/MainMenu/gameName.png?fileID=2800000&amp;guid=7e1d5585babecd64ca6b2a0c594bd930&amp;type=3#gameName&quot;); position: absolute; left: 20%; width: 80%; height: 100%; -unity-background-scale-mode: scale-and-crop;" />
             </ui:VisualElement>
             <ui:VisualElement name="Coins" style="flex-grow: 1; position: absolute; right: 0; top: 0; height: 100%; width: 20%; flex-direction: row; justify-content: space-around;">
-                <ui:VisualElement name="MetaCoinsIcon" style="flex-grow: 1; position: absolute; top: 32%; width: 20%; height: 20%; background-image: url(&quot;project://database/Assets/Art/Placeholder/TowerIcons/diamondIcon.png?fileID=2800000&amp;guid=73a3ae705b3566047b428eefb1330f2b&amp;type=3#diamondIcon&quot;); left: 10%;" />
+                <ui:VisualElement name="MetaCoinsIcon" style="flex-grow: 1; position: absolute; top: 32%; width: 20%; height: 20%; background-image: url(&quot;project://database/Assets/Art/MenuIcons/diamond_new.png?fileID=2800000&amp;guid=50dfb9f6bc155434db50db381fe0d82b&amp;type=3#diamond_new&quot;); left: 10%;" />
                 <ui:Label tabindex="-1" text="x 99" parse-escape-sequences="true" display-tooltip-when-elided="true" name="MetaCoinsAmount" class="buttonText" style="font-size: 58px; position: absolute; top: 30%; right: 15%; align-self: flex-start;" />
                 <ui:Label tabindex="-1" text="Highscore: 77" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Highscore" class="buttonText" style="font-size: 58px; position: absolute; top: 5%; right: 25%; align-self: flex-start;" />
             </ui:VisualElement>

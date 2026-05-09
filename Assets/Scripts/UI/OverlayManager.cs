@@ -112,6 +112,7 @@ public class OverlayManager : MonoBehaviour
         escMenuWrapper.Clear();
         escMenuTemplate.CloneTree(escMenuWrapper);
         isEscMenuOpen = true;
+        Time.timeScale = 0f;
         EscMenuButtonSetup();
     }
     public void CloseEscMenu()
@@ -119,6 +120,7 @@ public class OverlayManager : MonoBehaviour
         escMenuWrapper.Clear();
         OnEscMenu?.Invoke(false);
         isEscMenuOpen = false;
+        Time.timeScale = 1f;
     }
 
     private void EscMenuButtonSetup()
@@ -174,6 +176,7 @@ public class OverlayManager : MonoBehaviour
     }
     private void OnMainMenuClicked(ClickEvent evt)
     {
+        Time.timeScale = 1f;
         DataPersistenceManager.Instance.SaveRun();
         DataPersistenceManager.Instance.SaveGame();
         SceneManager.LoadScene(0);
