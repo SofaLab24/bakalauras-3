@@ -42,7 +42,7 @@ public class SFXManager : MonoBehaviour, IGameDataPersistence
 
     void Update()
     {
-        playingSources.RemoveAll(source => !source.isPlaying);
+        playingSources.RemoveAll(source => source == null || !source.isPlaying);
     }
 
     public void ShootSFX(AudioSource audioSource)

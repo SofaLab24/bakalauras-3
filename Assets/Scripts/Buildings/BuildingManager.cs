@@ -17,6 +17,7 @@ public class BuildingManager : MonoBehaviour, IRunDataPersistence
     public static event Action<bool> TriggerRangeIndicator;
     public static event Action OnInsufficientFunds;
     public static event Action<BaseTower> OnTowerClicked;
+    public static event Action OnBuildingDeselected;
     private bool canPlaceBuilding = true;
 
     private BuildingSettings selectedBuilding;
@@ -70,6 +71,7 @@ public class BuildingManager : MonoBehaviour, IRunDataPersistence
         if (isOpen)
         {
             canPlaceBuilding = false;
+            DeselectBuilding();
         }
         else
         {
@@ -79,6 +81,15 @@ public class BuildingManager : MonoBehaviour, IRunDataPersistence
     public void SelectBuilding(BuildingSettings buildingSettings)
     {
         selectedBuilding = buildingSettings;
+    }
+    public void DeselectBuilding()
+    {
+        selectedBuilding = null;
+        foreach (GameObject preview in GameObject.FindGameObjectsWithTag("BuildingPreview"))
+        {
+            Destroy(preview);
+        }
+        OnBuildingDeselected?.Invoke();
     }
 
     public Vector3Int GetHoveredTilePosition()
@@ -126,6 +137,7 @@ public class BuildingManager : MonoBehaviour, IRunDataPersistence
             {
                 if (building.TryGetComponent<BaseTower>(out BaseTower tower))
                 {
+                    DeselectBuilding();
                     tower.ToggleRangeIndicator();
                     OnTowerClicked?.Invoke(tower);
                     return;

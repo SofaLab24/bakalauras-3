@@ -28,12 +28,15 @@ public class OverlayManager : MonoBehaviour
     private VisualElement escMenuWrapper;
     private VisualElement escMenuButton;
     private VisualElement nextWaveButton;
+    private VisualElement gameSpeedButton;
+    private Label gameSpeedLabel;
     private VisualElement towerUpgradeWrapper;
     private Label moneyText;
     private VisualElement healthBarFill;
     private Label healthText;
     private Label currentWaveLabel;
     private BaseTower selectedTower;
+    private bool isDoubleSpeed = false;
 
     private void OnEnable()
     {
@@ -41,6 +44,7 @@ public class OverlayManager : MonoBehaviour
         BaseManager.OnBaseHealthChange += HandleHealthChanged;
         WaveManager.OnWaveCompleted += OnWaveCompleted;
         BuildingManager.OnTowerClicked += OpenTowerUpgradeMenu;
+        BuildingManager.OnBuildingDeselected += ClearSelectedBuildingIcon;
     }
 
     private void OnDisable()
@@ -49,6 +53,7 @@ public class OverlayManager : MonoBehaviour
         BaseManager.OnBaseHealthChange -= HandleHealthChanged;
         WaveManager.OnWaveCompleted -= OnWaveCompleted;
         BuildingManager.OnTowerClicked -= OpenTowerUpgradeMenu;
+        BuildingManager.OnBuildingDeselected -= ClearSelectedBuildingIcon;
     }
 
     // Start is called before the first frame update
@@ -74,6 +79,11 @@ public class OverlayManager : MonoBehaviour
         towerUpgradeWrapper = root.Q<VisualElement>("TowerUpgradeWrapper");
         escMenuButton = root.Q<VisualElement>("EscButton");
         escMenuButton.RegisterCallback<ClickEvent>(OnEscMenuButtonClicked);
+
+        gameSpeedButton = root.Q<VisualElement>("GameSpeedButton");
+        gameSpeedLabel = gameSpeedButton.Q<Label>("Text");
+        gameSpeedLabel.text = "1X";
+        gameSpeedButton.RegisterCallback<ClickEvent>(OnGameSpeedButtonClicked);
 
         currentWaveLabel = root.Q<Label>("CurrentWave");
 
@@ -120,7 +130,7 @@ public class OverlayManager : MonoBehaviour
         escMenuWrapper.Clear();
         OnEscMenu?.Invoke(false);
         isEscMenuOpen = false;
-        Time.timeScale = 1f;
+        Time.timeScale = isDoubleSpeed ? 2f : 1f;
     }
 
     private void EscMenuButtonSetup()
@@ -138,6 +148,13 @@ public class OverlayManager : MonoBehaviour
     {
         OnEscMenu?.Invoke(true);
         OpenEscMenu();
+    }
+
+    private void OnGameSpeedButtonClicked(ClickEvent evt)
+    {
+        isDoubleSpeed = !isDoubleSpeed;
+        Time.timeScale = isDoubleSpeed ? 2f : 1f;
+        gameSpeedLabel.text = isDoubleSpeed ? "2X" : "1X";
     }
     private void OnResumeClicked(ClickEvent evt)
     {
@@ -230,6 +247,17 @@ public class OverlayManager : MonoBehaviour
         buildingButton.style.borderRightColor = selectedColor;
         buildingButton.style.borderTopColor = selectedColor;
     }
+    private void ClearSelectedBuildingIcon()
+    {
+        if (buildingsWrapper == null) return;
+        foreach (VisualElement button in buildingsWrapper.Children())
+        {
+            button.style.borderBottomColor = unselectedColor;
+            button.style.borderLeftColor = unselectedColor;
+            button.style.borderRightColor = unselectedColor;
+            button.style.borderTopColor = unselectedColor;
+        }
+    }
     private void UpdateMoneyDisplay(int currentMoney)
     {
         if (moneyText != null)
@@ -269,11 +297,24 @@ public class OverlayManager : MonoBehaviour
             towerNameLabel.text = $"{tower.TowerName} Upgrades";
         }
 
+        Label statsTextBox = towerUpgradeWrapper.Q<Label>("StatsTextBox");
+        if (statsTextBox != null)
+        {
+            statsTextBox.text = tower.GetStatsText();
+        }
+
+        Action refreshStats = () =>
+        {
+            if (statsTextBox != null)
+                statsTextBox.text = tower.GetStatsText();
+        };
+
         new UpgradeSlot(towerUpgradeWrapper, "DamageLabel", "DamageButton")
             .WithName(() => "Damage")
             .WithCost(() => tower.DamageCost)
             .WithBoughtState(() => tower.DamageUpgraded)
             .OnPurchase(() => tower.TryUpgradeDamage(economyManager))
+            .AfterPurchase(refreshStats)
             .Bind();
 
         new UpgradeSlot(towerUpgradeWrapper, "SpecialtyLabel", "SpecialtyButton")
@@ -281,6 +322,7 @@ public class OverlayManager : MonoBehaviour
             .WithCost(() => tower.SpecialtyCost)
             .WithBoughtState(() => tower.SpecialtyUpgraded)
             .OnPurchase(() => tower.TryUpgradeSpecialty(economyManager))
+            .AfterPurchase(refreshStats)
             .Bind();
 
         VisualElement closeButton = towerUpgradeWrapper.Q<VisualElement>("CloseButton");

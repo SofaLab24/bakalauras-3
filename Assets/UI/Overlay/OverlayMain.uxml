@@ -7,6 +7,9 @@
                     <ui:VisualElement name="Icon" style="flex-grow: 1; position: absolute; left: 0; top: 0; width: 30%; height: 100%; background-image: url(&quot;project://database/Assets/Art/MenuIcons/settings.png?fileID=2800000&amp;guid=b175136523439e1408908631f2611621&amp;type=3#settings&quot;); justify-content: center; align-self: center;" />
                     <ui:Label tabindex="-1" text="Esc" name="Text" class="buttonText" style="position: absolute; top: 0; right: 0; width: 70%; height: 100%; font-size: 60px;" />
                 </ui:VisualElement>
+                <ui:VisualElement name="GameSpeedButton" class="button" style="flex-grow: 1; position: absolute; right: 0; top: 5%; width: 20%; height: 30%;">
+                    <ui:Label tabindex="-1" text="1X" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Text" class="buttonText" style="font-size: 60px; height: 100%;" />
+                </ui:VisualElement>
                 <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="CurrentWave" class="buttonText" style="position: absolute; top: 45%; left: 10%; font-size: 35px;" />
             </ui:VisualElement>
             <ui:VisualElement name="TopMid" picking-mode="Ignore" style="flex-grow: 1; position: absolute; left: 25%; top: 0; width: 50%; height: 100%;" />

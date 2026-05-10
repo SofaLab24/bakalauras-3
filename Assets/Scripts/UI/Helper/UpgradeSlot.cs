@@ -10,6 +10,7 @@ public class UpgradeSlot
     private Func<int> getCost;
     private Func<bool> isBought;
     private Func<bool> tryBuy;
+    private Action afterPurchase;
 
     public UpgradeSlot(VisualElement root, string labelName, string buttonName)
     {
@@ -41,6 +42,12 @@ public class UpgradeSlot
         return this;
     }
 
+    public UpgradeSlot AfterPurchase(Action callback)
+    {
+        this.afterPurchase = callback;
+        return this;
+    }
+
     public void Bind()
     {
         Refresh();
@@ -55,6 +62,7 @@ public class UpgradeSlot
         if (tryBuy())
         {
             Refresh();
+            afterPurchase?.Invoke();
         }
     }
 

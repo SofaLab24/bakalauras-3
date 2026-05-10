@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class CannonTower : BaseTower
 {
-    [SerializeField] private float explosionRadius = 2f;
+    [SerializeField] protected float explosionRadius = 2f;
     [SerializeField] private GameObject explosionPrefab;
     public override void Initialize(BuildingSettings settings)
     {
@@ -48,6 +48,11 @@ public class CannonTower : BaseTower
     public override string GetSpecialtyName()
     {
         return poisonDamage > 0 ? "EXPL. RADIUS + POISON" : "EXPL. RADIUS";
+    }
+
+    public override string GetStatsText()
+    {
+        return base.GetStatsText() + $"\n- Expl. Radius: {explosionRadius:F1}";
     }
 
     protected override void OnDrawGizmosSelected()

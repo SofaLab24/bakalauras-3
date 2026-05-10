@@ -15,7 +15,7 @@ MonoBehaviour:
   towerName: PoisonArrowTower
   isUnlocked: 0
   buildingCost: 200
-  buildingIcon: {fileID: 2800000, guid: 6ce8c4f1ba1d273419ba2237d47ce94d, type: 3}
+  buildingIcon: {fileID: 2800000, guid: 6f891addbd068a74aabff735d7fcf310, type: 3}
   buildingPrefab: {fileID: 1192505338540290890, guid: cf73ba70d7ae43d448a0b7d8d5fe524f, type: 3}
   isTower: 1
   towerType: 0

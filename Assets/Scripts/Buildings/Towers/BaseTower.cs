@@ -222,6 +222,15 @@ public abstract class BaseTower : MonoBehaviour
         return poisonDamage > 0 ? "SPECIALTY + POISON" : "SPECIALTY";
     }
 
+    public virtual string GetStatsText()
+    {
+        float atkPerSec = shootingSpeed > 0f ? 1f / shootingSpeed : 0f;
+        string stats = $"- Damage: {damage}\n- Atk Speed: {atkPerSec:F1} shots/s\n- Range: {range:F0}";
+        if (poisonDamage > 0)
+            stats += $"\n- Poison: {poisonDamage}";
+        return stats;
+    }
+
     protected virtual void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
