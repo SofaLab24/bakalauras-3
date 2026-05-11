@@ -16,12 +16,10 @@ public class MoabController : EnemyController
     [SerializeField] float childMoveSpeed = 2f;
     [SerializeField] float childSpawnSpacing = 0.35f;
 
-    private EnemyHealthManager healthManager;
     private bool childrenSpawned = false;
 
     void Start()
     {
-        healthManager = GetComponent<EnemyHealthManager>();
         EnemyHealthManager.OnEnemyDeath += HandleSelfDeath;
     }
 

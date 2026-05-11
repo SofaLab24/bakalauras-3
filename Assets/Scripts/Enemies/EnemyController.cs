@@ -3,13 +3,12 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    Rigidbody2D body;
     protected List<Vector2> targets;
-    EnemyHealthManager healthManager;
+    protected EnemyHealthManager healthManager;
+    protected Rigidbody2D body;
     SpriteRenderer spriteRenderer;
 
-    [SerializeField] float maxHealthColorScale = 200f;
-    [SerializeField] float maxMoveSpeedColorScale = 15f;
+    [SerializeField] float moveSpeedVariance = 0.1f;
 
     public float moveSpeed = 5f;
     public float distanceOffset = 0.09f;
@@ -28,26 +27,10 @@ public class EnemyController : MonoBehaviour
     public void SetHealth(int health)
     {
         healthManager.currentHealth = health;
-        float red;
-        if (health < maxHealthColorScale)
-        {
-            red = health / maxHealthColorScale;
-        }
-        else red = 1f;
-        Color currentColor = spriteRenderer.color;
-        spriteRenderer.color = new Color(red, currentColor.g, currentColor.b, currentColor.a);
     }
     public void SetMoveSpeed(float moveSpeed)
     {
-        this.moveSpeed = moveSpeed;
-        float blue;
-        if (moveSpeed < maxMoveSpeedColorScale)
-        {
-            blue = moveSpeed / maxMoveSpeedColorScale;
-        }
-        else blue = 1f;
-        Color currentColor = spriteRenderer.color;
-        spriteRenderer.color = new Color(currentColor.r, currentColor.g, blue, currentColor.a);
+        this.moveSpeed = moveSpeed + Random.Range(-moveSpeedVariance, moveSpeedVariance);
     }
     private void Move()
     {
@@ -56,7 +39,6 @@ public class EnemyController : MonoBehaviour
         if (distance > distanceOffset)
         {
             Vector2Int direction = CalculateDirection(target);
-            
             body.velocity = new Vector2(direction.x, direction.y) * moveSpeed * Time.fixedDeltaTime * 40;
         }
         else // reached the current target
@@ -69,6 +51,7 @@ public class EnemyController : MonoBehaviour
             body.velocity = Vector2.zero;
             transform.position = new Vector3(target.x, target.y);
             targets.RemoveAt(targets.Count - 1);
+            UpdateFacingDirection(targets[^1]);
         }
     }
     public virtual void Initialize(int damage, List<Vector2> targets, float moveSpeed, int health)
@@ -78,6 +61,14 @@ public class EnemyController : MonoBehaviour
         this.targets = new List<Vector2>(targets);
         SetMoveSpeed(moveSpeed);
         SetHealth(health);
+        UpdateFacingDirection(this.targets[^1]);
+    }
+
+    private void UpdateFacingDirection(Vector2 target)
+    {
+        Vector2Int direction = CalculateDirection(target);
+        if (direction.x < 0) spriteRenderer.flipX = true;
+        else if (direction.x > 0) spriteRenderer.flipX = false;
     }
 
     public Vector2Int CalculateDirection(Vector2 target)

@@ -1,7 +1,13 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using Newtonsoft.Json;
+
+[System.Serializable]
+public class EnemyStats
+{
+    public string id;
+    public int health;
+    public float moveSpeed;
+    public int damage;
+}
 
 [System.Serializable]
 public class RunData
@@ -11,13 +17,15 @@ public class RunData
     public int currentHealth;
     public SerializableMapData mapData;
 
+    public List<EnemyStats> enemyTypeStats = new();
+
     // Default values on new game
     public RunData()
     {
-        // current run data
         currentWave = 0;
         currentMoney = 400;
         currentHealth = 0;
         mapData = new SerializableMapData();
+        enemyTypeStats = new List<EnemyStats>();
     }
 }

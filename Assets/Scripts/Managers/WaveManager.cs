@@ -1,25 +1,39 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+
+[System.Serializable]
+public class EnemyTypeDefinition
+{
+    public string id;
+    public EnemyController prefab;
+    public int pointCost = 1;
+    [Header("Base Stats")]
+    public int baseHealth = 100;
+    public float baseMoveSpeed = 5f;
+    public int baseDamage = 1;
+}
 
 public class WaveManager : MonoBehaviour, IRunDataPersistence
 {
-    [SerializeField] EnemyController enemyPrefab;
+    [SerializeField] List<EnemyTypeDefinition> enemyTypes;
     [SerializeField] MoabController moabPrefab;
     [SerializeField] int moabWaveInterval = 10;
-    [SerializeField] float enemyStatMultiplier = 5.3f;
     [SerializeField] float enemyAmountMultiplier = 1.5f;
     [SerializeField] float enemySpawnInterval = 1.5f;
     [SerializeField] float enemySpawnIntervalVariance = 0.5f;
+    [SerializeField] float enemySpawnPathDelayVariance = 0.75f;
+    [SerializeField] float statScalePerTenWaves = 1.2f;
     public int waveNumber;
 
     public static event Action<int> OnWaveCompleted;
 
     private int enemiesToGenerate;
     public int enemiesLeftToDie;
-    private Stack<(int damage, int health, float moveSpeed)> enemyPool;
-    private EnemyGenerator enemyGenerator;
+    private Stack<(EnemyController prefab, int damage, int health, float moveSpeed)> enemyPool;
+    private Dictionary<string, EnemyStats> currentStats;
 
     PathGenerator pathGenerator;
 
@@ -36,14 +50,14 @@ public class WaveManager : MonoBehaviour, IRunDataPersistence
     private void Start()
     {
         pathGenerator = GetComponent<PathGenerator>();
-        enemyGenerator = GetComponent<EnemyGenerator>();
         DataPersistenceManager.Instance.LoadRun();
     }
     public void StartNextWave(float splitChance)
     {
-        // Save run before starting each wave
-        DataPersistenceManager.Instance.SaveRun();
         waveNumber++;
+        TryScaleStats();
+        // Save run (including potentially updated stats) before spawning
+        DataPersistenceManager.Instance.SaveRun();
         pathGenerator.GenerateNextPaths(splitChance);
         // this generates all enemies for all paths
         GenerateEnemyPool();
@@ -60,9 +74,13 @@ public class WaveManager : MonoBehaviour, IRunDataPersistence
             {
                 enemyAmountPerPath = enemiesToGenerate;
             }
-            else // this leaves at least 1 enemy for the last path
+            else
             {
-                enemyAmountPerPath = UnityEngine.Random.Range(1, enemiesToGenerate - pathGenerator.GetPaths.Count + i);
+                int remainingPathsAfter = pathGenerator.GetPaths.Count - 1 - i;
+                int maxCanAssign = enemiesToGenerate - remainingPathsAfter;
+                enemyAmountPerPath = maxCanAssign >= 1
+                    ? UnityEngine.Random.Range(1, maxCanAssign + 1)
+                    : 0;
             }
             enemiesToGenerate -= enemyAmountPerPath;
             List<Vector2> enemyTargets = pathGenerator.GetPaths[i].enemyWalkPoints;
@@ -73,44 +91,46 @@ public class WaveManager : MonoBehaviour, IRunDataPersistence
 
     private void GenerateEnemyPool()
     {
-        int newEnemies = 1 + (int)(enemyAmountMultiplier * waveNumber);
-        enemiesToGenerate = newEnemies;
-        
-        int totalStatPoints = 1 + (int)(enemyStatMultiplier * waveNumber);
-        enemyPool = new Stack<(int statPoints,int health, float moveSpeed)>();
+        enemiesToGenerate = 1 + (int)(enemyAmountMultiplier * waveNumber);
+        int remainingBudget = enemiesToGenerate;
 
-        while (totalStatPoints > newEnemies)
+        enemyPool = new Stack<(EnemyController prefab, int damage, int health, float moveSpeed)>();
+
+        EnemyTypeDefinition cheapestType = enemyTypes.OrderBy(t => t.pointCost).First();
+
+        for (int i = 0; i < enemiesToGenerate; i++)
         {
-            if (newEnemies <= 1)
-            {
-                (int damage, int health, float moveSpeed) lastEnemy = enemyGenerator.GenerateEnemy(totalStatPoints);
-                enemyPool.Push(lastEnemy);
-                newEnemies--;
-                break;
-            }
+            List<EnemyTypeDefinition> eligible = enemyTypes.Where(t => t.pointCost <= remainingBudget).ToList();
+            EnemyTypeDefinition chosenType = eligible.Count > 0
+                ? eligible[UnityEngine.Random.Range(0, eligible.Count)]
+                : cheapestType;
 
-            int statPoints = UnityEngine.Random.Range(1, totalStatPoints);
-            (int damage, int health, float moveSpeed) enemy = enemyGenerator.GenerateEnemy(statPoints);
-            enemyPool.Push(enemy);
-            totalStatPoints -= statPoints;
-            newEnemies--;
+            EnemyStats stats = currentStats.TryGetValue(chosenType.id, out EnemyStats saved)
+                ? saved
+                : new EnemyStats { id = chosenType.id, health = chosenType.baseHealth, moveSpeed = chosenType.baseMoveSpeed, damage = chosenType.baseDamage };
+
+            enemyPool.Push((chosenType.prefab, stats.damage, stats.health, stats.moveSpeed));
+            remainingBudget -= chosenType.pointCost;
         }
+    }
 
-        if (newEnemies > 0)
+    private void TryScaleStats()
+    {
+        if (waveNumber % 10 != 0) return;
+        foreach (EnemyStats stats in currentStats.Values)
         {
-            for (int i = 0; i < newEnemies; i++)
-            {
-                (int damage, int health, float moveSpeed) enemy = enemyGenerator.GenerateEnemy(1);
-                enemyPool.Push(enemy);
-            }
+            stats.health = Mathf.RoundToInt(stats.health * statScalePerTenWaves);
+            stats.damage = Mathf.RoundToInt(stats.damage * statScalePerTenWaves);
+            stats.moveSpeed *= statScalePerTenWaves;
         }
     }
     private IEnumerator SpawnEnemies(List<Vector2> enemyTargets, int enemyAmountPerPath, Vector3 initPosition)
     {
+        yield return new WaitForSeconds(UnityEngine.Random.Range(0f, enemySpawnPathDelayVariance));
         for (int j = 0; j < enemyAmountPerPath; j++)
         {
-            (int damage, int health, float moveSpeed) enemyStats = enemyPool.Pop();
-            EnemyController enemy = Instantiate(enemyPrefab, initPosition, Quaternion.identity);
+            (EnemyController prefab, int damage, int health, float moveSpeed) enemyStats = enemyPool.Pop();
+            EnemyController enemy = Instantiate(enemyStats.prefab, initPosition, Quaternion.identity);
             enemy.Initialize(enemyStats.damage, enemyTargets, enemyStats.moveSpeed, enemyStats.health);
             yield return new WaitForSeconds(enemySpawnInterval + UnityEngine.Random.Range(-enemySpawnIntervalVariance, enemySpawnIntervalVariance));
         }
@@ -134,7 +154,6 @@ public class WaveManager : MonoBehaviour, IRunDataPersistence
         for (int i = 0; i < moabCount; i++)
         {
             MoabController moab = Instantiate(moabPrefab, initPosition, Quaternion.identity);
-            // Values are overridden by MoabController to its fixed stats.
             moab.Initialize(0, moabTargets, 0f, 0);
             yield return new WaitForSeconds(enemySpawnInterval + UnityEngine.Random.Range(-enemySpawnIntervalVariance, enemySpawnIntervalVariance));
         }
@@ -157,11 +176,34 @@ public class WaveManager : MonoBehaviour, IRunDataPersistence
     public void LoadData(RunData data)
     {
         this.waveNumber = data.currentWave;
+
+        currentStats = new Dictionary<string, EnemyStats>();
+        if (data.enemyTypeStats != null && data.enemyTypeStats.Count > 0)
+        {
+            foreach (EnemyStats saved in data.enemyTypeStats)
+                currentStats[saved.id] = saved;
+        }
+        else
+        {
+            // Seed from inspector defaults on a fresh run
+            foreach (EnemyTypeDefinition type in enemyTypes)
+            {
+                currentStats[type.id] = new EnemyStats
+                {
+                    id = type.id,
+                    health = type.baseHealth,
+                    moveSpeed = type.baseMoveSpeed,
+                    damage = type.baseDamage
+                };
+            }
+        }
+
         OnWaveCompleted?.Invoke(waveNumber);
     }
 
     public void SaveData(ref RunData data)
     {
         data.currentWave = this.waveNumber;
+        data.enemyTypeStats = new List<EnemyStats>(currentStats.Values);
     }
 }

@@ -777,13 +777,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 174d89f9db5aba94da3110a555562dbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 7305669390683419870, guid: eae32f9db5878bc4abce2bc898a736f6, type: 3}
+  enemyTypes:
+  - id: slime
+    prefab: {fileID: 7305669390683419870, guid: 4f3b2f881f7f5ba48bbe3221d49514c2, type: 3}
+    pointCost: 1
+    baseHealth: 15
+    baseMoveSpeed: 3
+    baseDamage: 1
+  - id: skeleton
+    prefab: {fileID: 7305669390683419870, guid: b1eb50179a140b2448ed47f3339a6ba4, type: 3}
+    pointCost: 3
+    baseHealth: 15
+    baseMoveSpeed: 5
+    baseDamage: 1
+  - id: vampire
+    prefab: {fileID: 7305669390683419870, guid: 60ae6bcc3a809084c98b8a0a557090b1, type: 3}
+    pointCost: 5
+    baseHealth: 30
+    baseMoveSpeed: 2
+    baseDamage: 3
   moabPrefab: {fileID: 8683952593032317218, guid: e185f30a35233dc4d9d45e253cfc4bfc, type: 3}
   moabWaveInterval: 10
-  enemyStatMultiplier: 3.1
   enemyAmountMultiplier: 1.5
   enemySpawnInterval: 1.5
   enemySpawnIntervalVariance: 0.5
+  enemySpawnPathDelayVariance: 0.75
+  statScalePerTenWaves: 1.2
   waveNumber: 0
   enemiesLeftToDie: 0
 --- !u!114 &1429115355
