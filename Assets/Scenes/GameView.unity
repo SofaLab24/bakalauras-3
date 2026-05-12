@@ -804,7 +804,8 @@ MonoBehaviour:
   enemySpawnInterval: 1.5
   enemySpawnIntervalVariance: 0.5
   enemySpawnPathDelayVariance: 0.75
-  statScalePerTenWaves: 1.2
+  statScaleInterval: 5
+  statScaleMultiplier: 1.2
   waveNumber: 0
   enemiesLeftToDie: 0
 --- !u!114 &1429115355

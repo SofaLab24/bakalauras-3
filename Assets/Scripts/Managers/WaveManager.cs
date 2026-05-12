@@ -26,7 +26,8 @@ public class WaveManager : MonoBehaviour, IRunDataPersistence
     [SerializeField] float enemySpawnInterval = 1.5f;
     [SerializeField] float enemySpawnIntervalVariance = 0.5f;
     [SerializeField] float enemySpawnPathDelayVariance = 0.75f;
-    [SerializeField] float statScalePerTenWaves = 1.2f;
+    [SerializeField] int statScaleInterval = 10;
+    [SerializeField] float statScaleMultiplier = 1.2f;
     public int waveNumber;
 
     public static event Action<int> OnWaveCompleted;
@@ -144,12 +145,12 @@ public class WaveManager : MonoBehaviour, IRunDataPersistence
 
     private void TryScaleStats()
     {
-        if (waveNumber % 10 != 0) return;
+        if (waveNumber % statScaleInterval != 0) return;
         foreach (EnemyStats stats in currentStats.Values)
         {
-            stats.health = Mathf.RoundToInt(stats.health * statScalePerTenWaves);
-            stats.damage = Mathf.RoundToInt(stats.damage * statScalePerTenWaves);
-            stats.moveSpeed *= statScalePerTenWaves;
+            stats.health = Mathf.Max(stats.health + 1, Mathf.RoundToInt(stats.health * statScaleMultiplier));
+            stats.damage = Mathf.Max(stats.damage + 1, Mathf.RoundToInt(stats.damage * statScaleMultiplier));
+            stats.moveSpeed *= statScaleMultiplier;
         }
     }
     private List<(EnemyTypeDefinition type, EnemyStats stats)> GenerateChildPool(int count)
