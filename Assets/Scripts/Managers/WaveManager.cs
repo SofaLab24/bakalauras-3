@@ -30,6 +30,7 @@ public class WaveManager : MonoBehaviour, IRunDataPersistence
 
     public static event Action<int> OnWaveCompleted;
     public static event Action<int> OnWaveRestored;
+    public static event Action<int> OnWaveStarted;
 
     private int enemiesToGenerate;
     public int enemiesLeftToDie;
@@ -67,6 +68,7 @@ public class WaveManager : MonoBehaviour, IRunDataPersistence
         DataPersistenceManager.Instance.SaveRun();
         pathGenerator.CommitPendingPaths();
         enemiesLeftToDie = enemiesToGenerate;
+        OnWaveStarted?.Invoke(waveNumber);
 
         TrySpawnMoabs();
 

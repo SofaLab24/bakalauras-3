@@ -36,6 +36,10 @@ public class BuildingSettings : ScriptableObject
     [JsonIgnore]
     public GameObject towerExplosionPrefab;
 
+    [Header("Mushroom Tower Settings")]
+    public float towerSlowPercent = 30f;
+    public float towerSlowDuration = 2f;
+
     [Header("Resource Building Settings")]
     public string resourceType;
     public int resourceMultiplier;
@@ -58,6 +62,8 @@ public class BuildingSettings : ScriptableObject
         clone.towerPoisonDamage = towerPoisonDamage;
         clone.towerExplosionRadius = towerExplosionRadius;
         clone.towerExplosionPrefab = towerExplosionPrefab;
+        clone.towerSlowPercent = towerSlowPercent;
+        clone.towerSlowDuration = towerSlowDuration;
         clone.enemyLayer = enemyLayer;
         clone.towerProjectilePrefab = towerProjectilePrefab;
         clone.resourceType = resourceType;
@@ -71,5 +77,6 @@ public enum TowerType
 {
     Arrow,
     Cannon,
-    Sniper
+    Sniper,
+    Mushroom
 }

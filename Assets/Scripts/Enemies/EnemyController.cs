@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,6 +13,9 @@ public class EnemyController : MonoBehaviour
 
     public float moveSpeed = 5f;
     public float distanceOffset = 0.09f;
+
+    private float baseSpeed;
+    private Coroutine slowCoroutine;
 
     void Awake()
     {
@@ -31,6 +35,22 @@ public class EnemyController : MonoBehaviour
     public void SetMoveSpeed(float moveSpeed)
     {
         this.moveSpeed = moveSpeed + Random.Range(-moveSpeedVariance, moveSpeedVariance);
+        baseSpeed = this.moveSpeed;
+    }
+
+    public void ApplySlow(float slowPercent, float duration)
+    {
+        if (slowCoroutine != null)
+            StopCoroutine(slowCoroutine);
+        moveSpeed = baseSpeed * (1f - slowPercent / 100f);
+        slowCoroutine = StartCoroutine(RemoveSlowAfter(duration));
+    }
+
+    private IEnumerator RemoveSlowAfter(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        moveSpeed = baseSpeed;
+        slowCoroutine = null;
     }
     private void Move()
     {

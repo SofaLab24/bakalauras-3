@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 556192596e2423d43b48632c41d52a9e, type: 3}
+  m_Name: default_MushroomTower
+  m_EditorClassIdentifier: 
+  towerName: MushroomTower
+  isUnlocked: 1
+  buildingCost: 150
+  buildingIcon: {fileID: 2800000, guid: d0c789744bc3b9f4ca9b3fa198bec46b, type: 3}
+  buildingPrefab: {fileID: 1192505338540290890, guid: 8d7b6f051c85ae54aa62ee7a0fb6a09b, type: 3}
+  isTower: 1
+  towerType: 3
+  towerRange: 3
+  towerShootingDelay: 2
+  towerProjectileSpeed: 20
+  projectileSpeedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.9993355
+      inSlope: -0.0012621289
+      outSlope: -0.0012621289
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.11966937
+    - serializedVersion: 3
+      time: 1
+      value: 0.40005064
+      inSlope: -1.7363994
+      outSlope: -1.7363994
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.049475253
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  towerDamage: 8
+  towerPoisonDamage: 0
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  towerProjectilePrefab: {fileID: 7784466698744177259, guid: c245961681e2bae42b4c2a114d7353c5, type: 3}
+  towerExplosionRadius: 2
+  towerExplosionPrefab: {fileID: 0}
+  towerSlowPercent: 30
+  towerSlowDuration: 1.5
+  resourceType: 
+  resourceMultiplier: 0

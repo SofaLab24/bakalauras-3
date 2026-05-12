@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9183332490174408138}
-  - component: {fileID: 1391216975951494563}
   - component: {fileID: 3105589398671208908}
   - component: {fileID: 1563537472751291701}
+  - component: {fileID: 5518103230133431498}
   m_Layer: 0
   m_Name: MushroomTower
   m_TagString: Tower
@@ -35,36 +35,6 @@ Transform:
   - {fileID: 1643181842009637642}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1391216975951494563
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1192505338540290890}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8a37925fe1674d4eb2704652c6957de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  towerName: 
-  range: 0
-  shootingSpeed: 0
-  projectileSpeed: 0
-  damage: 0
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  projectilePrefab: {fileID: 0}
-  projectileSpeedCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  towerHead: {fileID: 1643181842009637642}
-  animator: {fileID: 6171841536127739977}
-  DamageCost: 100
 --- !u!82 &3105589398671208908
 AudioSource:
   m_ObjectHideFlags: 0
@@ -196,6 +166,38 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &5518103230133431498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1192505338540290890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc360eeff617e854e9a796d56f64e872, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  towerName: 
+  range: 0
+  shootingSpeed: 0
+  projectileSpeed: 0
+  damage: 0
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  projectilePrefab: {fileID: 0}
+  projectileSpeedCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  towerHead: {fileID: 1643181842009637642}
+  animator: {fileID: 6171841536127739977}
+  DamageCost: 100
+  slowPercent: 30
+  slowDuration: 2
 --- !u!1 &1685455754383598621
 GameObject:
   m_ObjectHideFlags: 0
@@ -354,10 +356,6 @@ PrefabInstance:
     - target: {fileID: 8131147760250337703, guid: d4cb11215f8085b41a7aee55a7245b94, type: 3}
       propertyPath: m_Name
       value: Explosion
-      objectReference: {fileID: 0}
-    - target: {fileID: 8131147760250337703, guid: d4cb11215f8085b41a7aee55a7245b94, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
