@@ -13,6 +13,9 @@ public class EnemyController : MonoBehaviour
 
     public float moveSpeed = 5f;
     public float distanceOffset = 0.09f;
+    public string TypeId { get; private set; }
+
+    public void SetTypeId(string id) { TypeId = id; }
 
     private float baseSpeed;
     private Coroutine slowCoroutine;

@@ -19,8 +19,9 @@ public class EnemyTypeDefinition
 public class WaveManager : MonoBehaviour, IRunDataPersistence
 {
     [SerializeField] List<EnemyTypeDefinition> enemyTypes;
-    [SerializeField] MoabController moabPrefab;
-    [SerializeField] int moabWaveInterval = 10;
+    [SerializeField] BossController bossPrefab;
+    [SerializeField] string bossId = "Boss";
+    [SerializeField] int bossWaveInterval = 10;
     [SerializeField] float enemyAmountMultiplier = 1.5f;
     [SerializeField] float enemySpawnInterval = 1.5f;
     [SerializeField] float enemySpawnIntervalVariance = 0.5f;
@@ -31,11 +32,13 @@ public class WaveManager : MonoBehaviour, IRunDataPersistence
     public static event Action<int> OnWaveCompleted;
     public static event Action<int> OnWaveRestored;
     public static event Action<int> OnWaveStarted;
+    public static event Action<Dictionary<string, int>> OnWavePoolGenerated;
 
     private int enemiesToGenerate;
     public int enemiesLeftToDie;
-    private Stack<(EnemyController prefab, int damage, int health, float moveSpeed)> enemyPool;
+    private Stack<(EnemyTypeDefinition type, EnemyStats stats)> enemyPool;
     private Dictionary<string, EnemyStats> currentStats;
+    private List<List<(EnemyTypeDefinition type, EnemyStats stats)>> pendingBossChildPools;
 
     PathGenerator pathGenerator;
 
@@ -70,7 +73,7 @@ public class WaveManager : MonoBehaviour, IRunDataPersistence
         enemiesLeftToDie = enemiesToGenerate;
         OnWaveStarted?.Invoke(waveNumber);
 
-        TrySpawnMoabs();
+        TrySpawnBosses();
 
         for (int i = 0; i < pathGenerator.GetPaths.Count; i++)
         {
@@ -101,7 +104,8 @@ public class WaveManager : MonoBehaviour, IRunDataPersistence
         enemiesToGenerate = 1 + (int)(enemyAmountMultiplier * waveNumber);
         int remainingBudget = enemiesToGenerate;
 
-        enemyPool = new Stack<(EnemyController prefab, int damage, int health, float moveSpeed)>();
+        enemyPool = new Stack<(EnemyTypeDefinition type, EnemyStats stats)>();
+        Dictionary<string, int> composition = new Dictionary<string, int>();
 
         EnemyTypeDefinition cheapestType = enemyTypes.OrderBy(t => t.pointCost).First();
 
@@ -116,9 +120,26 @@ public class WaveManager : MonoBehaviour, IRunDataPersistence
                 ? saved
                 : new EnemyStats { id = chosenType.id, health = chosenType.baseHealth, moveSpeed = chosenType.baseMoveSpeed, damage = chosenType.baseDamage };
 
-            enemyPool.Push((chosenType.prefab, stats.damage, stats.health, stats.moveSpeed));
+            enemyPool.Push((chosenType, stats));
             remainingBudget -= chosenType.pointCost;
+
+            if (composition.ContainsKey(chosenType.id))
+                composition[chosenType.id]++;
+            else
+                composition[chosenType.id] = 1;
         }
+
+        pendingBossChildPools = new List<List<(EnemyTypeDefinition type, EnemyStats stats)>>();
+        if (bossPrefab != null && bossWaveInterval > 0 && waveNumber % bossWaveInterval == 0)
+        {
+            int bossCount = waveNumber / bossWaveInterval;
+            composition[bossId] = bossCount;
+            int childPoolSize = waveNumber;
+            for (int m = 0; m < bossCount; m++)
+                pendingBossChildPools.Add(GenerateChildPool(childPoolSize));
+        }
+
+        OnWavePoolGenerated?.Invoke(composition);
     }
 
     private void TryScaleStats()
@@ -131,37 +152,61 @@ public class WaveManager : MonoBehaviour, IRunDataPersistence
             stats.moveSpeed *= statScalePerTenWaves;
         }
     }
+    private List<(EnemyTypeDefinition type, EnemyStats stats)> GenerateChildPool(int count)
+    {
+        var pool = new List<(EnemyTypeDefinition type, EnemyStats stats)>();
+        EnemyTypeDefinition cheapestType = enemyTypes.OrderBy(t => t.pointCost).First();
+        int budget = count;
+        for (int i = 0; i < count; i++)
+        {
+            List<EnemyTypeDefinition> eligible = enemyTypes.Where(t => t.pointCost <= budget).ToList();
+            EnemyTypeDefinition chosenType = eligible.Count > 0
+                ? eligible[UnityEngine.Random.Range(0, eligible.Count)]
+                : cheapestType;
+            EnemyStats stats = currentStats.TryGetValue(chosenType.id, out EnemyStats saved)
+                ? saved
+                : new EnemyStats { id = chosenType.id, health = chosenType.baseHealth, moveSpeed = chosenType.baseMoveSpeed, damage = chosenType.baseDamage };
+            pool.Add((chosenType, stats));
+            budget -= chosenType.pointCost;
+        }
+        return pool;
+    }
+
     private IEnumerator SpawnEnemies(List<Vector2> enemyTargets, int enemyAmountPerPath, Vector3 initPosition)
     {
         yield return new WaitForSeconds(UnityEngine.Random.Range(0f, enemySpawnPathDelayVariance));
         for (int j = 0; j < enemyAmountPerPath; j++)
         {
-            (EnemyController prefab, int damage, int health, float moveSpeed) enemyStats = enemyPool.Pop();
-            EnemyController enemy = Instantiate(enemyStats.prefab, initPosition, Quaternion.identity);
-            enemy.Initialize(enemyStats.damage, enemyTargets, enemyStats.moveSpeed, enemyStats.health);
+            (EnemyTypeDefinition type, EnemyStats stats) entry = enemyPool.Pop();
+            EnemyController enemy = Instantiate(entry.type.prefab, initPosition, Quaternion.identity);
+            enemy.Initialize(entry.stats.damage, enemyTargets, entry.stats.moveSpeed, entry.stats.health);
+            enemy.SetTypeId(entry.type.id);
             yield return new WaitForSeconds(enemySpawnInterval + UnityEngine.Random.Range(-enemySpawnIntervalVariance, enemySpawnIntervalVariance));
         }
     }
-    private void TrySpawnMoabs()
+    private void TrySpawnBosses()
     {
-        if (moabPrefab == null) return;
-        if (moabWaveInterval <= 0) return;
-        if (waveNumber % moabWaveInterval != 0) return;
+        if (bossPrefab == null) return;
+        if (bossWaveInterval <= 0) return;
+        if (waveNumber % bossWaveInterval != 0) return;
 
-        int moabCount = waveNumber / moabWaveInterval;
-        enemiesLeftToDie += moabCount;
+        int bossCount = waveNumber / bossWaveInterval;
+        enemiesLeftToDie += bossCount;
 
-        List<Vector2> moabTargets = pathGenerator.GetPaths[0].enemyWalkPoints;
-        Vector3 initPosition = new Vector3(moabTargets[^1].x, moabTargets[^1].y);
-        StartCoroutine(SpawnMoabs(moabTargets, moabCount, initPosition));
+        List<Vector2> bossTargets = pathGenerator.GetPaths[0].enemyWalkPoints;
+        Vector3 initPosition = new Vector3(bossTargets[^1].x, bossTargets[^1].y);
+        StartCoroutine(SpawnBosses(bossTargets, bossCount, initPosition));
     }
 
-    private IEnumerator SpawnMoabs(List<Vector2> moabTargets, int moabCount, Vector3 initPosition)
+    private IEnumerator SpawnBosses(List<Vector2> bossTargets, int bossCount, Vector3 initPosition)
     {
-        for (int i = 0; i < moabCount; i++)
+        for (int i = 0; i < bossCount; i++)
         {
-            MoabController moab = Instantiate(moabPrefab, initPosition, Quaternion.identity);
-            moab.Initialize(0, moabTargets, 0f, 0);
+            BossController boss = Instantiate(bossPrefab, initPosition, Quaternion.identity);
+            boss.Initialize(0, bossTargets, 0f, 0);
+            boss.SetTypeId(bossId);
+            if (pendingBossChildPools != null && i < pendingBossChildPools.Count)
+                boss.SetChildPool(pendingBossChildPools[i]);
             yield return new WaitForSeconds(enemySpawnInterval + UnityEngine.Random.Range(-enemySpawnIntervalVariance, enemySpawnIntervalVariance));
         }
     }

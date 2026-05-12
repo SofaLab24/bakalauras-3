@@ -1,21 +1,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoabController : EnemyController
+public class BossController : EnemyController
 {
-    [Header("MOAB settings")]
+    [Header("Boss settings")]
     [SerializeField] int fixedHealth = 500;
     [SerializeField] float fixedMoveSpeed = 2f;
     [SerializeField] int fixedDamage = 20;
 
     [Header("Child Enemies")]
-    [SerializeField] EnemyController childEnemyPrefab;
-    [SerializeField] int childCount = 10;
-    [SerializeField] int childDamage = 1;
-    [SerializeField] int childHealth = 10;
-    [SerializeField] float childMoveSpeed = 2f;
     [SerializeField] float childSpawnSpacing = 0.35f;
 
+    private List<(EnemyTypeDefinition type, EnemyStats stats)> childPool;
     private bool childrenSpawned = false;
 
     void Start()
@@ -33,6 +29,11 @@ public class MoabController : EnemyController
         base.Initialize(fixedDamage, targets, fixedMoveSpeed, fixedHealth);
     }
 
+    public void SetChildPool(List<(EnemyTypeDefinition type, EnemyStats stats)> pool)
+    {
+        childPool = pool;
+    }
+
     private void HandleSelfDeath(EnemyHealthManager deadEnemy, EnemyHealthManager.DeathReason reason)
     {
         if (deadEnemy != healthManager) return;
@@ -45,26 +46,28 @@ public class MoabController : EnemyController
 
     private void SpawnChildren()
     {
-        if (childEnemyPrefab == null || targets == null || targets.Count == 0) return;
+        if (childPool == null || childPool.Count == 0 || targets == null || targets.Count == 0) return;
 
         WaveManager waveManager = FindObjectOfType<WaveManager>();
         if (waveManager != null)
         {
-            // The MOAB itself already counts as one death; each child will trigger
+            // The boss itself already counts as one death; each child will trigger
             // another OnEnemyDeath, so register the extra children so the wave
             // counter stays in sync.
-            waveManager.RegisterExtraEnemies(childCount);
+            waveManager.RegisterExtraEnemies(childPool.Count);
         }
 
         Vector3 basePosition = transform.position;
-        for (int i = 0; i < childCount; i++)
+        foreach ((EnemyTypeDefinition type, EnemyStats stats) entry in childPool)
         {
+            if (entry.type.prefab == null) continue;
             Vector3 offset = new Vector3(
                 Random.Range(-childSpawnSpacing, childSpawnSpacing),
                 Random.Range(-childSpawnSpacing, childSpawnSpacing),
                 0f);
-            EnemyController child = Instantiate(childEnemyPrefab, basePosition + offset, Quaternion.identity);
-            child.Initialize(childDamage, targets, childMoveSpeed, childHealth);
+            EnemyController child = Instantiate(entry.type.prefab, basePosition + offset, Quaternion.identity);
+            child.Initialize(entry.stats.damage, targets, entry.stats.moveSpeed, entry.stats.health);
+            child.SetTypeId(entry.type.id);
         }
     }
 }

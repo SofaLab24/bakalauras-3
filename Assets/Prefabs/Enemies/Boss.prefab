@@ -127,7 +127,7 @@ GameObject:
   - component: {fileID: 1277934013024238486}
   - component: {fileID: 8683952593032317218}
   m_Layer: 6
-  m_Name: MOAB
+  m_Name: Boss
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -191,7 +191,7 @@ SpriteRenderer:
   m_SortingLayer: -3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 294f5bfb11c914148aedac594faa5149, type: 3}
-  m_Color: {r: 0.04161958, g: 0, b: 0.8235294, a: 1}
+  m_Color: {r: 0.6289307, g: 0.3571757, b: 0.3421541, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -314,18 +314,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3545e8562cb44b4bbb8f6adf35547c48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealthColorScale: 200
-  maxMoveSpeedColorScale: 15
+  moveSpeedVariance: 0.1
   moveSpeed: 5
   distanceOffset: 0.09
   fixedHealth: 500
   fixedMoveSpeed: 2
   fixedDamage: 20
-  childEnemyPrefab: {fileID: 7305669390683419870, guid: eae32f9db5878bc4abce2bc898a736f6, type: 3}
-  childCount: 10
-  childDamage: 1
-  childHealth: 10
-  childMoveSpeed: 2
   childSpawnSpacing: 0.35
 --- !u!1 &7714210957346369075
 GameObject:

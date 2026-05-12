@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -35,6 +37,9 @@ public class OverlayManager : MonoBehaviour
     private VisualElement healthBarFill;
     private Label healthText;
     private Label currentWaveLabel;
+    private Label previewTextBox;
+    private Label previewTitle;
+    private Dictionary<string, int> waveEnemyCounts;
     private BaseTower selectedTower;
     private bool isDoubleSpeed = false;
 
@@ -44,6 +49,9 @@ public class OverlayManager : MonoBehaviour
         BaseManager.OnBaseHealthChange += HandleHealthChanged;
         WaveManager.OnWaveCompleted += OnWaveCompleted;
         WaveManager.OnWaveRestored += OnWaveRestored;
+        WaveManager.OnWaveStarted += HandleWaveStartedPreview;
+        WaveManager.OnWavePoolGenerated += HandleWavePoolGenerated;
+        EnemyHealthManager.OnEnemyDeath += HandleEnemyDeathPreview;
         BuildingManager.OnTowerClicked += OpenTowerUpgradeMenu;
         BuildingManager.OnBuildingDeselected += ClearSelectedBuildingIcon;
     }
@@ -54,6 +62,9 @@ public class OverlayManager : MonoBehaviour
         BaseManager.OnBaseHealthChange -= HandleHealthChanged;
         WaveManager.OnWaveCompleted -= OnWaveCompleted;
         WaveManager.OnWaveRestored -= OnWaveRestored;
+        WaveManager.OnWaveStarted -= HandleWaveStartedPreview;
+        WaveManager.OnWavePoolGenerated -= HandleWavePoolGenerated;
+        EnemyHealthManager.OnEnemyDeath -= HandleEnemyDeathPreview;
         BuildingManager.OnTowerClicked -= OpenTowerUpgradeMenu;
         BuildingManager.OnBuildingDeselected -= ClearSelectedBuildingIcon;
     }
@@ -88,6 +99,9 @@ public class OverlayManager : MonoBehaviour
         gameSpeedButton.RegisterCallback<ClickEvent>(OnGameSpeedButtonClicked);
 
         currentWaveLabel = root.Q<Label>("CurrentWave");
+
+        previewTextBox = root.Q<Label>("PreviewTextBox");
+        previewTitle   = root.Q<Label>("PreviewTitle");
 
         waveManager = FindObjectOfType<WaveManager>();
         UpdateCurrentWave(waveManager.waveNumber);
@@ -353,6 +367,47 @@ public class OverlayManager : MonoBehaviour
     private void OnTowerUpgradeCloseClicked(ClickEvent evt)
     {
         CloseTowerUpgradeMenu();
+    }
+
+    private void HandleWavePoolGenerated(Dictionary<string, int> composition)
+    {
+        waveEnemyCounts = new Dictionary<string, int>(composition);
+        if (previewTitle != null) previewTitle.text = "Next Wave:";
+        UpdatePreviewLabel();
+    }
+
+    private void HandleWaveStartedPreview(int _)
+    {
+        if (previewTitle != null) previewTitle.text = "Enemies Left:";
+    }
+
+    private void HandleEnemyDeathPreview(EnemyHealthManager enemy, EnemyHealthManager.DeathReason reason)
+    {
+        if (waveEnemyCounts == null) return;
+        string typeId = enemy.GetComponent<EnemyController>()?.TypeId;
+        if (string.IsNullOrEmpty(typeId) || !waveEnemyCounts.ContainsKey(typeId)) return;
+
+        waveEnemyCounts[typeId]--;
+        if (waveEnemyCounts[typeId] <= 0)
+            waveEnemyCounts.Remove(typeId);
+
+        UpdatePreviewLabel();
+    }
+
+    private void UpdatePreviewLabel()
+    {
+        if (previewTextBox == null) return;
+        if (waveEnemyCounts == null || waveEnemyCounts.Count == 0)
+        {
+            previewTextBox.text = "—";
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        foreach (KeyValuePair<string, int> entry in waveEnemyCounts)
+            sb.AppendLine($"{entry.Key}: {entry.Value}");
+
+        previewTextBox.text = sb.ToString().TrimEnd();
     }
 
     private string FormatMoneyWithSpaces(int money)
