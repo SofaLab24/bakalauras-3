@@ -8,9 +8,13 @@ public class PathGenerator : MonoBehaviour, IRunDataPersistence
     [SerializeField]
     Tilemap tilemap;
     [SerializeField]
-    TileBase road;
+    TileBase road;    
+    [SerializeField]
+    TileBase roadLowOpacity;
     [SerializeField]
     TileBase towerSpot;
+    [SerializeField]
+    TileBase towerSpotLowOpacity;
     [SerializeField]
     TileBase portal;
 
@@ -18,9 +22,19 @@ public class PathGenerator : MonoBehaviour, IRunDataPersistence
 
     public Dictionary<Vector2Int, PathTile> allTiles;
     private List<WavePath> paths;
+    private List<PathTile> pendingTiles = new List<PathTile>();
 
     public List<WavePath> GetPaths => paths;
     public void SetPaths(List<WavePath> newPaths) => paths = newPaths;
+
+    public bool IsPreviewTile(Vector2Int pathTileCoordinates)
+    {
+        foreach (PathTile tile in pendingTiles)
+        {
+            if (tile.GetCoordinates() == pathTileCoordinates) return true;
+        }
+        return false;
+    }
 
     public void SetupNewMap()
     {
@@ -71,11 +85,14 @@ public class PathGenerator : MonoBehaviour, IRunDataPersistence
         }
     }
     /// <summary>
-    /// Generates next paths for all the current paths
+    /// Plans next paths for all the current paths — computes tile data but does not paint anything.
+    /// Call <see cref="CommitPendingPaths"/> to paint the planned tiles.
     /// </summary>
     /// <param name="splitChance"> 0.0 - 1.0 chance of paths to have a split tile </param>
-    public List<WavePath> GenerateNextPaths(float splitChance)
+    public List<WavePath> PlanNextPaths(float splitChance)
     {
+        pendingTiles.Clear();
+
         for (int i = paths.Count - 1; i >= 0; i--)
         {
             if (paths[i].hasEnd) continue;
@@ -107,7 +124,7 @@ public class PathGenerator : MonoBehaviour, IRunDataPersistence
                 allTiles[targetCoordinates].GeneratePath(paths[i].lastFilledTile - targetCoordinates, Vector2Int.zero);
                 paths[i].SetEnd();
                 paths[i].AddNewTile(allTiles[targetCoordinates]);
-                PaintPathTile(allTiles[targetCoordinates]);
+                pendingTiles.Add(allTiles[targetCoordinates]);
                 continue;
             }
 
@@ -130,7 +147,7 @@ public class PathGenerator : MonoBehaviour, IRunDataPersistence
             if (exitCount == 1)
             {
                 Vector2Int nextTraget = allTiles[targetCoordinates].GeneratePath(paths[i].lastFilledTile - targetCoordinates, exits[0] - targetCoordinates);
-                PaintPathTile(allTiles[targetCoordinates]);
+                pendingTiles.Add(allTiles[targetCoordinates]);
                 paths[i].SetLastFilledTile(targetCoordinates);
                 allTiles[nextTraget] = new PathTile(nextTraget, tileSize);
                 paths[i].SetTargetTile(nextTraget);
@@ -142,7 +159,7 @@ public class PathGenerator : MonoBehaviour, IRunDataPersistence
                 int newPathId = paths.Count;
                 (Vector2Int nextTraget1, Vector2Int nextTarget2) = allTiles[targetCoordinates]
                     .GenerateSplitPath(paths[i].lastFilledTile - targetCoordinates, exits[0] - targetCoordinates, exits[1] - targetCoordinates);
-                PaintPathTile(allTiles[targetCoordinates]);
+                pendingTiles.Add(allTiles[targetCoordinates]);
                 paths[i].SetLastFilledTile(targetCoordinates);
                 paths[i].AddNewTile(allTiles[targetCoordinates]);
 
@@ -154,6 +171,58 @@ public class PathGenerator : MonoBehaviour, IRunDataPersistence
             }
         }
         return paths;
+    }
+
+    /// <summary>
+    /// Paints all tiles that were planned in the last <see cref="PlanNextPaths"/> call using
+    /// low-opacity variants so the player can preview the upcoming path layout.
+    /// Does NOT consume the pending list — call <see cref="CommitPendingPaths"/> to replace
+    /// the preview with the final tiles when the wave starts.
+    /// </summary>
+    public void PreviewPendingPaths()
+    {
+        foreach (PathTile tile in pendingTiles)
+        {
+            PaintPathTilePreview(tile);
+        }
+    }
+
+    private void PaintPathTilePreview(PathTile tile)
+    {
+        for (int i = 0; i < tile.tilesToFill.GetLength(0); i++)
+        {
+            for (int j = 0; j < tile.tilesToFill.GetLength(1); j++)
+            {
+                Vector2Int tilemapCoordinate = tile.GetTilemapCoordinates(i, j);
+                switch (tile.tilesToFill[i, j])
+                {
+                    case 0:
+                        tilemap.SetTile((Vector3Int)tilemapCoordinate, towerSpotLowOpacity);
+                        break;
+                    case 1:
+                        tilemap.SetTile((Vector3Int)tilemapCoordinate, roadLowOpacity);
+                        break;
+                    case 2:
+                        tilemap.SetTile((Vector3Int)tilemapCoordinate, portal);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Paints all tiles that were planned in the last <see cref="PlanNextPaths"/> call,
+    /// replacing any preview tiles with the final opaque versions.
+    /// </summary>
+    public void CommitPendingPaths()
+    {
+        foreach (PathTile tile in pendingTiles)
+        {
+            PaintPathTile(tile);
+        }
+        pendingTiles.Clear();
     }
 
     public void LoadData(RunData data)
@@ -177,13 +246,31 @@ public class PathGenerator : MonoBehaviour, IRunDataPersistence
                 Vector2Int targetTile = path.targetTile;
                 allTiles[targetTile] = new PathTile(targetTile, tileSize);
             }
+
+            RestorePendingTiles(data.mapData.pendingTileCoords);
         }
+    }
+
+    private void RestorePendingTiles(List<Vector2Int> savedCoords)
+    {
+        pendingTiles.Clear();
+        if (savedCoords == null || savedCoords.Count == 0) return;
+
+        foreach (Vector2Int coord in savedCoords)
+        {
+            if (allTiles.TryGetValue(coord, out PathTile tile))
+                pendingTiles.Add(tile);
+        }
+        PreviewPendingPaths();
     }
 
     public void SaveData(ref RunData data)
     {
         SerializableMapData serializableMapData = new SerializableMapData();
         serializableMapData.SetPaths(paths);
+        serializableMapData.pendingTileCoords = new List<Vector2Int>();
+        foreach (PathTile tile in pendingTiles)
+            serializableMapData.pendingTileCoords.Add(tile.GetCoordinates());
         data.mapData = serializableMapData;
     }
 }

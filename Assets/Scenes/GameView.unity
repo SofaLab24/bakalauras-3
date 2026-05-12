@@ -725,7 +725,6 @@ GameObject:
   - component: {fileID: 1429115354}
   - component: {fileID: 1429115355}
   - component: {fileID: 1429115356}
-  - component: {fileID: 1429115357}
   m_Layer: 0
   m_Name: GAME_MANAGER
   m_TagString: Untagged
@@ -762,7 +761,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilemap: {fileID: 356289518}
   road: {fileID: 11400000, guid: bdbad05f9ca50a84b8194d68cce57f39, type: 2}
+  roadLowOpacity: {fileID: 11400000, guid: dbb8c3cb34adbf84386f4b67fb6f1e53, type: 2}
   towerSpot: {fileID: 11400000, guid: b8869fb373517f944bb08f66497f5d0d, type: 2}
+  towerSpotLowOpacity: {fileID: 11400000, guid: d47d6925760ddf44b9265629270d7d94, type: 2}
   portal: {fileID: 11400000, guid: ba2b82f4809eaa44a899eba95c613e54, type: 2}
   tileSize: 3
 --- !u!114 &1429115354
@@ -831,20 +832,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilemap: {fileID: 356289518}
---- !u!114 &1429115357
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1429115351}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e6f050957199d548b3e62679fc9ab2a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  healthMultiplier: 10
-  moveSpeedMultiplier: 1
 --- !u!1001 &6292206381227427851
 PrefabInstance:
   m_ObjectHideFlags: 0

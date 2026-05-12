@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ParticlePurple
+  m_Name: SlowCloud1
   m_Shader: {fileID: 4800000, guid: 0406db5a14f94604a8c57ccfbc9f3b46, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -100,11 +100,11 @@ Material:
     - _Surface: 1
     - _ZWrite: 0
     m_Colors:
-    - _BaseColor: {r: 0.5245282, g: 0.07818434, b: 0.49421862, a: 1}
+    - _BaseColor: {r: 1, g: 0.7560713, b: 0.34509802, a: 1}
     - _BaseColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
-    - _Color: {r: 0.5245282, g: 0.07818433, b: 0.49421853, a: 1}
-    - _EmissionColor: {r: 3.0037732, g: 0, b: 2.6132007, a: 1}
+    - _Color: {r: 1, g: 0.7560713, b: 0.345098, a: 1}
+    - _EmissionColor: {r: 3.0037732, g: 0.83415765, b: 0, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}

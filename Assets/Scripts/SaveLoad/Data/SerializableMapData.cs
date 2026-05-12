@@ -8,12 +8,14 @@ public class SerializableMapData
 {
     public List<SerializableWavePath> serializablePaths;
     public List<PlacedBuildingData> placedBuildings;
+    public List<Vector2Int> pendingTileCoords;
 
     // Default values on new game
     public SerializableMapData()
     {
         serializablePaths = null;
         placedBuildings = new List<PlacedBuildingData>();
+        pendingTileCoords = new List<Vector2Int>();
     }
     public void SetPaths(List<WavePath> newPaths)
     {

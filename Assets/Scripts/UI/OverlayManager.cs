@@ -43,6 +43,7 @@ public class OverlayManager : MonoBehaviour
         PlayerEconomyManager.OnMoneyChanged += UpdateMoneyDisplay;
         BaseManager.OnBaseHealthChange += HandleHealthChanged;
         WaveManager.OnWaveCompleted += OnWaveCompleted;
+        WaveManager.OnWaveRestored += OnWaveRestored;
         BuildingManager.OnTowerClicked += OpenTowerUpgradeMenu;
         BuildingManager.OnBuildingDeselected += ClearSelectedBuildingIcon;
     }
@@ -52,6 +53,7 @@ public class OverlayManager : MonoBehaviour
         PlayerEconomyManager.OnMoneyChanged -= UpdateMoneyDisplay;
         BaseManager.OnBaseHealthChange -= HandleHealthChanged;
         WaveManager.OnWaveCompleted -= OnWaveCompleted;
+        WaveManager.OnWaveRestored -= OnWaveRestored;
         BuildingManager.OnTowerClicked -= OpenTowerUpgradeMenu;
         BuildingManager.OnBuildingDeselected -= ClearSelectedBuildingIcon;
     }
@@ -217,11 +219,18 @@ public class OverlayManager : MonoBehaviour
     {
         if (!isEscMenuOpen)
         {
-            waveManager.StartNextWave(splitChance);
+            waveManager.StartWave();
             nextWaveButton.visible = false;
         }
     }
     private void OnWaveCompleted(int waveNumber)
+    {
+        waveManager.PrepareNextWave(splitChance);
+        nextWaveButton.visible = true;
+        UpdateCurrentWave(waveManager.waveNumber);
+    }
+
+    private void OnWaveRestored(int waveNumber)
     {
         nextWaveButton.visible = true;
         UpdateCurrentWave(waveNumber);

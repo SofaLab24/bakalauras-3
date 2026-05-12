@@ -13,9 +13,11 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] float animationDelayBetweenFrames = 0.33f;
     [SerializeField] Texture2D upgradePurchasedIcon;
     [SerializeField] VisualTreeAsset upgradesMenuTemplate;
+    [SerializeField] VisualTreeAsset settingsMenuTemplate;
     private VisualElement upgradesWrapper;
     private VisualElement upgradesBackButton;
     private VisualElement upgradesButton;
+    private VisualElement settingsButton;
     private VisualElement mainMenuButtons;
     private VisualElement menuWrapper;
     private Label highscore;
@@ -38,6 +40,9 @@ public class MainMenuManager : MonoBehaviour
 
         upgradesButton = root.Q<VisualElement>("UpgradesButton");
         upgradesButton.RegisterCallback<ClickEvent>(OnUpgradesMenuClick);
+
+        settingsButton = root.Q<VisualElement>("SettingsButton");
+        settingsButton.RegisterCallback<ClickEvent>(OnSettingsButtonClick);
 
         metaCoinsAmount = root.Q<Label>("MetaCoinsAmount");
         highscore = root.Q<Label>("Highscore");
@@ -168,6 +173,40 @@ public class MainMenuManager : MonoBehaviour
         menuWrapper.Clear();
         menuWrapper.Add(mainMenuButtons);
     }
+
+    private void OnSettingsButtonClick(ClickEvent evt)
+    {
+        menuWrapper.Clear();
+        settingsMenuTemplate.CloneTree(menuWrapper);
+
+        SliderInt musicSlider = menuWrapper.Q<SliderInt>("MusicSlider");
+        musicSlider.value = SFXManager.instance.musicVolume;
+        musicSlider.RegisterCallback<ChangeEvent<int>>(OnMusicSliderChanged);
+
+        SliderInt sfxSlider = menuWrapper.Q<SliderInt>("SFXSlider");
+        sfxSlider.value = SFXManager.instance.sfxVolume;
+        sfxSlider.RegisterCallback<ChangeEvent<int>>(OnSFXSliderChanged);
+
+        VisualElement backButton = menuWrapper.Q<VisualElement>("BackButton");
+        backButton.RegisterCallback<ClickEvent>(OnSettingsBackButtonClick);
+    }
+
+    private void OnMusicSliderChanged(ChangeEvent<int> evt)
+    {
+        SFXManager.instance.SetMusicVolume(evt.newValue);
+    }
+
+    private void OnSFXSliderChanged(ChangeEvent<int> evt)
+    {
+        SFXManager.instance.sfxVolume = evt.newValue;
+    }
+
+    private void OnSettingsBackButtonClick(ClickEvent evt)
+    {
+        menuWrapper.Clear();
+        menuWrapper.Add(mainMenuButtons);
+    }
+
     public void StartGame()
     {
         SceneManager.LoadScene(1);

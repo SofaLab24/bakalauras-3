@@ -29,6 +29,7 @@ public class WaveManager : MonoBehaviour, IRunDataPersistence
     public int waveNumber;
 
     public static event Action<int> OnWaveCompleted;
+    public static event Action<int> OnWaveRestored;
 
     private int enemiesToGenerate;
     public int enemiesLeftToDie;
@@ -52,15 +53,19 @@ public class WaveManager : MonoBehaviour, IRunDataPersistence
         pathGenerator = GetComponent<PathGenerator>();
         DataPersistenceManager.Instance.LoadRun();
     }
-    public void StartNextWave(float splitChance)
+    public void PrepareNextWave(float splitChance)
     {
         waveNumber++;
         TryScaleStats();
-        // Save run (including potentially updated stats) before spawning
-        DataPersistenceManager.Instance.SaveRun();
-        pathGenerator.GenerateNextPaths(splitChance);
-        // this generates all enemies for all paths
+        pathGenerator.PlanNextPaths(splitChance);
+        pathGenerator.PreviewPendingPaths();
         GenerateEnemyPool();
+    }
+
+    public void StartWave()
+    {
+        DataPersistenceManager.Instance.SaveRun();
+        pathGenerator.CommitPendingPaths();
         enemiesLeftToDie = enemiesToGenerate;
 
         TrySpawnMoabs();
@@ -198,7 +203,18 @@ public class WaveManager : MonoBehaviour, IRunDataPersistence
             }
         }
 
-        OnWaveCompleted?.Invoke(waveNumber);
+        if (waveNumber == 0)
+        {
+            // Fresh game — plan the first wave.
+            OnWaveCompleted?.Invoke(waveNumber);
+        }
+        else
+        {
+            // Existing save — paths and pending previews are already restored by
+            // PathGenerator.LoadData. Just rebuild the enemy pool and show the button.
+            GenerateEnemyPool();
+            OnWaveRestored?.Invoke(waveNumber);
+        }
     }
 
     public void SaveData(ref RunData data)

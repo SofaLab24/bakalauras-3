@@ -205,7 +205,8 @@ public class BuildingManager : MonoBehaviour, IRunDataPersistence
         if (localCoords.y < 0) localCoords.y += pathGenerator.tileSize;
         if (pathGenerator.allTiles.TryGetValue(pathTileCoords, out PathTile tile))
         {
-            return tile.tilesToFill[localCoords.x, localCoords.y] == 0;
+            return tile.tilesToFill[localCoords.x, localCoords.y] == 0
+                && !pathGenerator.IsPreviewTile(pathTileCoords);
         }
         return false;
     }

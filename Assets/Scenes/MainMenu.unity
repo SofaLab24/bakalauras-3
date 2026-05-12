@@ -621,6 +621,7 @@ MonoBehaviour:
   animationDelayBetweenFrames: 0.33
   upgradePurchasedIcon: {fileID: 2800000, guid: fbea9150152d65e4aad8e41b3c361f87, type: 3}
   upgradesMenuTemplate: {fileID: 9197481963319205126, guid: acf58f0c3390f3346a4de572ddf49213, type: 3}
+  settingsMenuTemplate: {fileID: 9197481963319205126, guid: 221add52337032d41a851c2614f07c1f, type: 3}
   towerUpgradesMenuTemplate: {fileID: 9197481963319205126, guid: 5464eed16ffeb1e40a9275dcf3c97666, type: 3}
   towerIconButtonTemplate: {fileID: 9197481963319205126, guid: 155a807859d054d46b4cb8226b0ca7ea, type: 3}
   baseTowers:
