@@ -46,11 +46,13 @@ public class WaveManager : MonoBehaviour, IRunDataPersistence
     void OnEnable()
     {
         EnemyHealthManager.OnEnemyDeath += HandleEnemyCounter;
+        BossController.OnBossSpawnedChildren += RegisterExtraEnemies;
     }
 
     void OnDisable()
     {
         EnemyHealthManager.OnEnemyDeath -= HandleEnemyCounter;
+        BossController.OnBossSpawnedChildren -= RegisterExtraEnemies;
     }
 
     private void Start()

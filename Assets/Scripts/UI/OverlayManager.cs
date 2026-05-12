@@ -182,11 +182,11 @@ public class OverlayManager : MonoBehaviour
         settingsMenuTemplate.CloneTree(escMenuWrapper);
 
         SliderInt musicSlider = escMenuWrapper.Q<SliderInt>("MusicSlider");
-        musicSlider.value = SFXManager.instance.musicVolume;
+        musicSlider.value = SFXManager.Instance.musicVolume;
         musicSlider.RegisterCallback<ChangeEvent<int>>(OnMusicSliderChanged);
 
         SliderInt sfxSlider = escMenuWrapper.Q<SliderInt>("SFXSlider");
-        sfxSlider.value = SFXManager.instance.sfxVolume;
+        sfxSlider.value = SFXManager.Instance.sfxVolume;
         sfxSlider.RegisterCallback<ChangeEvent<int>>(OnSFXSliderChanged);
 
         VisualElement backButton = escMenuWrapper.Q<VisualElement>("BackButton");
@@ -195,12 +195,12 @@ public class OverlayManager : MonoBehaviour
 
     private void OnMusicSliderChanged(ChangeEvent<int> evt)
     {
-        SFXManager.instance.SetMusicVolume(evt.newValue);
+        SFXManager.Instance.SetMusicVolume(evt.newValue);
     }
 
     private void OnSFXSliderChanged(ChangeEvent<int> evt)
     {
-        SFXManager.instance.sfxVolume = evt.newValue;
+        SFXManager.Instance.sfxVolume = evt.newValue;
     }
 
     private void OnSettingsBackButtonClicked(ClickEvent evt)

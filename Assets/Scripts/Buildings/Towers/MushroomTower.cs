@@ -60,7 +60,7 @@ public class MushroomTower : BaseTower
                 enemy.ApplySlow(slowPercent, slowDuration);
         }
 
-        SFXManager.instance.ShootSFX(GetComponent<AudioSource>());
+        SFXManager.Instance.ShootSFX(GetComponent<AudioSource>());
     }
 
     public override void DealDamage(Vector3 targetPosition, Transform target) { }

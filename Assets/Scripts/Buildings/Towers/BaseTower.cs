@@ -166,7 +166,7 @@ public abstract class BaseTower : MonoBehaviour
             animator.SetTrigger("Shoot");
             Projectile projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity).GetComponent<Projectile>();
             projectile.Initialize(currentTarget, projectileSpeed, projectileSpeedCurve, this);
-            SFXManager.instance.ShootSFX(GetComponent<AudioSource>());
+            SFXManager.Instance.ShootSFX(GetComponent<AudioSource>());
         }
     }
     // called by projectile when it hits the target

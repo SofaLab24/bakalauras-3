@@ -35,7 +35,7 @@ public class CannonTower : BaseTower
         // Create explosion effect
         GameObject explosion = Instantiate(explosionPrefab, targetPosition, Quaternion.identity);
         Destroy(explosion, 2f);
-        SFXManager.instance.ExplosionSFX(GetComponent<AudioSource>());
+        SFXManager.Instance.ExplosionSFX(GetComponent<AudioSource>());
     }
 
 

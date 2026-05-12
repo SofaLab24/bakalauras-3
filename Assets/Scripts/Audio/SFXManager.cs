@@ -13,8 +13,7 @@ public class SFXManager : MonoBehaviour, IGameDataPersistence
     [SerializeField] private AudioClip shootingSFX;
     [SerializeField] private AudioClip enemyDeathSFX;
     [SerializeField] private AudioClip explosionSFX;
-    [JsonIgnore]
-    public static SFXManager instance;
+    public static SFXManager Instance { get; private set; }
     private List<AudioSource> playingSources = new List<AudioSource>();
 
     void OnEnable()
@@ -27,9 +26,9 @@ public class SFXManager : MonoBehaviour, IGameDataPersistence
     }
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(gameObject);
         }
         else

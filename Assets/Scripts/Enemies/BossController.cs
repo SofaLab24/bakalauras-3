@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class BossController : EnemyController
 {
+    public static event Action<int> OnBossSpawnedChildren;
     [Header("Boss settings")]
     [SerializeField] int fixedHealth = 500;
     [SerializeField] float fixedMoveSpeed = 2f;
@@ -48,22 +50,17 @@ public class BossController : EnemyController
     {
         if (childPool == null || childPool.Count == 0 || targets == null || targets.Count == 0) return;
 
-        WaveManager waveManager = FindObjectOfType<WaveManager>();
-        if (waveManager != null)
-        {
-            // The boss itself already counts as one death; each child will trigger
-            // another OnEnemyDeath, so register the extra children so the wave
-            // counter stays in sync.
-            waveManager.RegisterExtraEnemies(childPool.Count);
-        }
+        // The boss itself already counts as one death; each child will trigger
+        // another OnEnemyDeath, so notify the wave counter to stay in sync.
+        OnBossSpawnedChildren?.Invoke(childPool.Count);
 
         Vector3 basePosition = transform.position;
         foreach ((EnemyTypeDefinition type, EnemyStats stats) entry in childPool)
         {
             if (entry.type.prefab == null) continue;
             Vector3 offset = new Vector3(
-                Random.Range(-childSpawnSpacing, childSpawnSpacing),
-                Random.Range(-childSpawnSpacing, childSpawnSpacing),
+                UnityEngine.Random.Range(-childSpawnSpacing, childSpawnSpacing),
+                UnityEngine.Random.Range(-childSpawnSpacing, childSpawnSpacing),
                 0f);
             EnemyController child = Instantiate(entry.type.prefab, basePosition + offset, Quaternion.identity);
             child.Initialize(entry.stats.damage, targets, entry.stats.moveSpeed, entry.stats.health);

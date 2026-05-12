@@ -31,10 +31,6 @@ public class EnemyController : MonoBehaviour
     {
         Move();
     }
-    public void SetHealth(int health)
-    {
-        healthManager.currentHealth = health;
-    }
     public void SetMoveSpeed(float moveSpeed)
     {
         this.moveSpeed = moveSpeed + Random.Range(-moveSpeedVariance, moveSpeedVariance);
@@ -83,7 +79,7 @@ public class EnemyController : MonoBehaviour
         this.healthManager.SetMoneyValue(damage);
         this.targets = new List<Vector2>(targets);
         SetMoveSpeed(moveSpeed);
-        SetHealth(health);
+        healthManager.Initialize(health);
         UpdateFacingDirection(this.targets[^1]);
     }
 

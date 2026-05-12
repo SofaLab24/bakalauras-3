@@ -24,8 +24,20 @@ public class EnemyHealthManager : MonoBehaviour
 
     private int poisonDamage = 0;
     private float poisonTickTimer = 0f;
+    private bool _initialized = false;
+
+    public void Initialize(int health)
+    {
+        currentHealth = health;
+        maxHealth = health;
+        healthBar.maxValue = maxHealth;
+        healthBar.value = currentHealth;
+        _initialized = true;
+    }
+
     void Start()
     {
+        if (_initialized) return;
         maxHealth = currentHealth;
         healthBar.maxValue = maxHealth;
         healthBar.value = currentHealth;
