@@ -74,6 +74,5 @@ public class PlacedBuildingData
     public float x;
     public float y;
     public string buildingName;
-    public bool damageUpgraded;
-    public bool specialtyUpgraded;
+    public List<bool> upgradePurchased;
 }

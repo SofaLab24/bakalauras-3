@@ -1,16 +1,17 @@
 using UnityEngine;
-using System;
 using System.Collections.Generic;
 
 public class ProgressionManager : MonoBehaviour, IGameDataPersistence
 {
     private string selectedBuildingName;
-    private int selectedBuildingIndex;
     private MainMenuManager mainMenuManager;
 
-    public List<(string towerName, bool damageUpgraded, bool rangeUpgraded, bool fireRateUpgraded, bool poisonTypeUnlocked)> towerUpgradeStatus;
+    public List<TowerUpgradeStatus> towerUpgradeStatus;
     public int metaCoins;
     public int waveHighscore;
+
+    [Header("Debug")]
+    public bool enableDebugCoinCheat = false;
 
     public static ProgressionManager Instance { get; private set; }
 
@@ -39,85 +40,76 @@ public class ProgressionManager : MonoBehaviour, IGameDataPersistence
         mainMenuManager = FindObjectOfType<MainMenuManager>();
         mainMenuManager.UpdateMetaCoins(metaCoins);
     }
+
+    void Update()
+    {
+        if (enableDebugCoinCheat && Input.GetKeyDown(KeyCode.J))
+        {
+            metaCoins += 20;
+            mainMenuManager.UpdateMetaCoins(metaCoins);
+            Debug.Log($"[Debug] Added 20 meta coins. Total: {metaCoins}");
+        }
+    }
+
     public void SetSelectedBuilding(BuildingSettings building)
     {
         selectedBuildingName = building.towerName;
-        selectedBuildingIndex = towerUpgradeStatus.FindIndex(upgrade => upgrade.towerName == selectedBuildingName);
     }
-    public bool IsUpgradePurchased(UpgradeType upgradeType)
+
+    private TowerUpgradeStatus GetSelectedStatus()
     {
-        switch(upgradeType)
-        {
-            case UpgradeType.Damage:
-                return towerUpgradeStatus[selectedBuildingIndex].damageUpgraded;
-            case UpgradeType.Range:
-                return towerUpgradeStatus[selectedBuildingIndex].rangeUpgraded;
-            case UpgradeType.FireRate:
-                return towerUpgradeStatus[selectedBuildingIndex].fireRateUpgraded;
-            case UpgradeType.PoisonType:
-                return towerUpgradeStatus[selectedBuildingIndex].poisonTypeUnlocked;
-        }
-        return false;
+        return towerUpgradeStatus.Find(s => s.towerName == selectedBuildingName);
     }
-    public bool UpgradeBuilding(UpgradeType upgradeType)
+
+    public bool IsUpgradePurchased(MetaUpgradeType upgradeType)
+    {
+        return GetSelectedStatus()?.IsUpgradePurchased(upgradeType) ?? false;
+    }
+
+    public bool UpgradeBuilding(MetaUpgradeType upgradeType)
     {
         int cost = GetUpgradeCost(upgradeType);
-        if(IsUpgradePurchased(upgradeType) || metaCoins < cost)
+        if (IsUpgradePurchased(upgradeType) || metaCoins < cost)
         {
             return false;
         }
         BuildingPresetsHandler.Instance.UpgradeBuilding(selectedBuildingName, upgradeType);
-        var upgradeStatus = towerUpgradeStatus[selectedBuildingIndex];
-        switch(upgradeType)
-        {
-            case UpgradeType.Damage:
-                upgradeStatus.damageUpgraded = true;
-                break;
-            case UpgradeType.Range:
-                upgradeStatus.rangeUpgraded = true;
-                break;
-            case UpgradeType.FireRate:
-                upgradeStatus.fireRateUpgraded = true;
-                break;
-            case UpgradeType.PoisonType:
-                upgradeStatus.poisonTypeUnlocked = true;
-                break;
-        }
-        towerUpgradeStatus[selectedBuildingIndex] = upgradeStatus;
+        GetSelectedStatus().Purchase(upgradeType);
         metaCoins -= cost;
         mainMenuManager.UpdateMetaCoins(metaCoins);
         DataPersistenceManager.Instance.SaveGame();
         return true;
     }
-    public int GetUpgradeCost(UpgradeType upgradeType, string towerName = "")
+
+    public int GetUpgradeCost(MetaUpgradeType upgradeType, string towerName = "")
     {
-        if(towerName == "") towerName = selectedBuildingName;
-        if (upgradeType == UpgradeType.PoisonType)
-        {
-            return BuildingPresetsHandler.Instance.GetBuildingPreset(towerName).buildingCost;
-        }
-        return BuildingPresetsHandler.Instance.GetBuildingPreset(towerName).buildingCost / 2;
+        if (towerName == "") towerName = selectedBuildingName;
+        BuildingSettings preset = BuildingPresetsHandler.Instance.GetBuildingPreset(towerName);
+        MetaUpgradeDefinition def = preset.metaUpgradeDefinitions.Find(d => d.upgradeType == upgradeType);
+        return def?.effect != null ? def.effect.cost : preset.buildingCost / 2;
     }
+
     private void HandleRunEnd(int waveNumber)
     {
-        if(waveNumber > waveHighscore)
+        if (waveNumber > waveHighscore)
         {
             waveHighscore = waveNumber;
         }
         metaCoins += waveNumber;
     }
+
     public void LoadData(GameData data)
     {
         this.metaCoins = data.metaCoins;
         this.waveHighscore = data.waveHighscore;
         mainMenuManager.UpdateMetaCoins(metaCoins);
-        if(data.towerUpgradeStatus.Count <= 0)
+        if (data.towerUpgradeStatus.Count <= 0)
         {
             List<BuildingSettings> buildingPresets = BuildingPresetsHandler.Instance.GetAllBuildingPresets();
-            towerUpgradeStatus = new List<(string towerName, bool damageUpgraded, bool rangeUpgraded, bool fireRateUpgraded, bool poisonTypeUnlocked)>();
+            towerUpgradeStatus = new List<TowerUpgradeStatus>();
             foreach (BuildingSettings building in buildingPresets)
             {
-                towerUpgradeStatus.Add((building.towerName, false, false, false, false));
+                towerUpgradeStatus.Add(new TowerUpgradeStatus { towerName = building.towerName });
             }
         }
         else
@@ -133,10 +125,24 @@ public class ProgressionManager : MonoBehaviour, IGameDataPersistence
         data.waveHighscore = this.waveHighscore;
     }
 }
-public enum UpgradeType
+
+public enum MetaUpgradeType
 {
     Damage,
     Range,
     FireRate,
-    PoisonType
+    PoisonType,
+    SlowPercent,
+    SlowDuration,
+    UnlockTower
+}
+
+[System.Serializable]
+public class TowerUpgradeStatus
+{
+    public string towerName;
+    public List<MetaUpgradeType> purchasedUpgrades = new List<MetaUpgradeType>();
+
+    public bool IsUpgradePurchased(MetaUpgradeType type) => purchasedUpgrades.Contains(type);
+    public void Purchase(MetaUpgradeType type) => purchasedUpgrades.Add(type);
 }

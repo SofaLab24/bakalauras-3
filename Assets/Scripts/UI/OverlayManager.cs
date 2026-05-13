@@ -17,6 +17,7 @@ public class OverlayManager : MonoBehaviour
     [SerializeField] private VisualTreeAsset buildingIconTemplate;
     [SerializeField] private VisualTreeAsset escMenuTemplate;
     [SerializeField] private VisualTreeAsset towerUpgradeMenuTemplate;
+    [SerializeField] private VisualTreeAsset upgradeButtonTemplate;
     [SerializeField] private VisualTreeAsset settingsMenuTemplate;
     [Header("Building Buttons")]
     [SerializeField] private Color unselectedColor;
@@ -332,21 +333,22 @@ public class OverlayManager : MonoBehaviour
                 statsTextBox.text = tower.GetStatsText();
         };
 
-        new UpgradeSlot(towerUpgradeWrapper, "DamageLabel", "DamageButton")
-            .WithName(() => "Damage")
-            .WithCost(() => tower.DamageCost)
-            .WithBoughtState(() => tower.DamageUpgraded)
-            .OnPurchase(() => tower.TryUpgradeDamage(economyManager))
-            .AfterPurchase(refreshStats)
-            .Bind();
-
-        new UpgradeSlot(towerUpgradeWrapper, "SpecialtyLabel", "SpecialtyButton")
-            .WithName(tower.GetSpecialtyName)
-            .WithCost(() => tower.SpecialtyCost)
-            .WithBoughtState(() => tower.SpecialtyUpgraded)
-            .OnPurchase(() => tower.TryUpgradeSpecialty(economyManager))
-            .AfterPurchase(refreshStats)
-            .Bind();
+        VisualElement upgradesContainer = towerUpgradeWrapper.Q<VisualElement>("UpgradesContainer");
+        foreach (TowerUpgrade upgrade in tower.GetUpgrades())
+        {
+            TowerUpgrade captured = upgrade;
+            // Clone the full tree so UpgradeSlot can query both "UpgradeButton" and "UpgradeLabel" as descendants
+            VisualElement cloneRoot = upgradeButtonTemplate.CloneTree();
+            cloneRoot.style.width = new StyleLength(new Length(80, LengthUnit.Percent));
+            upgradesContainer.Add(cloneRoot);
+            new UpgradeSlot(cloneRoot, "UpgradeLabel", "UpgradeButton")
+                .WithName(() => captured.Name)
+                .WithCost(() => captured.Cost)
+                .WithBoughtState(() => captured.IsPurchased)
+                .OnPurchase(() => captured.TryPurchase(economyManager))
+                .AfterPurchase(refreshStats)
+                .Bind();
+        }
 
         VisualElement closeButton = towerUpgradeWrapper.Q<VisualElement>("CloseButton");
         closeButton.RegisterCallback<ClickEvent>(OnTowerUpgradeCloseClicked);

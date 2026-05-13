@@ -351,8 +351,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ac240522a12820409def50f3d36f6a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  towerUpgradeStatus: []
   metaCoins: 500
   waveHighscore: 0
+  enableDebugCoinCheat: 1
 --- !u!4 &1141309814
 Transform:
   m_ObjectHideFlags: 0
@@ -616,19 +618,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   upgradeIconsFrames:
-  - {fileID: 2800000, guid: 173c24df69d2bae4bb0ac9becca7a636, type: 3}
-  - {fileID: 2800000, guid: e289a816c60ade3489f26374c53f20ce, type: 3}
-  - {fileID: 2800000, guid: a622c4ec22fdf2b4e83c114b87f14d5a, type: 3}
-  animationDelayBetweenFrames: 0.33
-  upgradePurchasedIcon: {fileID: 2800000, guid: fbea9150152d65e4aad8e41b3c361f87, type: 3}
+  - {fileID: 2800000, guid: 151587e1b3fdf744f99f718902365a59, type: 3}
+  - {fileID: 2800000, guid: fa948467b5531fa42920a6d62942b34a, type: 3}
+  animationDelayBetweenFrames: 0.4
+  upgradePurchasedIcon: {fileID: 2800000, guid: bb8baf2e8a791da4090ba31445671c78, type: 3}
   upgradesMenuTemplate: {fileID: 9197481963319205126, guid: acf58f0c3390f3346a4de572ddf49213, type: 3}
   settingsMenuTemplate: {fileID: 9197481963319205126, guid: 221add52337032d41a851c2614f07c1f, type: 3}
-  towerUpgradesMenuTemplate: {fileID: 9197481963319205126, guid: 5464eed16ffeb1e40a9275dcf3c97666, type: 3}
   towerIconButtonTemplate: {fileID: 9197481963319205126, guid: 155a807859d054d46b4cb8226b0ca7ea, type: 3}
+  mainMenuUpgradeSlotTemplate: {fileID: 9197481963319205126, guid: f3af74c5f8f605f42b421241848d8d00, type: 3}
   baseTowers:
   - {fileID: 11400000, guid: cea31ed8ee45f3048966bbaabe719d1c, type: 2}
   - {fileID: 11400000, guid: 2757f14bf8b3b804ebbcaf23641af36b, type: 2}
   - {fileID: 11400000, guid: 6b5655cfd50e53b40a64addfb40e91fc, type: 2}
+  - {fileID: 11400000, guid: 7d3ea67ef91079940b69b822fe1dedf8, type: 2}
 --- !u!114 &2074106385
 MonoBehaviour:
   m_ObjectHideFlags: 0

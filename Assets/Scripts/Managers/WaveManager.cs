@@ -260,9 +260,13 @@ public class WaveManager : MonoBehaviour, IRunDataPersistence
         }
         else
         {
-            // Existing save — paths and pending previews are already restored by
-            // PathGenerator.LoadData. Just rebuild the enemy pool and show the button.
-            GenerateEnemyPool();
+            // Existing save — restore the exact pool that was saved so the preview
+            // is deterministic across sessions, falling back to a fresh roll if the
+            // save pre-dates pool persistence.
+            if (data.savedEnemyPoolIds != null && data.savedEnemyPoolIds.Count > 0)
+                RestoreEnemyPool(data.savedEnemyPoolIds, data.savedEnemiesToGenerate);
+            else
+                GenerateEnemyPool();
             OnWaveRestored?.Invoke(waveNumber);
         }
     }
@@ -271,5 +275,46 @@ public class WaveManager : MonoBehaviour, IRunDataPersistence
     {
         data.currentWave = this.waveNumber;
         data.enemyTypeStats = new List<EnemyStats>(currentStats.Values);
+        // Stack enumerates top→bottom; save in that order so RestoreEnemyPool can push bottom→top.
+        data.savedEnemyPoolIds = enemyPool != null
+            ? enemyPool.Select(e => e.type.id).ToList()
+            : new List<string>();
+        data.savedEnemiesToGenerate = enemiesToGenerate;
+    }
+
+    private void RestoreEnemyPool(List<string> poolIds, int poolSize)
+    {
+        enemiesToGenerate = poolSize;
+        Dictionary<string, EnemyTypeDefinition> typeMap = enemyTypes.ToDictionary(t => t.id);
+
+        enemyPool = new Stack<(EnemyTypeDefinition type, EnemyStats stats)>();
+        // poolIds is top→bottom; push bottom→top so the top element is restored correctly.
+        for (int i = poolIds.Count - 1; i >= 0; i--)
+        {
+            if (!typeMap.TryGetValue(poolIds[i], out EnemyTypeDefinition def)) continue;
+            EnemyStats stats = currentStats.TryGetValue(def.id, out EnemyStats s)
+                ? s
+                : new EnemyStats { id = def.id, health = def.baseHealth, moveSpeed = def.baseMoveSpeed, damage = def.baseDamage };
+            enemyPool.Push((def, stats));
+        }
+
+        Dictionary<string, int> composition = new Dictionary<string, int>();
+        foreach (string id in poolIds)
+        {
+            if (!composition.ContainsKey(id)) composition[id] = 0;
+            composition[id]++;
+        }
+
+        pendingBossChildPools = new List<List<(EnemyTypeDefinition type, EnemyStats stats)>>();
+        if (bossPrefab != null && bossWaveInterval > 0 && waveNumber % bossWaveInterval == 0)
+        {
+            int bossCount = waveNumber / bossWaveInterval;
+            composition[bossId] = bossCount;
+            int childPoolSize = waveNumber;
+            for (int m = 0; m < bossCount; m++)
+                pendingBossChildPools.Add(GenerateChildPool(childPoolSize));
+        }
+
+        OnWavePoolGenerated?.Invoke(composition);
     }
 }

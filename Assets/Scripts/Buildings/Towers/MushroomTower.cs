@@ -6,11 +6,23 @@ public class MushroomTower : BaseTower
     [SerializeField] private float slowPercent = 30f;
     [SerializeField] private float slowDuration = 2f;
 
+    private const float MaxSlowDuration = 6f;
+    private const float MaxSlowPercent = 80f;
+
     public override void Initialize(BuildingSettings settings)
     {
         base.Initialize(settings);
         slowPercent = settings.towerSlowPercent;
         slowDuration = settings.towerSlowDuration;
+    }
+
+    protected override void RegisterUpgrades()
+    {
+        int cost = settings != null ? settings.buildingCost : 0;
+        upgrades.Add(new TowerUpgrade("SLOW DURATION", 100,
+            () => slowDuration = Mathf.Min(slowDuration * 1.5f, MaxSlowDuration)));
+        upgrades.Add(new TowerUpgrade("SLOW %", cost,
+            () => slowPercent = Mathf.Min(slowPercent * 1.5f, MaxSlowPercent)));
     }
 
     protected override void OnEnable()
@@ -29,15 +41,8 @@ public class MushroomTower : BaseTower
         BuildingManager.TriggerRangeIndicator -= ToggleRangeIndicator;
     }
 
-    private void OnWaveStarted(int waveNumber)
-    {
-        StartShooting();
-    }
-
-    private void OnWaveCompleted(int waveNumber)
-    {
-        StopShooting();
-    }
+    private void OnWaveStarted(int waveNumber) => StartShooting();
+    private void OnWaveCompleted(int waveNumber) => StopShooting();
 
     protected override IEnumerator ShootingRoutine()
     {
@@ -64,14 +69,6 @@ public class MushroomTower : BaseTower
     }
 
     public override void DealDamage(Vector3 targetPosition, Transform target) { }
-
-    protected override void ApplySpecialtyUpgrade()
-    {
-        base.ApplySpecialtyUpgrade();
-        slowPercent = Mathf.Min(slowPercent * 1.5f, 80f);
-    }
-
-    public override string GetSpecialtyName() => "SLOW %";
 
     public override string GetStatsText()
     {

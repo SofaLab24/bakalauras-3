@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: default_MushroomTower
   m_EditorClassIdentifier: 
   towerName: MushroomTower
-  isUnlocked: 1
+  isUnlocked: 0
   buildingCost: 150
   buildingIcon: {fileID: 2800000, guid: d0c789744bc3b9f4ca9b3fa198bec46b, type: 3}
   buildingPrefab: {fileID: 1192505338540290890, guid: 8d7b6f051c85ae54aa62ee7a0fb6a09b, type: 3}
@@ -58,3 +58,6 @@ MonoBehaviour:
   towerSlowDuration: 1.5
   resourceType: 
   resourceMultiplier: 0
+  metaUpgradeDefinitions:
+  - upgradeType: 6
+    effect: {fileID: 11400000, guid: b2c3d4e5f6a7890123456789012345fa, type: 2}

@@ -10,7 +10,7 @@ public class GameData
     public int metaCoins;
     public int sfxVolume;
     public int musicVolume;
-    public List<(string towerName, bool damageUpgraded, bool rangeUpgraded, bool fireRateUpgraded, bool poisonTypeUnlocked)> towerUpgradeStatus;
+    public List<TowerUpgradeStatus> towerUpgradeStatus;
 
     // Default values on new game
     public GameData()
@@ -20,6 +20,6 @@ public class GameData
         metaCoins = 0;
         sfxVolume = 100;
         musicVolume = 100;
-        towerUpgradeStatus = new List<(string towerName, bool damageUpgraded, bool rangeUpgraded, bool fireRateUpgraded, bool poisonTypeUnlocked)>();
+        towerUpgradeStatus = new List<TowerUpgradeStatus>();
     }
 }

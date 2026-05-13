@@ -9,15 +9,14 @@ public class UIUtils : MonoBehaviour
     private List<(string referenceName, Coroutine coroutine)> coroutinesByName = new List<(string, Coroutine)>();
     public void StopCoroutineByReference(string referenceName)
     {
-        try
+        var entry = coroutinesByName.Find(c => c.referenceName == referenceName);
+        if (entry.coroutine == null)
         {
-            Coroutine coroutine = coroutinesByName.Find(c => c.referenceName == referenceName).coroutine;
-            StopCoroutine(coroutine);
+            Debug.LogWarning($"Coroutine with reference name {referenceName} not found.");
+            return;
         }
-        catch (Exception e)
-        {
-            Debug.LogError($"Coroutine with reference name {referenceName} not found. {e.Message}");
-        }
+        StopCoroutine(entry.coroutine);
+        coroutinesByName.Remove(entry);
     }
     public void AnimateIcon(string referenceName, VisualElement icon, List<Texture2D> frames, float delayBetweenFrames)
     {

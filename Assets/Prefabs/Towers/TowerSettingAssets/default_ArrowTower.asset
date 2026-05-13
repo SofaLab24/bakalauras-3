@@ -54,5 +54,16 @@ MonoBehaviour:
   towerProjectilePrefab: {fileID: 7784466698744177259, guid: c245961681e2bae42b4c2a114d7353c5, type: 3}
   towerExplosionRadius: 2
   towerExplosionPrefab: {fileID: 0}
+  towerSlowPercent: 30
+  towerSlowDuration: 2
   resourceType: 
   resourceMultiplier: 0
+  metaUpgradeDefinitions:
+  - upgradeType: 0
+    effect: {fileID: 11400000, guid: 896431e50ffcdbb48814875adf282593, type: 2}
+  - upgradeType: 2
+    effect: {fileID: 11400000, guid: 548c314fd92dd2e4887db2c6cc1716e5, type: 2}
+  - upgradeType: 1
+    effect: {fileID: 11400000, guid: 03ae59bccc432204680cec634e49540b, type: 2}
+  - upgradeType: 3
+    effect: {fileID: 11400000, guid: 98012de94a4d8aa42a4bb665eb76e0f9, type: 2}

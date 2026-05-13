@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections;
-using System;
+using System.Collections.Generic;
 
 public abstract class BaseTower : MonoBehaviour
 {
@@ -14,7 +14,7 @@ public abstract class BaseTower : MonoBehaviour
     [SerializeField] protected AnimationCurve projectileSpeedCurve;
     [SerializeField] protected Transform towerHead;
     [SerializeField] protected Animator animator;
-    
+
     protected Coroutine shootingCoroutine;
     protected Transform currentTarget;
     protected bool rangeIndicatorActive;
@@ -22,12 +22,13 @@ public abstract class BaseTower : MonoBehaviour
     protected int poisonDamage;
     protected BuildingSettings settings;
 
+    protected List<TowerUpgrade> upgrades = new();
+
+    private const int DamageCost = 100;
+
     public string TowerName => towerName;
     public float Range => range;
-    public bool DamageUpgraded { get; private set; }
-    public bool SpecialtyUpgraded { get; private set; }
-    public int DamageCost = 100;
-    public int SpecialtyCost => settings != null ? settings.buildingCost : 0;
+    public IReadOnlyList<TowerUpgrade> GetUpgrades() => upgrades;
 
     protected virtual void Awake()
     {
@@ -38,15 +39,48 @@ public abstract class BaseTower : MonoBehaviour
     public virtual void Initialize(BuildingSettings settings)
     {
         this.settings = settings;
-        this.towerName = settings.towerName;
-        this.range = settings.towerRange;
-        this.shootingSpeed = settings.towerShootingDelay;
-        this.projectileSpeed = settings.towerProjectileSpeed;
-        this.damage = settings.towerDamage;
-        this.enemyLayer = settings.enemyLayer;
-        this.projectilePrefab = settings.towerProjectilePrefab;
-        this.projectileSpeedCurve = settings.projectileSpeedCurve;
-        this.poisonDamage = settings.towerPoisonDamage;
+        towerName = settings.towerName;
+        range = settings.towerRange;
+        shootingSpeed = settings.towerShootingDelay;
+        projectileSpeed = settings.towerProjectileSpeed;
+        damage = settings.towerDamage;
+        enemyLayer = settings.enemyLayer;
+        projectilePrefab = settings.towerProjectilePrefab;
+        projectileSpeedCurve = settings.projectileSpeedCurve;
+        poisonDamage = settings.towerPoisonDamage;
+        RegisterUpgrades();
+    }
+
+    protected virtual void RegisterUpgrades()
+    {
+        upgrades.Add(CreateDamageUpgrade());
+        upgrades.Add(CreateSpecialtyUpgrade());
+    }
+
+    protected virtual TowerUpgrade CreateDamageUpgrade()
+    {
+        return new TowerUpgrade("DAMAGE", DamageCost,
+            () => damage = Mathf.RoundToInt(damage * 1.5f));
+    }
+
+    protected virtual TowerUpgrade CreateSpecialtyUpgrade()
+    {
+        string name = poisonDamage > 0 ? "SPECIALTY + POISON" : "SPECIALTY";
+        int cost = settings != null ? settings.buildingCost : 0;
+        return new TowerUpgrade(name, cost, () =>
+        {
+            if (poisonDamage > 0)
+                poisonDamage = Mathf.RoundToInt(poisonDamage * 1.5f);
+        });
+    }
+
+    public void LoadUpgrades(List<bool> purchasedStates)
+    {
+        for (int i = 0; i < purchasedStates.Count && i < upgrades.Count; i++)
+        {
+            if (purchasedStates[i])
+                upgrades[i].ForceApply();
+        }
     }
 
     protected virtual void OnEnable()
@@ -61,6 +95,7 @@ public abstract class BaseTower : MonoBehaviour
         StopShooting();
         BuildingManager.TriggerRangeIndicator -= ToggleRangeIndicator;
     }
+
     public virtual void ToggleRangeIndicator(bool setToFalse = false)
     {
         if (setToFalse && rangeIndicatorActive)
@@ -85,9 +120,7 @@ public abstract class BaseTower : MonoBehaviour
     protected virtual void StartShooting()
     {
         if (shootingCoroutine == null)
-        {
             shootingCoroutine = StartCoroutine(ShootingRoutine());
-        }
     }
 
     protected virtual void StopShooting()
@@ -104,14 +137,10 @@ public abstract class BaseTower : MonoBehaviour
         while (true)
         {
             if (!IsTargetValid())
-            {
                 FindNewTarget();
-            }
 
             if (currentTarget != null)
-            {
                 ShootAtTarget();
-            }
 
             yield return new WaitForSeconds(shootingSpeed);
         }
@@ -119,16 +148,13 @@ public abstract class BaseTower : MonoBehaviour
 
     protected virtual bool IsTargetValid()
     {
-        if (currentTarget == null)
-            return false;
+        if (currentTarget == null) return false;
 
         float distanceToTarget = Vector2.Distance(transform.position, currentTarget.position);
-        if (distanceToTarget > range)
-            return false;
+        if (distanceToTarget > range) return false;
 
         EnemyHealthManager enemyHealth = currentTarget.GetComponent<EnemyHealthManager>();
-        if (enemyHealth == null || enemyHealth.currentHealth <= 0)
-            return false;
+        if (enemyHealth == null || enemyHealth.currentHealth <= 0) return false;
 
         return true;
     }
@@ -137,7 +163,7 @@ public abstract class BaseTower : MonoBehaviour
     {
         currentTarget = null;
         Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, range, enemyLayer);
-        
+
         foreach (Collider2D collider in hitColliders)
         {
             EnemyHealthManager enemyHealth = collider.GetComponent<EnemyHealthManager>();
@@ -149,77 +175,32 @@ public abstract class BaseTower : MonoBehaviour
             }
         }
     }
+
     protected virtual void LookAtTarget()
     {
         if (towerHead != null)
-        {
             towerHead.up = currentTarget.position - towerHead.position;
-        }
     }
 
-    // shoots projectile at target
     protected virtual void ShootAtTarget()
     {
         EnemyHealthManager enemyHealth = currentTarget.GetComponent<EnemyHealthManager>();
         if (enemyHealth != null)
         {
             animator.SetTrigger("Shoot");
-            Projectile projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity).GetComponent<Projectile>();
+            Projectile projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity)
+                .GetComponent<Projectile>();
             projectile.Initialize(currentTarget, projectileSpeed, projectileSpeedCurve, this);
             SFXManager.Instance.ShootSFX(GetComponent<AudioSource>());
         }
     }
-    // called by projectile when it hits the target
+
     public abstract void DealDamage(Vector3 targetPosition, Transform target);
+
     public virtual void DealPoisonDamage(EnemyHealthManager enemyHealth)
     {
         if (enemyHealth != null)
-        {
             enemyHealth.SetPoisonDamage(poisonDamage);
-        }
-    }
-
-    public virtual void LoadUpgrades(bool damageUpgraded, bool specialtyUpgraded)
-    {
-        if (damageUpgraded)
-        {
-            damage = Mathf.RoundToInt(damage * 1.5f);
-            DamageUpgraded = true;
-        }
-        if (specialtyUpgraded)
-        {
-            ApplySpecialtyUpgrade();
-            SpecialtyUpgraded = true;
-        }
-    }
-
-    public bool TryUpgradeDamage(PlayerEconomyManager economy)
-    {
-        if (DamageUpgraded) return false;
-        if (!economy.SpendMoney(DamageCost)) return false;
-        damage = Mathf.RoundToInt(damage * 1.5f);
-        DamageUpgraded = true;
-        return true;
-    }
-
-    public bool TryUpgradeSpecialty(PlayerEconomyManager economy)
-    {
-        if (SpecialtyUpgraded) return false;
-        if (!economy.SpendMoney(SpecialtyCost)) return false;
-        ApplySpecialtyUpgrade();
-        SpecialtyUpgraded = true;
-        return true;
-    }
-
-    protected virtual void ApplySpecialtyUpgrade()
-    {
-        if (poisonDamage > 0)
-            poisonDamage = Mathf.RoundToInt(poisonDamage * 1.5f);
-    }
-
-    public virtual string GetSpecialtyName()
-    {
-        return poisonDamage > 0 ? "SPECIALTY + POISON" : "SPECIALTY";
     }
 
     public virtual string GetStatsText()
@@ -236,4 +217,4 @@ public abstract class BaseTower : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, range);
     }
-} 
+}

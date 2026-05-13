@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 [CreateAssetMenu(menuName = "Buildings/New Building", order = 1)]
@@ -44,6 +45,10 @@ public class BuildingSettings : ScriptableObject
     public string resourceType;
     public int resourceMultiplier;
 
+    [Header("Meta Upgrade Settings")]
+    [JsonIgnore]
+    public List<MetaUpgradeDefinition> metaUpgradeDefinitions = new List<MetaUpgradeDefinition>();
+
     public BuildingSettings CloneInstance()
     {
         BuildingSettings clone = ScriptableObject.CreateInstance<BuildingSettings>();
@@ -68,6 +73,7 @@ public class BuildingSettings : ScriptableObject
         clone.towerProjectilePrefab = towerProjectilePrefab;
         clone.resourceType = resourceType;
         clone.resourceMultiplier = resourceMultiplier;
+        clone.metaUpgradeDefinitions = new List<MetaUpgradeDefinition>(metaUpgradeDefinitions);
         return clone;
     }
 }

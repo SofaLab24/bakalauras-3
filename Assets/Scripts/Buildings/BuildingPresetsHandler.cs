@@ -34,21 +34,29 @@ public class BuildingPresetsHandler : MonoBehaviour, ISettingsPersistence
         }
         foreach (BuildingSettings savedPreset in savedPresets)
         {
-            BuildingSettings combinedPreset = CombineBuildingPresets(defaultBuildingPresets.Find(p => p.towerName == savedPreset.towerName), savedPreset);
-            this.buildingPresets.Add(combinedPreset);
+            BuildingSettings defaultPreset = defaultBuildingPresets.Find(p => p.towerName == savedPreset.towerName);
+            if (defaultPreset == null) continue;
+            this.buildingPresets.Add(CombineBuildingPresets(defaultPreset, savedPreset));
+        }
+        // Add any towers that exist in defaults but are missing from the save (e.g. newly added towers)
+        foreach (BuildingSettings defaultPreset in defaultBuildingPresets)
+        {
+            if (this.buildingPresets.Find(p => p.towerName == defaultPreset.towerName) == null)
+                this.buildingPresets.Add(defaultPreset.CloneInstance());
         }
     }
     private BuildingSettings CombineBuildingPresets(BuildingSettings defaultPreset, BuildingSettings savedPreset)
     {
         BuildingSettings combinedPreset = savedPreset;
 
-        // update not serialized fields
+        // restore fields that are not serialized to disk
         combinedPreset.towerName = defaultPreset.towerName;
         combinedPreset.buildingPrefab = defaultPreset.buildingPrefab;
         combinedPreset.buildingIcon = defaultPreset.buildingIcon;
         combinedPreset.projectileSpeedCurve = defaultPreset.projectileSpeedCurve;
         combinedPreset.towerProjectilePrefab = defaultPreset.towerProjectilePrefab;
         combinedPreset.towerExplosionPrefab = defaultPreset.towerExplosionPrefab;
+        combinedPreset.metaUpgradeDefinitions = new List<MetaUpgradeDefinition>(defaultPreset.metaUpgradeDefinitions);
 
         return combinedPreset;
     }
@@ -66,23 +74,10 @@ public class BuildingPresetsHandler : MonoBehaviour, ISettingsPersistence
     {
         return buildingPresets;
     }
-    public void UpgradeBuilding(string buildingName, UpgradeType upgradeType)
+    public void UpgradeBuilding(string buildingName, MetaUpgradeType upgradeType)
     {
-        switch(upgradeType)
-        {
-            case UpgradeType.Damage:
-                buildingPresets.Find(preset => preset.towerName == buildingName).towerDamage *= 2;
-                break;
-            case UpgradeType.Range:
-                buildingPresets.Find(preset => preset.towerName == buildingName).towerRange *= 2;
-                break;
-            case UpgradeType.FireRate:
-                buildingPresets.Find(preset => preset.towerName == buildingName).towerShootingDelay /= 2;
-                break;
-            case UpgradeType.PoisonType:
-                UnlockPoisonType(buildingName);
-                break;
-        }
+        BuildingSettings preset = GetBuildingPreset(buildingName);
+        preset.metaUpgradeDefinitions.Find(d => d.upgradeType == upgradeType)?.effect.Apply(preset);
         DataPersistenceManager.Instance.SaveGame();
     }
     public void UnlockPoisonType(string buildingName)

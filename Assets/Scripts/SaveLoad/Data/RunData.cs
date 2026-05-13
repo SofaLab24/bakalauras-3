@@ -18,6 +18,8 @@ public class RunData
     public SerializableMapData mapData;
 
     public List<EnemyStats> enemyTypeStats = new();
+    public List<string> savedEnemyPoolIds = new();
+    public int savedEnemiesToGenerate;
 
     // Default values on new game
     public RunData()
@@ -27,5 +29,7 @@ public class RunData
         currentHealth = 0;
         mapData = new SerializableMapData();
         enemyTypeStats = new List<EnemyStats>();
+        savedEnemyPoolIds = new List<string>();
+        savedEnemiesToGenerate = 0;
     }
 }

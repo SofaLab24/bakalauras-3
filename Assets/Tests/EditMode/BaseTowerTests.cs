@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -49,6 +50,9 @@ public class BaseTowerTests
         economy.LoadData(data);
     }
 
+    private TowerUpgrade DamageUpgrade => tower.GetUpgrades()[0];
+    private TowerUpgrade SpecialtyUpgrade => tower.GetUpgrades()[1];
+
     // --- Initialize ---
 
     [Test]
@@ -64,129 +68,129 @@ public class BaseTowerTests
     }
 
     [Test]
-    public void Initialize_DamageUpgraded_IsFalseByDefault()
+    public void Initialize_DamageUpgrade_IsNotPurchasedByDefault()
     {
-        Assert.IsFalse(tower.DamageUpgraded);
+        Assert.IsFalse(DamageUpgrade.IsPurchased);
     }
 
     [Test]
-    public void Initialize_SpecialtyUpgraded_IsFalseByDefault()
+    public void Initialize_SpecialtyUpgrade_IsNotPurchasedByDefault()
     {
-        Assert.IsFalse(tower.SpecialtyUpgraded);
+        Assert.IsFalse(SpecialtyUpgrade.IsPurchased);
     }
 
-    // --- TryUpgradeDamage ---
+    // --- Damage upgrade (index 0) ---
 
     [Test]
-    public void TryUpgradeDamage_ReturnsFalse_WhenInsufficientFunds()
+    public void DamageUpgrade_TryPurchase_ReturnsFalse_WhenInsufficientFunds()
     {
         SetMoney(50); // DamageCost = 100
-        Assert.IsFalse(tower.TryUpgradeDamage(economy));
+        Assert.IsFalse(DamageUpgrade.TryPurchase(economy));
     }
 
     [Test]
-    public void TryUpgradeDamage_ReturnsTrue_WhenExactFunds()
+    public void DamageUpgrade_TryPurchase_ReturnsTrue_WhenExactFunds()
     {
         SetMoney(100); // DamageCost = 100
-        Assert.IsTrue(tower.TryUpgradeDamage(economy));
+        Assert.IsTrue(DamageUpgrade.TryPurchase(economy));
     }
 
     [Test]
-    public void TryUpgradeDamage_ReturnsTrue_WhenSufficientFunds()
+    public void DamageUpgrade_TryPurchase_ReturnsTrue_WhenSufficientFunds()
     {
         SetMoney(500);
-        Assert.IsTrue(tower.TryUpgradeDamage(economy));
+        Assert.IsTrue(DamageUpgrade.TryPurchase(economy));
     }
 
     [Test]
-    public void TryUpgradeDamage_IncreasesDamageByOnePointFiveTimes()
+    public void DamageUpgrade_TryPurchase_IncreasesDamageByOnePointFiveTimes()
     {
         SetMoney(500);
-        tower.TryUpgradeDamage(economy);
+        DamageUpgrade.TryPurchase(economy);
         Assert.AreEqual(Mathf.RoundToInt(20 * 1.5f), tower.GetDamage());
     }
 
     [Test]
-    public void TryUpgradeDamage_SetsDamageUpgradedFlag()
+    public void DamageUpgrade_TryPurchase_SetsPurchasedFlag()
     {
         SetMoney(500);
-        tower.TryUpgradeDamage(economy);
-        Assert.IsTrue(tower.DamageUpgraded);
+        DamageUpgrade.TryPurchase(economy);
+        Assert.IsTrue(DamageUpgrade.IsPurchased);
     }
 
     [Test]
-    public void TryUpgradeDamage_DeductsExactCostFromBalance()
+    public void DamageUpgrade_TryPurchase_DeductsExactCostFromBalance()
     {
         SetMoney(250);
-        tower.TryUpgradeDamage(economy); // DamageCost = 100
+        DamageUpgrade.TryPurchase(economy); // DamageCost = 100
         Assert.AreEqual(150, economy.playerMoney);
     }
 
     [Test]
-    public void TryUpgradeDamage_ReturnsFalse_WhenAlreadyUpgraded()
+    public void DamageUpgrade_TryPurchase_ReturnsFalse_WhenAlreadyPurchased()
     {
         SetMoney(500);
-        tower.TryUpgradeDamage(economy);
-        Assert.IsFalse(tower.TryUpgradeDamage(economy));
+        DamageUpgrade.TryPurchase(economy);
+        Assert.IsFalse(DamageUpgrade.TryPurchase(economy));
     }
 
     [Test]
-    public void TryUpgradeDamage_DoesNotDeductMoney_WhenAlreadyUpgraded()
+    public void DamageUpgrade_TryPurchase_DoesNotDeductMoney_WhenAlreadyPurchased()
     {
         SetMoney(500);
-        tower.TryUpgradeDamage(economy);
+        DamageUpgrade.TryPurchase(economy);
         int balanceAfterFirst = economy.playerMoney;
-        tower.TryUpgradeDamage(economy);
+        DamageUpgrade.TryPurchase(economy);
         Assert.AreEqual(balanceAfterFirst, economy.playerMoney);
     }
 
-    // --- TryUpgradeSpecialty ---
+    // --- Specialty upgrade (index 1) ---
 
     [Test]
-    public void TryUpgradeSpecialty_ReturnsFalse_WhenInsufficientFunds()
+    public void SpecialtyUpgrade_TryPurchase_ReturnsFalse_WhenInsufficientFunds()
     {
         SetMoney(50); // SpecialtyCost = buildingCost = 150
-        Assert.IsFalse(tower.TryUpgradeSpecialty(economy));
+        Assert.IsFalse(SpecialtyUpgrade.TryPurchase(economy));
     }
 
     [Test]
-    public void TryUpgradeSpecialty_ReturnsTrue_WhenExactFunds()
+    public void SpecialtyUpgrade_TryPurchase_ReturnsTrue_WhenExactFunds()
     {
         SetMoney(150); // SpecialtyCost = 150
-        Assert.IsTrue(tower.TryUpgradeSpecialty(economy));
+        Assert.IsTrue(SpecialtyUpgrade.TryPurchase(economy));
     }
 
     [Test]
-    public void TryUpgradeSpecialty_SetsSpecialtyUpgradedFlag()
+    public void SpecialtyUpgrade_TryPurchase_SetsPurchasedFlag()
     {
         SetMoney(500);
-        tower.TryUpgradeSpecialty(economy);
-        Assert.IsTrue(tower.SpecialtyUpgraded);
+        SpecialtyUpgrade.TryPurchase(economy);
+        Assert.IsTrue(SpecialtyUpgrade.IsPurchased);
     }
 
     [Test]
-    public void TryUpgradeSpecialty_DeductsSpecialtyCostFromBalance()
+    public void SpecialtyUpgrade_TryPurchase_DeductsSpecialtyCostFromBalance()
     {
         SetMoney(400);
-        tower.TryUpgradeSpecialty(economy); // SpecialtyCost = 150
+        SpecialtyUpgrade.TryPurchase(economy); // SpecialtyCost = 150
         Assert.AreEqual(250, economy.playerMoney);
     }
 
     [Test]
-    public void TryUpgradeSpecialty_ReturnsFalse_WhenAlreadyUpgraded()
+    public void SpecialtyUpgrade_TryPurchase_ReturnsFalse_WhenAlreadyPurchased()
     {
         SetMoney(500);
-        tower.TryUpgradeSpecialty(economy);
-        Assert.IsFalse(tower.TryUpgradeSpecialty(economy));
+        SpecialtyUpgrade.TryPurchase(economy);
+        Assert.IsFalse(SpecialtyUpgrade.TryPurchase(economy));
     }
 
     [Test]
-    public void TryUpgradeSpecialty_DoesNotDeductMoney_WhenAlreadyUpgraded()
+    public void SpecialtyUpgrade_TryPurchase_DoesNotDeductMoney_WhenAlreadyPurchased()
     {
         SetMoney(500);
-        tower.TryUpgradeSpecialty(economy);
+        SpecialtyUpgrade.TryPurchase(economy);
         int balanceAfterFirst = economy.playerMoney;
-        tower.TryUpgradeSpecialty(economy);
+        SpecialtyUpgrade.TryPurchase(economy);
         Assert.AreEqual(balanceAfterFirst, economy.playerMoney);
     }
 
@@ -195,28 +199,28 @@ public class BaseTowerTests
     [Test]
     public void LoadUpgrades_DamageTrue_AppliesDamageMultiplier()
     {
-        tower.LoadUpgrades(damageUpgraded: true, specialtyUpgraded: false);
+        tower.LoadUpgrades(new List<bool> { true, false });
         Assert.AreEqual(Mathf.RoundToInt(20 * 1.5f), tower.GetDamage());
     }
 
     [Test]
-    public void LoadUpgrades_DamageTrue_SetsDamageUpgradedFlag()
+    public void LoadUpgrades_DamageTrue_SetsPurchasedFlag()
     {
-        tower.LoadUpgrades(damageUpgraded: true, specialtyUpgraded: false);
-        Assert.IsTrue(tower.DamageUpgraded);
+        tower.LoadUpgrades(new List<bool> { true, false });
+        Assert.IsTrue(DamageUpgrade.IsPurchased);
     }
 
     [Test]
     public void LoadUpgrades_DamageFalse_DoesNotChangeDamage()
     {
-        tower.LoadUpgrades(damageUpgraded: false, specialtyUpgraded: false);
+        tower.LoadUpgrades(new List<bool> { false, false });
         Assert.AreEqual(20, tower.GetDamage());
     }
 
     [Test]
-    public void LoadUpgrades_SpecialtyTrue_SetsSpecialtyUpgradedFlag()
+    public void LoadUpgrades_SpecialtyTrue_SetsPurchasedFlag()
     {
-        tower.LoadUpgrades(damageUpgraded: false, specialtyUpgraded: true);
-        Assert.IsTrue(tower.SpecialtyUpgraded);
+        tower.LoadUpgrades(new List<bool> { false, true });
+        Assert.IsTrue(SpecialtyUpgrade.IsPurchased);
     }
 }

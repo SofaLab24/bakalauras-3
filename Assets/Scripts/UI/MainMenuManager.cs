@@ -21,8 +21,8 @@ public class MainMenuManager : MonoBehaviour
     private VisualElement mainMenuButtons;
     private VisualElement menuWrapper;
     private Label highscore;
-    [SerializeField] VisualTreeAsset towerUpgradesMenuTemplate;
     [SerializeField] VisualTreeAsset towerIconButtonTemplate;
+    [SerializeField] VisualTreeAsset mainMenuUpgradeSlotTemplate;
     [SerializeField] List<BuildingSettings> baseTowers;
     private void Awake()
     {
@@ -95,74 +95,46 @@ public class MainMenuManager : MonoBehaviour
         upgradesWrapper.Clear();
         ProgressionManager.Instance.SetSelectedBuilding(tower);
 
-        VisualElement upgrades = towerUpgradesMenuTemplate.CloneTree();
+        BuildingSettings runtimePreset = BuildingPresetsHandler.Instance.GetBuildingPreset(tower.towerName);
+        bool isLocked = !runtimePreset.isUnlocked;
 
-        VisualElement damageUpgrade = upgrades.Q<VisualElement>("DamageButton");
-        if(ProgressionManager.Instance.IsUpgradePurchased(UpgradeType.Damage))
+        foreach (MetaUpgradeDefinition def in tower.metaUpgradeDefinitions)
         {
-            SetupPurchasedUpgrade(damageUpgrade);
-        }
-        else
-        {
-            damageUpgrade.RegisterCallback<ClickEvent>(evt => OnUpgradeButtonClick(evt, UpgradeType.Damage, damageUpgrade));
-            uiUtils.AnimateIcon(damageUpgrade.name, damageUpgrade, upgradeIconsFrames, animationDelayBetweenFrames);
-            upgrades.Q<VisualElement>("DamageUpgrade").Q<Label>("Cost").text = ""+ProgressionManager.Instance.GetUpgradeCost(UpgradeType.Damage, tower.towerName);
-        }
-        upgradesWrapper.Add(upgrades.Q<VisualElement>("DamageUpgrade"));
+            bool isUnlockDef = def.upgradeType == MetaUpgradeType.UnlockTower;
+            if (isLocked && !isUnlockDef) continue;
 
-
-        VisualElement rangeUpgrade = upgrades.Q<VisualElement>("RangeButton");
-        if(ProgressionManager.Instance.IsUpgradePurchased(UpgradeType.Range))
-        {
-            SetupPurchasedUpgrade(rangeUpgrade);
+            VisualElement slot = mainMenuUpgradeSlotTemplate.CloneTree().Q<VisualElement>("UpgradeSlot");
+            slot.Q<Label>("UpgradeName").text = def.upgradeType.ToString();
+            slot.Q<Label>("Cost").text = def.effect != null ? "" + def.effect.cost : "";
+            VisualElement btn = slot.Q<VisualElement>("UpgradeButton");
+            if (ProgressionManager.Instance.IsUpgradePurchased(def.upgradeType))
+            {
+                SetupPurchasedUpgrade(btn);
+            }
+            else
+            {
+                MetaUpgradeDefinition captured = def;
+                string animKey = btn.name + def.upgradeType;
+                btn.RegisterCallback<ClickEvent>(e =>
+                {
+                    if (ProgressionManager.Instance.UpgradeBuilding(captured.upgradeType))
+                    {
+                        SetupPurchasedUpgrade(btn, animKey);
+                    }
+                });
+                uiUtils.AnimateIcon(animKey, btn, upgradeIconsFrames, animationDelayBetweenFrames);
+            }
+            upgradesWrapper.Add(slot);
         }
-        else
-        {
-            rangeUpgrade.RegisterCallback<ClickEvent>(evt => OnUpgradeButtonClick(evt, UpgradeType.Range, rangeUpgrade));
-            uiUtils.AnimateIcon(rangeUpgrade.name, rangeUpgrade, upgradeIconsFrames, animationDelayBetweenFrames);
-            upgrades.Q<VisualElement>("RangeUpgrade").Q<Label>("Cost").text = ""+ProgressionManager.Instance.GetUpgradeCost(UpgradeType.Range, tower.towerName);
-        }
-        upgradesWrapper.Add(upgrades.Q<VisualElement>("RangeUpgrade"));
-
-        VisualElement fireRateUpgrade = upgrades.Q<VisualElement>("FireRateButton");
-        if(ProgressionManager.Instance.IsUpgradePurchased(UpgradeType.FireRate))
-        {
-            SetupPurchasedUpgrade(fireRateUpgrade);
-        }
-        else
-        {
-            fireRateUpgrade.RegisterCallback<ClickEvent>(evt => OnUpgradeButtonClick(evt, UpgradeType.FireRate, fireRateUpgrade));
-            uiUtils.AnimateIcon(fireRateUpgrade.name, fireRateUpgrade, upgradeIconsFrames, animationDelayBetweenFrames);
-            upgrades.Q<VisualElement>("FireRateUpgrade").Q<Label>("Cost").text = ""+ProgressionManager.Instance.GetUpgradeCost(UpgradeType.FireRate, tower.towerName);
-        }
-        upgradesWrapper.Add(upgrades.Q<VisualElement>("FireRateUpgrade"));
-
-        VisualElement poisonTypeUpgrade = upgrades.Q<VisualElement>("PoisonButton");
-        if(ProgressionManager.Instance.IsUpgradePurchased(UpgradeType.PoisonType))
-        {
-            SetupPurchasedUpgrade(poisonTypeUpgrade);
-        }
-        else
-        {
-            poisonTypeUpgrade.RegisterCallback<ClickEvent>(evt => OnUpgradeButtonClick(evt, UpgradeType.PoisonType, poisonTypeUpgrade));
-            uiUtils.AnimateIcon(poisonTypeUpgrade.name, poisonTypeUpgrade, upgradeIconsFrames, animationDelayBetweenFrames);
-            upgrades.Q<VisualElement>("PoisonUpgrade").Q<Label>("Cost").text = ""+ProgressionManager.Instance.GetUpgradeCost(UpgradeType.PoisonType, tower.towerName);
-        }
-        upgradesWrapper.Add(upgrades.Q<VisualElement>("PoisonUpgrade"));
 
         upgradesBackButton.UnregisterCallback<ClickEvent>(OnUpgradesBackButtonClick);
         upgradesBackButton.RegisterCallback<ClickEvent>(OnUpgradesMenuClick);
     }
-    private void OnUpgradeButtonClick(ClickEvent evt, UpgradeType upgradeType, VisualElement clickedButton)
+
+    private void SetupPurchasedUpgrade(VisualElement upgradeButton, string coroutineRef = null)
     {
-        if(ProgressionManager.Instance.UpgradeBuilding(upgradeType))
-        {
-            SetupPurchasedUpgrade(clickedButton);
-        }
-    }
-    private void SetupPurchasedUpgrade(VisualElement upgradeButton)
-    {
-        uiUtils.StopCoroutineByReference(upgradeButton.name);
+        if (coroutineRef != null)
+            uiUtils.StopCoroutineByReference(coroutineRef);
         upgradeButton.parent.Q<Label>("Cost").text = "Purchased";
         upgradeButton.style.backgroundImage = new StyleBackground(upgradePurchasedIcon);
         upgradeButton.pickingMode = PickingMode.Ignore;

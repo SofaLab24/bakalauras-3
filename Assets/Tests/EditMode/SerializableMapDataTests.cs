@@ -136,14 +136,6 @@ public class SerializableMapDataTests
         Assert.AreEqual("ArrowTower", b.buildingName);
     }
 
-    [Test]
-    public void PlacedBuildingData_StoresUpgradeFlags()
-    {
-        var b = new PlacedBuildingData { damageUpgraded = true, specialtyUpgraded = false };
-        Assert.IsTrue(b.damageUpgraded);
-        Assert.IsFalse(b.specialtyUpgraded);
-    }
-
     // --- Helper ---
 
     private static WavePath MakePath(Vector2Int lastFilledTile, Vector2Int targetTile, bool hasEnd)

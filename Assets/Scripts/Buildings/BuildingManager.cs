@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine.EventSystems;
 
 public class BuildingManager : MonoBehaviour, IRunDataPersistence
@@ -275,11 +276,10 @@ public class BuildingManager : MonoBehaviour, IRunDataPersistence
         {
             BuildingSettings settings = BuildingPresetsHandler.Instance.GetBuildingPreset(building.buildingName);
             GameObject obj = InstantiateBuilding(new Vector3(building.x, building.y, 0), settings);
-            if (building.damageUpgraded || building.specialtyUpgraded)
+            BaseTower tower = obj.GetComponent<BaseTower>();
+            if (tower != null)
             {
-                BaseTower tower = obj.GetComponent<BaseTower>();
-                if (tower != null)
-                    tower.LoadUpgrades(building.damageUpgraded, building.specialtyUpgraded);
+                tower.LoadUpgrades(building.upgradePurchased ?? new List<bool>());
             }
             placedBuildingObjects.Add((obj, building.buildingName));
         }
@@ -297,8 +297,9 @@ public class BuildingManager : MonoBehaviour, IRunDataPersistence
                 x = obj.transform.position.x,
                 y = obj.transform.position.y,
                 buildingName = buildingName,
-                damageUpgraded = tower != null && tower.DamageUpgraded,
-                specialtyUpgraded = tower != null && tower.SpecialtyUpgraded
+                upgradePurchased = tower != null
+                    ? tower.GetUpgrades().Select(u => u.IsPurchased).ToList()
+                    : new List<bool>()
             });
         }
         data.mapData.placedBuildings = savedBuildings;

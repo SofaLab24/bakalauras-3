@@ -7,14 +7,9 @@
         </ui:VisualElement>
         <ui:VisualElement name="BottomBox" style="flex-grow: 1; position: absolute; bottom: 0; left: 0; width: 100%; height: 60%;">
             <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="TowerName" class="buttonText" style="position: absolute; top: 0; left: 0; width: 100%; -unity-text-align: upper-center; font-size: 23px; height: 15%; color: rgb(255, 225, 180);" />
-            <ui:VisualElement name="DamageButton" class="button" style="flex-grow: 1; position: absolute; top: 20%; left: 10%; width: 80%; height: 20%; justify-content: center;">
-                <ui:Label tabindex="-1" text="DAMAGE" parse-escape-sequences="true" display-tooltip-when-elided="true" name="DamageLabel" class="buttonText" style="font-size: 35px;" />
-            </ui:VisualElement>
-            <ui:VisualElement name="SpecialtyButton" class="button" style="flex-grow: 1; position: absolute; top: 45%; left: 10%; width: 80%; height: 20%; justify-content: center;">
-                <ui:Label tabindex="-1" text="SPECIALTY" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SpecialtyLabel" class="buttonText" style="font-size: 35px;" />
-            </ui:VisualElement>
-            <ui:VisualElement name="CloseButton" class="button" style="flex-grow: 1; position: absolute; top: 75%; left: 10%; width: 80%; height: 20%; justify-content: center;">
-                <ui:Label tabindex="-1" text="CLOSE" parse-escape-sequences="true" display-tooltip-when-elided="true" name="CloseLabel" class="buttonText" style="font-size: 35px;" />
+            <ui:VisualElement name="UpgradesContainer" style="position: absolute; top: 15%; left: 0; width: 100%; height: 60%; flex-direction: column; align-items: center; justify-content: space-evenly;" />
+            <ui:VisualElement name="CloseButton" class="button" style="flex-grow: 1; position: absolute; top: 80%; left: 10%; width: 80%; height: 15%; justify-content: center;">
+                <ui:Label tabindex="-1" text="CLOSE" parse-escape-sequences="true" display-tooltip-when-elided="true" name="CloseLabel" class="buttonText" style="font-size: 30px;" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
