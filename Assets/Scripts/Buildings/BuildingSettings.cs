@@ -29,6 +29,7 @@ public class BuildingSettings : ScriptableObject
     public AnimationCurve projectileSpeedCurve;
     public int towerDamage = 20;
     public int towerPoisonDamage = 0;
+    [JsonIgnore]
     public LayerMask enemyLayer;
     [JsonIgnore]
     public GameObject towerProjectilePrefab;

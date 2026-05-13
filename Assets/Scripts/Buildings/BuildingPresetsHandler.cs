@@ -57,6 +57,7 @@ public class BuildingPresetsHandler : MonoBehaviour, ISettingsPersistence
         combinedPreset.towerProjectilePrefab = defaultPreset.towerProjectilePrefab;
         combinedPreset.towerExplosionPrefab = defaultPreset.towerExplosionPrefab;
         combinedPreset.metaUpgradeDefinitions = new List<MetaUpgradeDefinition>(defaultPreset.metaUpgradeDefinitions);
+        combinedPreset.enemyLayer = defaultPreset.enemyLayer;
 
         return combinedPreset;
     }
