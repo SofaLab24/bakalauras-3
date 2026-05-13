@@ -223,4 +223,12 @@ public class BaseTowerTests
         tower.LoadUpgrades(new List<bool> { false, true });
         Assert.IsTrue(SpecialtyUpgrade.IsPurchased);
     }
+
+    // --- TowerName ---
+
+    [Test]
+    public void TowerName_ReturnsSettingsTowerName()
+    {
+        Assert.AreEqual("TestTower", tower.TowerName);
+    }
 }

@@ -238,7 +238,7 @@ public class WaveManager : MonoBehaviour, IRunDataPersistence
             foreach (EnemyStats saved in data.enemyTypeStats)
                 currentStats[saved.id] = saved;
         }
-        else
+        else if (enemyTypes != null)
         {
             // Seed from inspector defaults on a fresh run
             foreach (EnemyTypeDefinition type in enemyTypes)

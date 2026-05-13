@@ -130,4 +130,16 @@ public class PlayerEconomyTests
         SetMoney(100);
         Assert.AreEqual(100, economy.playerMoney);
     }
+
+    // --- SaveData ---
+
+    [Test]
+    public void SaveData_PersistsCurrentMoney()
+    {
+        SetMoney(300);
+        var data = new RunData();
+        economy.SaveData(ref data);
+        Assert.AreEqual(300, data.currentMoney);
+    }
+
 }

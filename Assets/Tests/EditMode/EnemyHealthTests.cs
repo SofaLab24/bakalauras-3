@@ -1,6 +1,7 @@
 using System.Reflection;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.TestTools;
 using UnityEngine.UI;
 
 public class EnemyHealthTests
@@ -79,8 +80,54 @@ public class EnemyHealthTests
     }
 
     [Test]
-    public void DamageValue_DefaultIsNotNegative()
+    public void DamageValue_DefaultIs10()
     {
-        Assert.GreaterOrEqual(healthManager.damageValue, 0);
+        Assert.AreEqual(10, healthManager.damageValue);
+    }
+
+    // --- Initialize ---
+
+    [Test]
+    public void Initialize_SetsCurrentHealthToGivenValue()
+    {
+        healthManager.Initialize(50);
+        Assert.AreEqual(50, healthManager.currentHealth);
+    }
+
+    [Test]
+    public void Initialize_DoesNotAffectMoneyValue()
+    {
+        healthManager.Initialize(50);
+        Assert.AreEqual(0, healthManager.moneyValue);
+    }
+
+    [Test]
+    public void TakeDamage_ExactHealth_FiresOnEnemyDeathEvent()
+    {
+        bool deathFired = false;
+        EnemyHealthManager.DeathReason capturedReason = default;
+
+        void Handler(EnemyHealthManager mgr, EnemyHealthManager.DeathReason reason)
+        {
+            deathFired = true;
+            capturedReason = reason;
+        }
+
+        // Die() calls Destroy(gameObject), which is invalid in EditMode.
+        // Declare the expected error so the test runner does not treat it as a failure.
+        LogAssert.Expect(LogType.Error, new System.Text.RegularExpressions.Regex("Destroy may not be called from edit mode"));
+
+        EnemyHealthManager.OnEnemyDeath += Handler;
+        try
+        {
+            healthManager.TakeDamage(healthManager.currentHealth); // deal exactly 100 damage
+        }
+        finally
+        {
+            EnemyHealthManager.OnEnemyDeath -= Handler;
+        }
+
+        Assert.IsTrue(deathFired, "OnEnemyDeath should fire when health reaches zero.");
+        Assert.AreEqual(EnemyHealthManager.DeathReason.KilledByTower, capturedReason);
     }
 }

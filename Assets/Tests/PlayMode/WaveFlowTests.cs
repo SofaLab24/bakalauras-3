@@ -144,4 +144,19 @@ public class WaveFlowTests
 
         Assert.AreEqual(6, waveManager.enemiesLeftToDie);
     }
+
+    // --- ReachedEnd death reason ---
+
+    [UnityTest]
+    public IEnumerator EnemyDeath_ReachedEnd_AlsoDecrementsCounter()
+    {
+        waveManager.enemiesLeftToDie = 3;
+
+        FireDeathEvent(EnemyHealthManager.DeathReason.ReachedEnd);
+
+        yield return null;
+
+        Assert.AreEqual(2, waveManager.enemiesLeftToDie,
+            "ReachedEnd deaths should decrement the enemy counter just like KilledByTower deaths.");
+    }
 }

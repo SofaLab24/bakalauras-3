@@ -85,6 +85,54 @@ public class BaseManagerIntegrationTests
         BaseManager.OnBaseHealthChange += OnHealthChange;
     }
 
+    // --- Multiple damage calls ---
+
+    [UnityTest]
+    public IEnumerator TakeDamage_MultipleCalls_AccumulatesDamageCorrectly()
+    {
+        baseManager.TakeDamage(30);
+        baseManager.TakeDamage(40);
+
+        yield return null;
+
+        Assert.AreEqual(30, baseManager.GetCurrentHealth(),
+            "Health should reflect the sum of all damage taken.");
+    }
+
+    // --- OnBaseDamaged event ---
+
+    [UnityTest]
+    public IEnumerator OnBaseDamaged_FiresWhenTakeDamage()
+    {
+        bool damagedFired = false;
+        void Handler() { damagedFired = true; }
+
+        BaseManager.OnBaseDamaged += Handler;
+        baseManager.TakeDamage(10);
+        BaseManager.OnBaseDamaged -= Handler;
+
+        yield return null;
+
+        Assert.IsTrue(damagedFired,
+            "OnBaseDamaged should fire whenever TakeDamage is called.");
+    }
+
+    // --- SaveData ---
+
+    [UnityTest]
+    public IEnumerator SaveData_PersistsCurrentHealth()
+    {
+        baseManager.TakeDamage(25);
+
+        var data = new RunData();
+        baseManager.SaveData(ref data);
+
+        yield return null;
+
+        Assert.AreEqual(75, data.currentHealth,
+            "SaveData should store the current health after damage.");
+    }
+
     // --- Integration: enemy reaches end ---
 
     [UnityTest]
